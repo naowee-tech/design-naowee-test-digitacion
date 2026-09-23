@@ -1,4 +1,4 @@
 <!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8"/><title>Naowee – Sorteo</title>
-<script>location.replace('../sorteo/sorteo-publico.html' + location.search + location.hash);</script>
+<script>location.replace('../sorteo/sorteo-publico.html' + location.search.replace(/([?&])role=EVENT_COORDINATOR(?=&|$)/, '$1role=ACCESS_MANAGER') + location.hash);</script>
 </head><body>La demo de Sorteo se movió a <a href="../sorteo/sorteo-publico.html">../sorteo/sorteo-publico.html</a>.</body></html>

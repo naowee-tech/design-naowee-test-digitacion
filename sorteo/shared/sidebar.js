@@ -29,10 +29,10 @@ const LOGIN_URL = (() => {
    El demo switcher y el "Cambiar a" del header solo muestran ESTOS roles
    (no los de otros módulos: escenarios, documentación, deportista, etc.),
    agrupados por la lógica de uso del módulo. */
-/* Demo de Sorteo: el sorteo lo opera solo el Coordinador de eventos
-   (nacionales). */
+/* Demo de Sorteo: el sorteo lo opera solo el Access Manager del evento
+   (Daniel Barreto). ADMIN/ROOT lo verían por bypass en la suite real. */
 const DIGITACION_ROLE_GROUPS = [
-  { label: 'Operación', codes: ['EVENT_COORDINATOR'] },
+  { label: 'Evento', codes: ['ACCESS_MANAGER'] },
 ];
 const DIGITACION_ROLE_CODES = DIGITACION_ROLE_GROUPS.flatMap((g) => g.codes);
 
@@ -56,7 +56,7 @@ export function resolveRoleCode(fallback) {
   }
   let recordado = null;
   try { recordado = sessionStorage.getItem(ROLE_KEY); } catch (e) {}
-  return recordado || fallback || 'EVENT_COORDINATOR';
+  return recordado || fallback || 'ACCESS_MANAGER';
 }
 
 /* Demo de Sorteo independiente: cualquier rol aterriza en la ruleta. */
@@ -239,12 +239,11 @@ function bindSidebarEvents(rootEl) {
    perdía el rol al navegar → el coordinador terminaba como ROOT/Digitador
    o saltaba al shell host. Centralizado aquí: una sola fuente de verdad. */
 const DIGI_ROUTES = {
-  'inicio': 'sorteo.html',
-  'sorteo': 'sorteo.html',
+  'event-draws': 'sorteo.html',
 };
 export function resolveDigiRoute(activeId, roleCode) {
   const page = DIGI_ROUTES[activeId];
-  if (!page) return null;                       // sin página en digitación → host shell
+  if (!page) return null;                       // ítem inerte en esta demo
   return page + '?role=' + encodeURIComponent(roleCode);
 }
 
@@ -259,15 +258,16 @@ function navigateToActive(activeId) {
   const url = resolveDigiRoute(activeId, roleCode);
 
   if (url) {
-    if (baseName(url.split('?')[0]) === currentFile) return;   // ya estás en esa página
+    if (baseName(url.split('?')[0]) === currentFile) {
+      /* Ya estamos en la demo: volver a la raíz del módulo (promociones). */
+      if (typeof window.openPromos === 'function') window.openPromos();
+      return;
+    }
     window.location.href = url;                       // navegación full, rol preservado
     return;
   }
-  /* Ítem sin página propia en digitación (módulos del roadmap, sobre todo
-     para ROOT/admin) → cae al shell host, llevando rol + active. */
-  const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
-  const base = isLocal ? 'http://localhost:5100' : 'https://naowee-tech.github.io/naowee-test-sidebar-shell';
-  window.location.href = `${base}/perfil.html?role=${roleCode}&active=${activeId}`;
+  /* Demo de Sorteo: los demás ítems del menú de la suite son inertes.
+     No se navega ni se cambia el activo, para no perder el contexto. */
 }
 
 function updateActive(activeId, options) {

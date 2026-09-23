@@ -94,27 +94,16 @@ body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text-prim
     prog:'<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 6.5h12M5 1.5v3M11 1.5v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>' };
 
   var html='';
-  html+='<div class="pub-hero"><span class="pub-emoji">'+(c.emoji||'🏆')+'</span><div><h1>'+esc(c.nombre||'Sorteo')+'</h1><p>'+esc(c.sistema||'')+(c.sisCls==='elim'?'':' · '+((c.grupos||[]).length)+' grupos')+'</p></div><span class="pub-estado">'+(anu?'<span class="naowee-badge naowee-badge--negative naowee-badge--large">Anulado</span>':'<span class="naowee-badge naowee-badge--positive naowee-badge--large">Publicado</span>')+'</span></div>';
+  html+='<div class="pub-hero"><span class="pub-emoji">'+(c.emoji||'🏆')+'</span><div><h1>'+esc(c.nombre||'Sorteo')+'</h1><p>'+esc(c.sistema||'')+' · '+esc((rec.promotion&&rec.promotion.from&&rec.promotion.to)?(rec.promotion.from+' → '+rec.promotion.to):'Promoción')+' · '+((c.grupos||[]).length)+' grupos'+'</p></div><span class="pub-estado">'+(anu?'<span class="naowee-badge naowee-badge--negative naowee-badge--large">Anulado</span>':(rec.estado==='CERRADO'?'<span class="naowee-badge naowee-badge--positive naowee-badge--large">Cerrado</span>':'<span class="naowee-badge naowee-badge--caution naowee-badge--large">Abierto</span>'))+'</span></div>';
 
   if(anu){ html+='<div class="naowee-message naowee-message--negative" style="width:100%"><div class="naowee-message__header"><span class="naowee-message__icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M7 5h2v4H7z" fill="#fff"/><circle cx="8" cy="11" r="1" fill="#fff"/></svg></span><span class="naowee-message__title">Sorteo anulado</span></div><p class="naowee-message__text">'+(rec.motivo?('Motivo: '+esc(rec.motivo)+'. '):'')+'Este resultado fue anulado y no es vigente.</p></div>'; }
 
   if(c.grupos&&c.grupos.length){
-    if(R.renderGrupos) html+=sec('Grupos y calendario',ICO.grupos,R.renderGrupos(c));
-    if(R.renderStandings) html+=sec('Posiciones',ICO.pos,c.grupos.map(function(g){return R.renderStandings(g);}).join(''));
+    if(R.renderGrupos) html+=sec('Grupos y enfrentamientos',ICO.grupos,R.renderGrupos(c));
   }
   if(c.bracket&&c.bracket.length){
     if(R.renderBracket) html+=sec('Llave de eliminación',ICO.llave,R.renderBracket(c));
     if(R.renderMedalleria) html+=sec('Medallería',ICO.medal,R.renderMedalleria(c));
-  }
-
-  // Programación (read-only) si algún partido tiene fecha
-  var prog=[];
-  (c.grupos||[]).forEach(function(g){ (g.partidos||[]).forEach(function(p){ if(p.fecha||p.hora||p.escenario) prog.push({t1:p.t1,t2:p.t2,ctx:g.nombre+' · J'+p.jornada,fecha:p.fecha,hora:p.hora,esc:p.escenario}); }); });
-  (c.bracket||[]).forEach(function(rd){ (rd.matches||[]).forEach(function(m){ if(m.fecha||m.hora||m.escenario) prog.push({t1:m.t1,t2:m.t2,ctx:rd.round,fecha:m.fecha,hora:m.hora,esc:m.escenario}); }); });
-  if(prog.length){
-    var pubTeam=function(name){ var meta=(c&&c.teamMeta&&c.teamMeta[name])||''; return '<span class="pubp-team"><span class="pubp-team__name">'+esc(name||'')+'</span>'+(meta?'<span class="pubp-team__meta">'+esc(meta)+'</span>':'')+'</span>'; };
-    var rows=prog.map(function(x){ var when=[fmtFecha(x.fecha),esc(x.hora)].filter(Boolean).join(' · '); return '<div class="pubp-row"><div class="pubp-match"><div class="pubp-match__teams">'+pubTeam(x.t1)+'<span class="pubp-vs">vs</span>'+pubTeam(x.t2)+'</div><small>'+esc(x.ctx)+'</small></div><div class="pubp-when">'+(when||'Por programar')+'<small>'+esc(x.esc||'Escenario por definir')+'</small></div></div>'; }).join('');
-    html+=sec('Programación',ICO.prog,'<div class="pubp-list">'+rows+'</div>');
   }
 
   el.innerHTML=html;

@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Naowee – Sorteo</title>
+<title>Sorteos – Juegos Intercolegiados Nacionales 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="design-system.css"/>
 <link rel="stylesheet" href="naowee-ds-components.css"/>
 <link rel="stylesheet" href="competition-render.css"/>
-<link rel="stylesheet" href="ruleta-wheel.css"/>
 <style>
 :root {
   --naranja:#FF7500; --azul:#002B5B;
@@ -647,6 +646,68 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-primary);font
 .uc-chev{color:var(--text-secondary);transition:transform .2s}
 .profile-switcher.open .profile-dropdown{display:block}
 .profile-switcher.open .uc-chev{transform:rotate(180deg)}
+
+/* ═══ v3 · Chrome de suite-web-v2: breadcrumb en el header + franja del evento ═══ */
+.top-header{justify-content:space-between}
+.crumbs{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--text-secondary);min-width:0;flex-wrap:wrap}
+.crumbs a{color:var(--text-secondary);cursor:pointer}
+.crumbs a:hover{color:var(--accent);text-decoration:none}
+.crumbs__sep{color:var(--text-muted)}
+.crumbs__cur{color:var(--text-primary);font-weight:600}
+#detailActions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+#detailActions:empty{display:none}
+/* Cabecera del evento: nombre como título grande, como el detalle del evento en la suite */
+.event-strip{display:flex;align-items:center;gap:12px;margin:0 0 24px;max-width:var(--sorteo-maxw)}
+.event-strip__back{width:28px;height:28px;border:none;background:none;border-radius:6px;display:grid;place-items:center;color:var(--accent);cursor:pointer}
+.event-strip__back:hover{background:var(--accent-bg,#fff3e6)}
+.event-strip__back svg{width:18px;height:18px}
+.event-strip__name{font-size:26px;font-weight:700;letter-spacing:-.2px;line-height:1.2;color:var(--text-primary)}
+/* ═══ v3 · S1 Promociones: misma anatomía que event-detail__feature-card de la suite ═══ */
+.promo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media(max-width:820px){.promo-grid{grid-template-columns:1fr}}
+.promo-card{display:flex;align-items:center;gap:16px;padding:18px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;text-align:left;font-family:inherit;width:100%;transition:border-color .15s,box-shadow .15s}
+.promo-card:hover{border-color:var(--border-dark);box-shadow:var(--shadow-sm)}
+.promo-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.promo-card__step{width:48px;height:48px;flex:0 0 48px;border-radius:12px;background:var(--accent-bg,#fff3e6);color:var(--accent);display:flex;align-items:center;justify-content:center;gap:1px;font-size:15px;font-weight:800;letter-spacing:-.02em}
+.promo-card__step svg{width:13px;height:13px}
+.promo-card__text{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.promo-card__title{font-size:15px;font-weight:700;color:var(--text-primary)}
+.promo-card__meta{font-size:12.5px;color:var(--text-secondary);display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.promo-card__bar{height:4px;border-radius:2px;background:var(--bg-soft);overflow:hidden;margin-top:6px;max-width:260px}
+.promo-card__bar i{display:block;height:100%;background:var(--accent);border-radius:2px}
+.promo-card__arrow{width:20px;height:20px;color:var(--text-muted);flex-shrink:0;transform:rotate(180deg)}
+.promo-card.is-off{cursor:default;background:var(--bg-soft)}
+.promo-card.is-off:hover{box-shadow:none;border-color:var(--border)}
+.promo-card.is-off .promo-card__step{background:#e9ebf3;color:var(--text-muted)}
+.promo-card.is-off .promo-card__title{color:var(--text-secondary)}
+.promo-card.is-off .promo-card__arrow{display:none}
+/* ═══ v3 · Participantes con checkbox ═══ */
+.part-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.part-toolbar__count{font-size:13px;color:var(--text-secondary)}
+.part-toolbar__count b{color:var(--text-primary)}
+.part-toolbar__actions{display:flex;gap:6px}
+.part-row{display:flex;align-items:center;gap:12px;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius-md);cursor:pointer;transition:border-color .12s,background .12s}
+.part-row:hover{border-color:var(--border-dark)}
+.part-row.is-on{border-color:#f3c9b4;background:#fff8f3}
+.part-row__cb{width:18px;height:18px;flex:0 0 18px;border-radius:5px;border:1.5px solid var(--border-dark);background:#fff;display:grid;place-items:center;color:#fff}
+.part-row.is-on .part-row__cb{background:var(--accent);border-color:var(--accent)}
+.part-row__cb svg{width:12px;height:12px}
+.part-row__txt{flex:1;min-width:0;display:flex;flex-direction:column}
+.part-row__name{font-size:13.5px;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.part-row__meta{font-size:12px;color:var(--text-secondary)}
+/* ═══ v3 · Líderes por grupo ═══ */
+.leaders{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:4px}
+.leader{border:1px solid var(--border);border-radius:var(--radius-md);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.leader__head{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text-primary)}
+.leader select{width:100%;height:36px;border:1px solid var(--border-dark);border-radius:var(--radius-md);padding:0 10px;font:inherit;font-size:13px;color:var(--text-primary);background:#fff}
+.leader select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(215,64,9,.12)}
+/* ═══ v3 · Confirmación de cierre ═══ */
+.modal-veil{position:fixed;inset:0;background:rgba(40,40,52,.38);z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-card{background:var(--surface);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);max-width:460px;width:100%;padding:24px}
+.modal-card h2{font-size:17px;font-weight:700;margin-bottom:8px;color:var(--text-primary)}
+.modal-card p{font-size:13.5px;color:var(--text-secondary);line-height:1.5}
+.modal-card__actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+.s2-banner{margin-bottom:14px}
 </style>
 <!-- Shell compartido (sidebar/header canónicos) — linkeado DESPUÉS del <style> inline para ganar sobre el chrome viejo -->
 <link rel="stylesheet" href="shared/tokens.css"/>
@@ -659,69 +720,51 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-primary);font
 body.sorteo-has-footer .page{padding-bottom:96px}
 </style>
 </head>
-<body>
+<body data-screen="promociones" data-route="/home/events/jin-2026/draws">
 <div class="shell">
 
 <aside class="sidebar" id="sidebarRoot"></aside>
 
 <div class="main">
   <header class="top-header" id="topHeader"></header>
-  <template id="_oldChromeHeader">
-  <header class="top-header">
-    <div class="profile-switcher" id="profileSwitcher">
-      <div class="user-chip" onclick="toggleProfileDD(event)">
-        <div class="ava"><div class="ava-ring" style="background:#ffe4cf;color:#d74009">CE</div><div class="ava-dot"></div></div>
-        <div class="user-info"><span class="user-name">Coordinador</span><span class="user-role">Coordinador de eventos</span></div>
-        <svg class="uc-chev" width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      </div>
-      <div class="profile-dropdown" id="profileDropdown">
-        <div class="profile-option active" onclick="switchProfile('coordinador')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>
-          <div><div class="po-name">Coordinador de eventos</div><div class="po-desc">Crear y configurar competencias</div></div>
-        </div>
-        <div class="profile-option" onclick="switchProfile('digitador')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-          <div><div class="po-name">Digitador</div><div class="po-desc">Digitar enfrentamientos asignados</div></div>
-        </div>
-      </div>
-    </div>
-  </header>
-  </template>
   <div class="page">
+
+    <!-- Franja del evento en contexto (como el detalle del evento en la suite) -->
+    <div class="event-strip" id="eventHeader">
+      <button class="event-strip__back" type="button" onclick="crumbBack()" aria-label="Volver"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="event-strip__name" id="eventName">Juegos Intercolegiados Nacionales 2026</span>
+      <span class="naowee-badge naowee-badge--negative naowee-badge--quiet">En curso</span>
+    </div>
+
+    <!-- ═══ S1 · PROMOCIONES DEL EVENTO ═══ -->
+    <div id="promoStage" class="stage" style="display:none">
+      <div class="sorteo-head">
+        <div>
+          <h1 class="sorteo-title">Sorteos</h1>
+          <p class="sorteo-sub">Elige la promoción que vas a sortear. Cada promoción es el paso de una fase a la siguiente.</p>
+        </div>
+      </div>
+      <div id="promoBody"></div>
+    </div>
 
     <div id="wizardStage" class="stage" style="display:none">
     <div class="sorteo-head">
       <div>
-        <h1 class="sorteo-title">Sorteo de equipos</h1>
-        <p class="sorteo-sub">Configura una prueba para sortear sus grupos o llaves. Cada prueba (deporte + categoría + sexo) es un sorteo independiente.</p>
+        <h1 class="sorteo-title">Crear sorteo</h1>
+        <p class="sorteo-sub" id="wzPromoSub"></p>
       </div>
-      <button class="naowee-btn naowee-btn--mute" id="btnWizardBack" onclick="openProgEdit()">← Regresar a la lista</button>
+      <button class="naowee-btn naowee-btn--mute" id="btnWizardBack" onclick="openProgEdit()">Regresar a la lista</button>
     </div>
 
     <div class="wz-card">
-      <div class="wz-steps">
-        <div class="naowee-stepper naowee-stepper--pulse">
-          <div class="naowee-stepper__step naowee-stepper__step--active" id="wzStep1"><span class="naowee-stepper__number">1</span><span class="naowee-stepper__label">Prueba</span></div>
-          <div class="naowee-stepper__connector" id="wzLine1"></div>
-          <div class="naowee-stepper__step" id="wzStep2"><span class="naowee-stepper__number">2</span><span class="naowee-stepper__label">Configuración</span></div>
-          <div class="naowee-stepper__connector" id="wzLine2"></div>
-          <div class="naowee-stepper__step" id="wzStep3"><span class="naowee-stepper__number">3</span><span class="naowee-stepper__label">Confirmar</span></div>
-        </div>
-      </div>
+      <div class="wz-steps" id="wzStepper"></div>
 
       <div class="wz-body">
         <!-- PASO 1 -->
         <div class="wz-panel active" id="panel1">
           <div class="wz-panel-title">Selecciona la prueba</div>
-          <div class="wz-panel-hint">Tipo de deporte, disciplina, categoría y sexo.</div>
-          <div class="wz-field">
-            <label>Tipo de deporte</label>
-            <div class="wz-pills">
-              <div class="wz-pill" data-tipo="conjunto" onclick="selTipo('conjunto')"><div class="wz-pill-ico">🤝</div><div class="wz-pill-txt"><b>De conjunto</b><span>Equipos<span class="naowee-badge naowee-badge--neutral naowee-badge--quiet naowee-badge--small">grupos</span></span></div></div>
-              <div class="wz-pill" data-tipo="individual" onclick="selTipo('individual')"><div class="wz-pill-ico">🥋</div><div class="wz-pill-txt"><b>Individual</b><span>Deportistas<span class="naowee-badge naowee-badge--neutral naowee-badge--quiet naowee-badge--small">llaves</span></span></div></div>
-            </div>
-          </div>
-          <div class="wz-field hidden" id="fDeporte">
+          <div class="wz-panel-hint">Deporte de conjunto, categoría y rama. Solo los deportes de conjunto del evento.</div>
+          <div class="wz-field" id="fDeporte">
             <label>Deporte</label>
             <div class="naowee-dropdown" id="ddDeporte">
               <button type="button" class="naowee-dropdown__trigger" onclick="ddToggle('ddDeporte')">
@@ -768,41 +811,18 @@ body.sorteo-has-footer .page{padding-bottom:96px}
           <div id="dupWarn"></div>
         </div>
 
-        <!-- PASO 2 -->
+        <!-- PASO 3 · Grupos y líderes -->
         <div class="wz-panel" id="panel2">
-          <div class="wz-panel-title">Sistema de competencia</div>
-          <div class="wz-panel-hint">El formato depende de la cantidad de participantes. Ajústalo según los clasificados reales.</div>
-          <!-- Sistema NO se elige aqui: lo determina el tipo de prueba del paso 1.
-               Por eso es texto de dato + "Cambiar", y no una pildora con forma de boton. -->
-          <div class="wz-field wz-inherit">
-            <label>Sistema</label>
-            <div class="wz-inherit__row">
-              <b id="sistemaTxt">—</b>
-              <button type="button" class="naowee-btn naowee-btn--link naowee-btn--small" onclick="goStep(1)">Cambiar</button>
-            </div>
-            <p class="wz-inherit__note">Lo define el tipo de prueba que elegiste en el paso 1.</p>
-          </div>
-          <div class="wz-field"><label>Modo de sorteo</label>
-            <div class="naowee-segment naowee-segment--proportional naowee-segment--small" id="modoSeg" style="width:100%">
-              <span class="naowee-segment__pill naowee-segment__pill--no-anim"></span>
-              <button type="button" class="naowee-segment__item naowee-segment__item--active" data-modo="auto" onclick="setModo('auto')"><svg viewBox="0 0 16 16" fill="none"><path d="M2 8h12M9 4l5 4-5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Automático</button>
-              <button type="button" class="naowee-segment__item" data-modo="manual" onclick="setModo('manual')"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 2v1.4M8 12.6V14M2 8h1.4M12.6 8H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="8" r="1.3" fill="currentColor"/></svg>Manual</button>
-              <button type="button" class="naowee-segment__item" data-modo="transcrip" onclick="setModo('transcrip')"><svg viewBox="0 0 16 16" fill="none"><path d="M5 2.5h6a1 1 0 011 1V13a1 1 0 01-1 1H5a1 1 0 01-1-1V3.5a1 1 0 011-1z" stroke="currentColor" stroke-width="1.3"/><path d="M6.4 2.6V2.2a1 1 0 011-1h1.2a1 1 0 011 1v.4M6.3 6.4h3.4M6.3 8.9h3.4M6.3 11.4h2.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Ya sorteado</button>
-            </div>
-            <div class="wz-panel-hint" style="margin-top:6px" id="modoHint">Automático: el sistema arma los grupos al instante.</div>
-          </div>
+          <div class="wz-panel-title">Grupos y líderes</div>
+          <div class="wz-panel-hint">Fase de grupos, todos contra todos. El número de grupos lo limita la cantidad de participantes. El líder es el único equipo que queda fijo en su grupo; los demás salen al azar.</div>
           <div id="cfgConjunto">
-            <div class="wz-row">
+            <div class="wz-row wz-row--narrow">
               <div class="wz-field">
-                <label>N.º de equipos clasificados</label>
-                <div class="naowee-input-stepper"><div class="naowee-input-stepper__content"><div class="naowee-input-stepper__input">
-                  <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inEquipos',-1,2,32)"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-                  <div class="naowee-input-stepper__value"><input type="number" class="naowee-input-stepper__value-input" id="inEquipos" value="8" min="2" max="32" oninput="W.nEquipos=+this.value||0;recalcCfg()" onblur="cfgClampInput(this)"><span class="naowee-input-stepper__value-comp">equipos</span></div>
-                  <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inEquipos',1,2,32)"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-                </div></div></div>
+                <label>Participantes</label>
+                <div class="wz-inherit__row"><b id="cfgEquiposTxt">—</b><button type="button" class="naowee-btn naowee-btn--link naowee-btn--small" onclick="goStep(2)">Cambiar</button></div>
               </div>
               <div class="wz-field">
-                <label>N.º de grupos</label>
+                <label>Número de grupos</label>
                 <div class="naowee-input-stepper"><div class="naowee-input-stepper__content"><div class="naowee-input-stepper__input">
                   <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inGrupos',-1)"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
                   <div class="naowee-input-stepper__value"><input type="number" class="naowee-input-stepper__value-input" id="inGrupos" value="2" min="1" max="8" oninput="W.nGrupos=+this.value||1;recalcCfg()" onblur="cfgClampInput(this)"><span class="naowee-input-stepper__value-comp">grupos</span></div>
@@ -811,29 +831,10 @@ body.sorteo-has-footer .page{padding-bottom:96px}
               </div>
             </div>
             <div id="repartoMsg" class="wz-cfgmsg"></div>
-          </div>
-          <div id="cfgIndividual" style="display:none">
-            <div class="wz-field" style="max-width:50%">
-              <label>N.º de participantes</label>
-              <div class="naowee-input-stepper"><div class="naowee-input-stepper__content"><div class="naowee-input-stepper__input">
-                <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inPart',-1,2,64)"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-                <div class="naowee-input-stepper__value"><input type="number" class="naowee-input-stepper__value-input" id="inPart" value="8" min="2" max="64" oninput="W.nEquipos=+this.value||0;recalcCfg()" onblur="cfgClampInput(this)"><span class="naowee-input-stepper__value-comp">deportistas</span></div>
-                <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inPart',1,2,64)"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-              </div></div></div>
+            <div class="wz-field" style="margin-top:18px">
+              <label>Líder de cada grupo (opcional)</label>
+              <div class="leaders" id="leadersBox"></div>
             </div>
-            <div id="llaveMsg" class="wz-cfgmsg"></div>
-          </div>
-        </div>
-
-        <!-- PASO 3 -->
-        <div class="wz-panel" id="panel3">
-          <div class="wz-panel-title">Revisa la parametrización</div>
-          <div class="wz-panel-hint">Si todo está correcto, confirma para continuar al sorteo.</div>
-          <div class="wz-summary" id="summaryBox"></div>
-          <div class="wz-done" id="doneBox" style="display:none">
-            <div class="wz-done-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <b>Parametrización lista</b>
-            <p>Los parámetros quedaron definidos. El siguiente paso —cargar clasificados y ejecutar la ruleta— llega en la próxima fase del prototipo.</p>
           </div>
         </div>
       </div>
@@ -845,23 +846,31 @@ body.sorteo-has-footer .page{padding-bottom:96px}
     </div>
     </div><!-- /wizardStage -->
 
-    <!-- ═══ CLASIFICADOS (editable) ═══ -->
+    <!-- ═══ S3 · PASO 2 · PARTICIPANTES ═══ -->
     <div id="clasifStage" class="stage" style="display:none">
       <div class="sorteo-head">
         <div>
-          <h1 class="sorteo-title">Clasificados</h1>
-          <p class="sorteo-sub">Nombra a los participantes del sorteo. La cantidad la fijaste en <b>Parámetros</b>; para cambiarla, vuelve allá.</p>
+          <h1 class="sorteo-title">Crear sorteo</h1>
+          <p class="sorteo-sub" id="clasifPromoSub"></p>
         </div>
-        <button class="naowee-btn naowee-btn--mute" onclick="backToWizard()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 5h5M11 5h3M2 11h3M9 11h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="5" r="1.8" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="11" r="1.8" stroke="currentColor" stroke-width="1.5"/></svg> Parámetros</button>
+        <button class="naowee-btn naowee-btn--mute" onclick="openProgEdit()">Regresar a la lista</button>
       </div>
       <div class="clasif-panel">
-        <div class="clasif-head"><span class="cr-stand-dot"></span><span id="clasifTitle">Equipos clasificados</span><span class="naowee-badge naowee-badge--neutral naowee-badge--quiet" id="clasifCount">0</span></div>
+        <div class="wz-steps" id="clasifSteps"></div>
+        <div class="wz-body" style="padding-bottom:0">
+          <div class="wz-panel-title">Participantes</div>
+          <div class="wz-panel-hint" id="clasifTitle"></div>
+        </div>
+        <div id="clasifBanner" style="padding:0 28px"></div>
+        <div class="part-toolbar">
+          <span class="part-toolbar__count" id="clasifCount"></span>
+          <span class="part-toolbar__actions"><button type="button" class="naowee-btn naowee-btn--quiet naowee-btn--small" onclick="clasifSelectAll(true)">Marcar todas</button><button type="button" class="naowee-btn naowee-btn--quiet naowee-btn--small" onclick="clasifSelectAll(false)">Desmarcar todas</button></span>
+        </div>
         <div id="clasifList" class="clasif-list"></div>
-        <p class="clasif-note">* El <b>nombre</b> es obligatorio; la <b>delegación / regional</b> es opcional. Serán los participantes que entren al sorteo. Para agregar o quitar cupos, vuelve a <b>Parámetros</b>.</p>
         <div id="clasifDerived"></div>
         <div class="wz-nav clasif-foot">
-          <button class="naowee-btn naowee-btn--mute" onclick="backToWizard()">Atrás</button>
-          <button class="naowee-btn naowee-btn--loud" id="btnClasifNext" onclick="continueSorteo()">Continuar al sorteo</button>
+          <button class="naowee-btn naowee-btn--mute" onclick="goStep(1)">Atrás</button>
+          <button class="naowee-btn naowee-btn--loud" id="btnClasifNext" onclick="goStep(3)">Siguiente</button>
         </div>
       </div>
     </div>
@@ -870,7 +879,7 @@ body.sorteo-has-footer .page{padding-bottom:96px}
     <div id="ruletaStage" class="stage" style="display:none">
       <div class="sorteo-head">
         <div>
-          <h1 class="sorteo-title">Sorteo en vivo</h1>
+          <h1 class="sorteo-title">Sorteo</h1>
           <p class="sorteo-sub" id="ruletaSub">Asignando participantes a los grupos…</p>
         </div>
         <button class="naowee-btn naowee-btn--mute" id="btnSkip" onclick="skipRuleta()"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 4l4 4-4 4M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Saltar</button>
@@ -881,66 +890,8 @@ body.sorteo-has-footer .page{padding-bottom:96px}
           <div class="ruleta-grupos" id="ruletaGrupos"></div>
         </div>
         <div class="wz-nav" id="ruletaNav" style="display:none">
-          <button class="naowee-btn naowee-btn--mute" onclick="backToWizard()">← Parámetros</button>
-          <button class="naowee-btn naowee-btn--loud" onclick="showPreview()">Ver resultado →</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══ SORTEO MANUAL (ruleta) ═══ -->
-    <div id="manualStage" class="stage" style="display:none">
-      <div class="sorteo-head">
-        <div>
-          <h1 class="sorteo-title">Sorteo manual</h1>
-          <p class="sorteo-sub" id="manualSub">Gira la ruleta: cada giro asigna un equipo a un grupo.</p>
-          <!-- Píldora con la prueba: en esta pantalla ya no se ve qué se está
-               sorteando, y el head es el único sitio donde cabe sin ruido. -->
-          <span class="manual-prueba" id="manualPrueba" hidden></span>
-        </div>
-        <!-- Sin botón "Parámetros" aquí: estaba duplicado con el "← Parámetros"
-             del pie de la tarjeta, mismo destino y misma pantalla. -->
-      </div>
-      <div class="manual-wrap">
-        <div class="stage-panel manual-panel">
-          <div class="manual-grupos" id="manualGrupos"></div>
-          <div class="wz-nav">
-            <button class="naowee-btn naowee-btn--mute" onclick="backToWizard()">← Parámetros</button>
-            <button class="naowee-btn naowee-btn--loud" id="btnManualNext" onclick="showPreviewManual()" disabled>Ver resultado →</button>
-          </div>
-        </div>
-        <!-- La ruleta va FUERA de la tarjeta: es el objeto protagonista, no
-             contenido de un panel. -->
-        <div class="manual-wheel-col">
-          <div id="manualWheel" class="manual-wheel"></div>
-          <button class="naowee-btn naowee-btn--loud naowee-btn--large" id="btnGirar" onclick="girarManual()">Girar la ruleta</button>
-          <div class="manual-progress" id="manualProgress">0 / 0 equipos sorteados</div>
-        </div>
-      </div>
-    </div>
-
-    <div id="transcripStage" class="stage" style="display:none">
-      <div class="sorteo-head">
-        <div>
-          <h1 class="sorteo-title">Registrar un sorteo ya hecho</h1>
-          <p class="sorteo-sub" id="transcripSub">El sorteo se hizo afuera; regístralo aquí.</p>
-        </div>
-        <button class="naowee-btn naowee-btn--mute" onclick="backToWizard()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 5h5M11 5h3M2 11h3M9 11h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="5" r="1.8" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="11" r="1.8" stroke="currentColor" stroke-width="1.5"/></svg> Parámetros</button>
-      </div>
-      <div class="stage-panel">
-        <div class="transcrip-wrap">
-          <div class="transcrip-fmt">
-            <span class="transcrip-fmt-lbl">Formato del sorteo</span>
-            <div class="naowee-segment naowee-segment--proportional naowee-segment--small" id="tFmtSeg" style="width:100%;max-width:340px">
-              <span class="naowee-segment__pill naowee-segment__pill--no-anim"></span>
-              <button type="button" class="naowee-segment__item naowee-segment__item--active" data-fmt="grupos" onclick="setTFmt('grupos')"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="2.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>Grupos</button>
-              <button type="button" class="naowee-segment__item" data-fmt="bracket" onclick="setTFmt('bracket')"><svg viewBox="0 0 16 16" fill="none"><path d="M2 3.5h3.5v3H9M2 12.5h3.5v-3M9 5h2.5v3H14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Llave</button>
-            </div>
-          </div>
-          <div id="tBody"></div>
-        </div>
-        <div class="wz-nav">
-          <button class="naowee-btn naowee-btn--mute" onclick="backToWizard()">← Atrás</button>
-          <button class="naowee-btn naowee-btn--loud" id="btnTranscrip" onclick="confirmTranscrip()">Conformar grupos</button>
+          <button class="naowee-btn naowee-btn--mute" onclick="backToWizard()">Atrás</button>
+          <button class="naowee-btn naowee-btn--loud" onclick="showPreview()">Ver resultado</button>
         </div>
       </div>
     </div>
@@ -951,11 +902,10 @@ body.sorteo-has-footer .page{padding-bottom:96px}
       <div class="sorteo-head">
         <div>
           <h1 class="sorteo-title">Resultado del sorteo</h1>
-          <p class="sorteo-sub">Revisa el resultado y confírmalo para publicarlo.</p>
+          <p class="sorteo-sub">Revisa los grupos y los enfrentamientos. Puedes resortear hasta que cierres el sorteo.</p>
         </div>
         <div class="sorteo-head-actions">
-          <button class="naowee-btn naowee-btn--mute" onclick="exportarPDF()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.8v6.4M5.3 5.8L8 8.5l2.7-2.7M3 10.5v2a1 1 0 001 1h8a1 1 0 001-1v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Exportar</button>
-          <button class="naowee-btn naowee-btn--mute" id="btnResortear" onclick="reSortear()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.6 8a5.6 5.6 0 11-1.64-3.96M13.6 2.2v3h-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Re-sortear</button>
+          <button class="naowee-btn naowee-btn--mute" id="btnResortear" onclick="reSortear()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.6 8a5.6 5.6 0 11-1.64-3.96M13.6 2.2v3h-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Resortear</button>
         </div>
       </div>
       <div class="preview-comp">
@@ -963,9 +913,9 @@ body.sorteo-has-footer .page{padding-bottom:96px}
         <div class="naowee-tabs naowee-tabs--proportional" id="previewTabs"></div>
         <div class="cr-tabpanel" id="previewPanel"></div>
         <div class="wz-nav">
-          <button class="naowee-btn naowee-btn--mute" id="btnPreviewBack" onclick="backToWizard()">← Parámetros</button>
+          <button class="naowee-btn naowee-btn--mute" id="btnPreviewBack" onclick="backToWizard()">Atrás</button>
           <div style="display:flex;gap:10px;align-items:center">
-            <button class="naowee-btn naowee-btn--loud" id="btnConfirmSorteo" onclick="confirmSorteo()">Confirmar sorteo</button>
+            <button class="naowee-btn naowee-btn--loud" id="btnConfirmSorteo" onclick="confirmSorteo()">Cerrar sorteo</button>
           </div>
         </div>
       </div>
@@ -978,28 +928,16 @@ body.sorteo-has-footer .page{padding-bottom:96px}
         <div class="ph-titlewrap">
           <button class="naowee-btn naowee-btn--icon naowee-btn--mute ph-back" id="btnProgBackArrow" onclick="progEditBack()" style="display:none" aria-label="Volver a la lista" title="Volver a la lista"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <div>
-            <h1 class="sorteo-title" id="progEditTitle">Lista de sorteos</h1>
-            <p class="sorteo-sub" id="progEditSub">Todos los sorteos creados. Entra a uno para editarlo o programar sus partidos.</p>
+            <h1 class="sorteo-title" id="progEditTitle">Regional → Nacional</h1>
+            <p class="sorteo-sub" id="progEditSub">Sorteos de esta promoción. Entra a uno para ver su resultado.</p>
           </div>
         </div>
         <div class="ph-actions">
-          <!-- Head COMPARTIDO por dos vistas del mismo stage: la lista
-               (openProgEdit) y el detalle de un sorteo (editProg). Cada boton se
-               alterna segun la vista; ninguno vale para las dos.
-                 · lista   -> "Crear sorteo"
-                 · detalle -> "Descartar cambios" + "Guardar cambios" (estado sucio:
-                              Guardar arranca deshabilitado, Descartar solo aparece
-                              cuando hay algo que descartar). "Crear sorteo" no pinta
-                              nada en un sorteo que ya existe. -->
-          <button class="naowee-btn naowee-btn--mute" id="btnDescartarProg" onclick="descartarProg()" style="display:none">Descartar cambios</button>
-          <button class="naowee-btn naowee-btn--loud" id="btnGuardarProg" onclick="guardarProg()" style="display:none" disabled>Guardar cambios</button>
+          <div id="detailActions"></div>
           <button class="naowee-btn naowee-btn--loud" id="btnCrearSorteo" onclick="openCrearSorteo()" style="display:none"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Crear sorteo</button>
         </div>
       </div>
       <div id="progEditWrap">
-        <!-- Mismo juego de tabs del resultado: al entrar a un sorteo ya publicado
-             desde la lista antes solo se montaba la Programación, dejando grupos,
-             posiciones y fase final inalcanzables. -->
         <div class="naowee-tabs naowee-tabs--proportional" id="progEditTabs" style="display:none"></div>
         <div id="progEditBody"></div>
       </div>
@@ -1009,52 +947,25 @@ body.sorteo-has-footer .page{padding-bottom:96px}
 </div>
 </div>
 
-<!-- Confirmacion de descarte: el mismo modal sirve al boton "Descartar cambios"
-     y al back-arrow, que tambien puede perder cambios sin guardar. -->
-<div class="naowee-modal-overlay" id="progDiscardOverlay">
-  <div class="naowee-modal" role="dialog" aria-modal="true" aria-labelledby="progDiscardTitle">
-    <div class="naowee-modal__header">
-      <div class="naowee-modal__title-group">
-        <h2 class="naowee-modal__title" id="progDiscardTitle">¿Estás seguro que quieres descartar los cambios?</h2>
-        <p class="naowee-modal__subtitle">Se perderán la fecha, hora y escenario que asignaste y no has guardado.</p>
-      </div>
-      <button class="naowee-modal__dismiss" type="button" aria-label="Cerrar" onclick="progDiscardCancel()"><svg viewBox="0 0 16 16" width="16" height="16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-    </div>
-    <div class="naowee-modal__footer naowee-modal__footer--end">
-      <button class="naowee-btn naowee-btn--mute" type="button" onclick="progDiscardCancel()">Seguir editando</button>
-      <button class="naowee-btn naowee-btn--loud" type="button" onclick="progDiscardConfirm()">Descartar cambios</button>
-    </div>
-  </div>
-</div>
-
 <script src="shared.js"></script>
 <script src="sorteo-engine.js"></script>
 <script src="sorteo-store.js"></script>
 <script src="competition-render.js?v=2.1.1"></script>
-<script src="ruleta-wheel.js"></script>
-<script src="sorteo-tour.js?v=2.5.0"></script>
 <script src="shared/naowee-footer.js" defer></script>
 <script>
-/* ── Chrome (profile switcher + nav) ── */
-function toggleProfileDD(e){ if(e) e.stopPropagation(); document.getElementById('profileSwitcher').classList.toggle('open'); }
-function fadeAndGo(url){document.body.style.transition='opacity .25s ease';document.body.style.opacity='0';setTimeout(()=>{window.location.href=url},260)}
-function switchProfile(p){
-  document.getElementById('profileSwitcher')?.classList.remove('open');
-  if(p==='coordinador') fadeAndGo('stepper.html');
-  if(p==='digitador') fadeAndGo('digitador.html');
-}
-function toggleCompMenu(){ var nav=document.getElementById('navComp'); var sub=document.getElementById('subnavComp'); if(nav) nav.classList.toggle('expanded'); if(sub) sub.classList.toggle('open'); }
-document.addEventListener('click',function(e){ if(!e.target.closest('.profile-switcher')) document.getElementById('profileSwitcher')?.classList.remove('open'); });
-document.getElementById('btnLogout')?.addEventListener('click',()=>{ fadeAndGo('../escenarios/escenario-01-login.html'); });
-
 /* ── Wizard ── */
-const W = { step:1, tipo:'', deporteKey:'', deporteLabel:'', emoji:'', categoria:'', sexo:'', nEquipos:8, nGrupos:2, sistema:'', modo:'auto' };
+const W = { step:1, tipo:'conjunto', deporteKey:'', deporteLabel:'', emoji:'', categoria:'', sexo:'', nEquipos:8, nGrupos:2, sistema:'' };
+/* Deportes de conjunto del evento (catálogo deportivo de Juegos Intercolegiados Nacionales 2026). Solo estos se sortean. */
+var EVENT_TEAM_SPORTS=['Baloncesto','Fútbol','Fútbol Sala','Voleibol','Balonmano','Béisbol','Rugby Sevens'];
+var _TICON={ info:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M7 7h2v4H7z" fill="#fff"/><circle cx="8" cy="5" r="1" fill="#fff"/></svg>', caution:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M7 5h2v4H7z" fill="#fff"/><circle cx="8" cy="11" r="1" fill="#fff"/></svg>', ok:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 8l1.6 1.6L10.5 6.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' };
+function tEsc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch];}); }
 function deportesPorTipo(tipo){
   const out=[], seen=new Set();
   if(typeof SPORTS_DB==='undefined') return out;
   for(const k in SPORTS_DB){ const sp=SPORTS_DB[k];
     if(!sp||typeof sp!=='object'||!sp.label) continue;
     if(tipo && sp.tipo!==tipo) continue;
+    if(_eligibleSportLabels().indexOf(sp.label)<0) continue;   /* solo los de conjunto elegibles en la fase destino */
     const lk=sp.label.toLowerCase(); if(seen.has(lk)) continue; seen.add(lk); /* dedup por nombre: las modalidades (cricket_t20, cricket_odi…) comparten label */
     out.push({key:k,label:sp.label,emoji:sp.emoji||'🏅'}); }
   return out.sort((a,b)=>a.label.localeCompare(b.label,'es'));
@@ -1109,14 +1020,13 @@ function _renderDupWarn(rec){
   box.innerHTML='<div class="naowee-message naowee-message--caution" style="width:100%;margin-top:14px">'
     +'<div class="naowee-message__header"><span class="naowee-message__icon">'+_TICON.caution+'</span>'
     +'<span class="naowee-message__title">Ya creaste este sorteo</span></div>'
-    +'<p class="naowee-message__text"><b>'+tEsc(nombre)+'</b> ya tiene un sorteo publicado, así que no se puede volver a sortear. '
-    +'¿Deseas editarlo o reprogramarlo?</p>'
+    +'<p class="naowee-message__text"><b>'+tEsc(nombre)+'</b> ya tiene un sorteo en '+tEsc(_promoLabel())+'. Una prueba admite un solo sorteo por promoción.</p>'
     +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">'
-    +'<button type="button" class="naowee-btn naowee-btn--loud naowee-btn--small" onclick="dupReprogramar()">Reprogramar horarios</button>'
+    +'<button type="button" class="naowee-btn naowee-btn--loud naowee-btn--small" onclick="dupVerResultado()">Ver resultado</button>'
     +'<button type="button" class="naowee-btn naowee-btn--quiet naowee-btn--small" onclick="dupOtraPrueba()">Elegir otra prueba</button>'
     +'</div></div>';
 }
-function dupReprogramar(){ if(_dupRec) editProg(_dupRec.id); }
+function dupVerResultado(){ if(_dupRec) editProg(_dupRec.id); }
 function dupOtraPrueba(){
   W.categoria=''; W.sexo='';
   resetDD('ddCategoria','Categoría…'); resetDD('ddSexo','Sexo…');
@@ -1126,6 +1036,7 @@ function refreshStep1(){
   const ok=W.tipo&&W.deporteKey&&W.categoria&&W.sexo;
   _dupRec = ok ? _sorteoExistente() : null;
   _renderDupWarn(_dupRec);
+  if(ok && !_dupRec) _loadParticipants();   /* la prueba define el pool de la fase origen */
   if(W.step===1) document.getElementById('btnNext').disabled=!ok||!!_dupRec;
 }
 function stepAdjust(id,delta,min,max){ const el=document.getElementById(id);
@@ -1153,8 +1064,9 @@ function _cfgMsg(id,tipo,titulo,texto){
 }
 function recalcCfg(){
   if(W.tipo==='conjunto'){ W.sistema='Fase de grupos · todos contra todos';
-    const n=W.nEquipos||0, g=W.nGrupos||1;
+    const n=_selCount(), g=W.nGrupos||1; W.nEquipos=n;
     const maxG=_cfgMaxGrupos(n), ig=document.getElementById('inGrupos'); if(ig) ig.max=maxG;
+    const et=document.getElementById('cfgEquiposTxt'); if(et) et.textContent=_cfgPl(n,'institución seleccionada','instituciones seleccionadas');
     if(!n||!g){ W.cfgOk=false; _cfgMsg('repartoMsg','informative','Define equipos y grupos','Ajusta los dos valores y aquí verás cómo queda el reparto.'); }
     else {
       const sizes=_cfgSizes(n,g), resto=n%g, base=Math.floor(n/g);
@@ -1174,16 +1086,8 @@ function recalcCfg(){
             : `Todos los grupos juegan todos contra todos en ${_cfgPl(fechas,'fecha','fechas')}, sin descansos.`);
       }
     }
-  }else{ W.sistema='Eliminación directa · llaves';
-    const n=W.nEquipos||0, byes=n>1?(Math.pow(2,Math.ceil(Math.log2(n)))-n):0;
-    if(!n||n<2){ W.cfgOk=false; _cfgMsg('llaveMsg','informative','Define participantes','Se necesitan al menos 2 para armar una llave.'); }
-    else { W.cfgOk=true;
-      _cfgMsg('llaveMsg','informative',`Llave de ${_cfgPl(n,'participante','participantes')}${byes?` · ${_cfgPl(byes,'descanso','descansos')}`:''}`,
-        byes ? `El cuadro se completa a ${n+byes}: ${_cfgPl(byes,'participante pasa','participantes pasan')} directo a la segunda ronda sin jugar la primera.`
-             : 'El cuadro está completo: todos juegan desde la primera ronda.');
-    }
   }
-  document.getElementById('sistemaTxt').textContent=W.sistema;
+  renderLeaders();
   _cfgSyncNext();
 }
 /* Ajuste al SOLTAR el campo, no en cada tecla: mientras escribes puedes quedar
@@ -1205,48 +1109,6 @@ function cfgClampInput(el){
   if(ig && el!==ig) _cfgClampUno(ig);
 }
 /* El paso 2 solo avanza si la configuracion produce una competencia jugable. */
-function _cfgSyncNext(){ if(W.step!==2)return; const b=document.getElementById('btnNext'); if(b) b.disabled=(W.cfgOk===false); }
-function buildSummary(){ const conj=W.tipo==='conjunto';
-  /* repartoTxt/llaveTxt no estan en el HTML: los crea recalcCfg() en el paso 2.
-     Si se salta al 3 sin pasar por el 2 —lo hace el recorrido guiado con
-     goStep(3)— venian null y el resumen entero reventaba. */
-  const _rt=document.getElementById(conj?'repartoTxt':'llaveTxt');
-  const reparto=_rt?(conj?_rt.textContent.replace('Reparto: ',''):_rt.textContent):'';
-  document.getElementById('summaryBox').innerHTML=`
-    <div class="sum2">
-      <div class="sum2-hero">
-        <div class="sum2-emoji">${W.emoji||'🏅'}</div>
-        <div class="sum2-hero-txt">
-          <div class="sum2-title">${W.deporteLabel}</div>
-          <div class="sum2-chips"><span class="naowee-badge naowee-badge--on-fill naowee-badge--large">${W.categoria}</span><span class="naowee-badge naowee-badge--on-fill naowee-badge--large">${W.sexo}</span><span class="naowee-badge naowee-badge--on-fill naowee-badge--large">${conj?'De conjunto':'Individual'}</span><span class="naowee-badge naowee-badge--on-fill naowee-badge--large">${W.modo==='manual'?'Ruleta manual':'Automático'}</span></div>
-        </div>
-      </div>
-      <div class="sum2-grid">
-        <div class="sum2-stat"><span class="sum2-stat-ico"><svg viewBox="0 0 18 18" fill="none"><circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.4"/><path d="M2 15a4 4 0 018 0M12 4.2a2.5 2.5 0 010 4.6M16 15a4 4 0 00-3-3.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><div><div class="sum2-stat-v">${W.nEquipos}</div><div class="sum2-stat-k">${conj?'Equipos clasificados':'Participantes'}</div></div></div>
-        ${conj?`<div class="sum2-stat"><span class="sum2-stat-ico"><svg viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.4"/><rect x="10" y="2" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.4"/><rect x="2" y="10" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.4"/><rect x="10" y="10" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.4"/></svg></span><div><div class="sum2-stat-v">${W.nGrupos}</div><div class="sum2-stat-k">Grupos</div></div></div>`:`<div class="sum2-stat"><span class="sum2-stat-ico"><svg viewBox="0 0 18 18" fill="none"><path d="M3 3v4h4M3 11v4h4M11 5h4M11 13h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><div class="sum2-stat-v">${W.nEquipos}</div><div class="sum2-stat-k">Cuadro de llave</div></div></div>`}
-        <div class="sum2-stat sum2-stat--wide"><span class="sum2-stat-ico"><svg viewBox="0 0 18 18" fill="none"><path d="M6 2.5h6v3.4a3 3 0 01-6 0V2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 3.8H3.8v.9a2.3 2.3 0 002.3 2.3M12 3.8h2.2v.9a2.3 2.3 0 01-2.3 2.3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M9 8.9v3.2M6.6 15.2h4.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><div><div class="sum2-stat-v">${W.sistema}</div><div class="sum2-stat-k">Sistema de competencia</div></div></div>
-        <div class="sum2-stat sum2-stat--wide"><span class="sum2-stat-ico"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2v3.4M9 5.4H4.6A1.6 1.6 0 003 7v1M9 5.4h4.4A1.6 1.6 0 0115 7v1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><rect x="1" y="9.5" width="4" height="5.5" rx="1.2" stroke="currentColor" stroke-width="1.4"/><rect x="13" y="9.5" width="4" height="5.5" rx="1.2" stroke="currentColor" stroke-width="1.4"/></svg></span><div><div class="sum2-stat-v">${reparto}</div><div class="sum2-stat-k">${conj?'Reparto de grupos':'Formato'}</div></div></div>
-      </div>
-    </div>`;
-}
-function goStep(n){ n=Math.max(1,Math.min(3,n)); W.step=n;
-  for(let i=1;i<=3;i++){ const st=document.getElementById('wzStep'+i);
-    st.classList.toggle('naowee-stepper__step--active',i===n); st.classList.toggle('naowee-stepper__step--done',i<n);
-    st.querySelector('.naowee-stepper__number').innerHTML = i<n ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : String(i); }
-  document.getElementById('wzLine1').classList.toggle('naowee-stepper__connector--done',n>1); document.getElementById('wzLine2').classList.toggle('naowee-stepper__connector--done',n>2);
-  for(let i=1;i<=3;i++) document.getElementById('panel'+i).classList.toggle('active',i===n);
-  if(n===2){ document.getElementById('cfgConjunto').style.display=W.tipo==='conjunto'?'block':'none';
-    document.getElementById('cfgIndividual').style.display=W.tipo==='individual'?'block':'none';
-    var ie=document.getElementById('inEquipos'); if(ie)ie.value=W.nEquipos; var ig=document.getElementById('inGrupos'); if(ig)ig.value=W.nGrupos; var ip=document.getElementById('inPart'); if(ip)ip.value=W.nEquipos;
-    recalcCfg(); var ms=document.getElementById('modoSeg'); if(ms) segmentSync(ms); }
-  if(n===3){ buildSummary(); document.getElementById('doneBox').style.display='none'; }
-  document.getElementById('btnBack').classList.toggle('is-hidden',n===1);
-  const next=document.getElementById('btnNext');
-  if(n===1){ next.textContent='Siguiente'; refreshStep1(); }
-  else if(n===2){ next.textContent='Siguiente'; _cfgSyncNext(); }
-  else { next.textContent='Confirmar parametrización'; next.disabled=false; }
-}
-function next(){ if(W.step<3){ goStep(W.step+1); return; } startClasificados(); }
 function fireConfetti(){
   try{ if(matchMedia('(prefers-reduced-motion: reduce)').matches) return; }catch(e){}
   const cv=document.createElement('canvas'); cv.style.cssText='position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:9999';
@@ -1288,15 +1150,12 @@ var _WHEEL_COLORS=['#2c4a6b','#e8a05a','#96b9d5'];
 function teamColorLocal(n){ if(window.CompRender&&CompRender.teamColor)return CompRender.teamColor(n); let h=0; for(let i=0;i<n.length;i++)h=n.charCodeAt(i)+((h<<5)-h); return _TC[Math.abs(h)%_TC.length]; }
 function teamInitLocal(n){ if(window.CompRender&&CompRender.teamInit)return CompRender.teamInit(n); return n.split(' ').filter(w=>w.length>1).map(w=>w[0]).join('').substring(0,2).toUpperCase()||n[0]; }
 var _stageHistReady=false;
-function showStage(id,opts){ opts=opts||{}; const D={wizardStage:'block',clasifStage:'flex',ruletaStage:'flex',manualStage:'flex',transcripStage:'flex',previewStage:'flex',progEditStage:'flex'}; ['wizardStage','clasifStage','ruletaStage','manualStage','transcripStage','previewStage','progEditStage'].forEach(s=>{const el=document.getElementById(s); if(el)el.style.display=(s===id?(D[s]||'block'):'none');}); try{document.querySelector('.page').scrollTo(0,0);}catch(e){} try{document.body.classList.toggle('sorteo-has-footer',['clasifStage','ruletaStage','manualStage','transcripStage','previewStage'].indexOf(id)>=0);}catch(e){}
+function showStage(id,opts){ opts=opts||{}; const D={promoStage:'block',wizardStage:'block',clasifStage:'flex',ruletaStage:'flex',previewStage:'flex',progEditStage:'flex'}; ['promoStage','wizardStage','clasifStage','ruletaStage','previewStage','progEditStage'].forEach(s=>{const el=document.getElementById(s); if(el)el.style.display=(s===id?(D[s]||'block'):'none');}); try{document.querySelector('.page').scrollTo(0,0);}catch(e){} try{document.body.classList.toggle('sorteo-has-footer',['clasifStage','ruletaStage','previewStage'].indexOf(id)>=0);}catch(e){}
   /* Historial: cada cambio de stage = una entrada de historial, para que el BACK del navegador
      recorra los stages in-page (p.ej. progEditStage → wizardStage) en vez de salir de la página
      (antes saltaba directo a lista.html). Se seedea el stage base en el arranque (ver abajo). */
   try{ if(!opts.noPush){ if(!_stageHistReady){ history.replaceState({naoweeStage:id},''); _stageHistReady=true; } else if(!(history.state&&history.state.naoweeStage===id)){ history.pushState({naoweeStage:id},''); } } }catch(e){} }
-function _syncSorteoMode(id){ var isProg=(id==='progEditStage'); var crear=document.getElementById('modeCrear'), prog=document.getElementById('modeProg'); if(crear)crear.classList.toggle('is-active',!isProg); if(prog)prog.classList.toggle('is-active',isProg); }
-function setSorteoMode(m){ if(m==='prog'){ openProgEdit(); } else { showStage('wizardStage'); } }
 function genParticipantes(n,tipo){ const out=[]; for(let i=0;i<n;i++){ const p=_INST_POOL[i%_INST_POOL.length]; const wrap=Math.floor(i/_INST_POOL.length); const nombre=p?(p.n+(wrap?(' '+(wrap+1)):'')):((tipo==='individual'?'Deportista ':'Equipo ')+(i+1)); out.push({nombre:nombre, delegacion:(p?p.r:'')}); } return out; }
-function buildSorteo(){ const n=Math.max(2, +W.nEquipos||8); const parts=(_clasificados&&_clasificados.length)?_clasificados.map(c=>({nombre:(c.nombre||'').trim(),delegacion:(c.delegacion||'').trim(),grupoFijo:(c.grupoFijo==null?null:c.grupoFijo)})):genParticipantes(n,W.tipo); _sorteo={prueba:{deporteLabel:W.deporteLabel||'Deporte',emoji:W.emoji||'🏆',categoria:W.categoria||'General',sexo:W.sexo||'Mixto',tipo:W.tipo||'conjunto'},config:{nGrupos:(W.tipo==='individual'?1:Math.max(1,+W.nGrupos||2))},participantes:parts}; return _sorteo; }
 /* ── F3a: Clasificados editables ── */
 let _clasificados=[], _clasifTipo=null;
 /* La cantidad la manda Parametros, no esta pantalla. Al volver con otro numero
@@ -1304,50 +1163,9 @@ let _clasificados=[], _clasifTipo=null;
    final. Antes se regeneraba la lista entera, asi que cambiar la cantidad
    borraba todos los nombres tecleados — y ahora ese es el unico camino para
    agregar o quitar un cupo. */
-function _clasifResize(n){
-  const cambioDeTipo = (_clasifTipo !== W.tipo);
-  _clasifTipo = W.tipo;
-  if(!_clasificados.length || cambioDeTipo){
-    _clasificados = genParticipantes(n,W.tipo).map(p=>({nombre:p.nombre,delegacion:p.delegacion||''}));
-    return;
-  }
-  if(_clasificados.length > n){ _clasificados = _clasificados.slice(0,n); return; }
-  if(_clasificados.length < n){
-    genParticipantes(n,W.tipo).slice(_clasificados.length)
-      .forEach(p=>_clasificados.push({nombre:p.nombre,delegacion:p.delegacion||''}));
-  }
-}
-function startClasificados(){ const n=Math.max(2,+W.nEquipos||8); _clasifResize(n); showStage('clasifStage'); document.getElementById('clasifTitle').textContent=(W.tipo==='individual'?'Deportistas clasificados':'Equipos clasificados'); renderClasifList(); }
-function renderClasifList(){ const el=document.getElementById('clasifList'); if(!el)return; const ph=W.tipo==='individual'?'Nombre del deportista':'Nombre del equipo'; el.innerHTML=_clasificados.map(function(c,i){ const nm=(c.nombre||'').replace(/"/g,'&quot;'), dg=(c.delegacion||'').replace(/"/g,'&quot;'); return '<div class="clasif-row"><span class="clasif-pos">'+(i+1)+'</span>'
-  +'<div class="clasif-combo clasif-tf"><div class="naowee-textfield naowee-textfield--small"><div class="naowee-textfield__input-wrap"><input class="naowee-textfield__input clasif-combo-inp" value="'+nm+'" placeholder="'+ph+'" autocomplete="off" oninput="clasifInput('+i+',this.value)" onfocus="clasifShow('+i+')"><button type="button" class="clasif-combo-chev" onclick="clasifToggle('+i+',event)" tabindex="-1" aria-label="Ver participantes"><svg viewBox="0 0 16 16" width="14" height="14" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div><div class="clasif-combo-menu" id="clasifMenu'+i+'"></div></div>'
-  +'<div class="naowee-textfield naowee-textfield--small clasif-tf clasif-tf--sub"><div class="naowee-textfield__input-wrap"><input class="naowee-textfield__input" value="'+dg+'" placeholder="Delegación / regional (opcional)" oninput="syncClasif('+i+',\'delegacion\',this.value)"></div></div>'
-  +_grupoPillsHTML(i)
-  +'</div>'; }).join(''); document.getElementById('clasifCount').textContent=_clasificados.length; validateClasif(); renderClasifDerived(); }
 /* ── Reglas del sorteo: fijar un equipo a un grupo (grupoFijo). Pills por fila, solo en fase de grupos ── */
-function _clasifNGrupos(){ return (W.tipo==='individual')?0:Math.max(1,+W.nGrupos||1); }
-function _grupoPillsHTML(i){ var ng=_clasifNGrupos(); if(ng<2) return ''; var cur=(_clasificados[i]&&_clasificados[i].grupoFijo); if(cur!=null&&(cur|0)>=ng) cur=null;
-  var pills='<button type="button" class="clasif-gp clasif-gp--none'+((cur==null)?' is-active':'')+'" onclick="setGrupoFijo('+i+',null)" title="Sin grupo fijo" aria-label="Sin grupo fijo">—</button>';
-  for(var g=0;g<ng;g++){ var L=String.fromCharCode(65+g); pills+='<button type="button" class="clasif-gp'+(((cur|0)===g&&cur!=null)?' is-active':'')+'" onclick="setGrupoFijo('+i+','+g+')" title="Fijar al Grupo '+L+'" aria-label="Grupo '+L+'">'+L+'</button>'; }
-  return '<div class="clasif-grupo" role="group" aria-label="Grupo fijo del equipo">'+pills+'</div>'; }
-function setGrupoFijo(i,g){ if(!_clasificados[i])return; _clasificados[i].grupoFijo=(g==null?null:(g|0));
-  /* actualización puntual: solo re-pinta los pills de la fila + el resumen (no toca inputs → no pierde foco) */
-  var rows=document.querySelectorAll('#clasifList .clasif-row'), row=rows[i], wrap=row&&row.querySelector('.clasif-grupo');
-  if(wrap){ var tmp=document.createElement('div'); tmp.innerHTML=_grupoPillsHTML(i); var neo=tmp.firstElementChild; if(neo){ wrap.parentNode.replaceChild(neo,wrap); renderClasifDerived(); return; } }
-  renderClasifList(); }
-function syncClasif(i,k,v){ if(_clasificados[i]){ _clasificados[i][k]=v; if(k==='nombre') validateClasif(); } }
 /* ── Combobox de clasificados (desplegable alimentado del evento + editable) ── */
 function _normTxt(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); }
-function clasifMenuHtml(i,q){ var cur=_normTxt(q); var used=_clasificados.map(function(c,j){return j!==i?_normTxt(c.nombre):'';}); var pool=_NAMES.filter(function(n){ var nn=_normTxt(n); if(used.indexOf(nn)>=0)return false; return !cur||nn.indexOf(cur)>=0; }); if(!pool.length) return '<div class="clasif-combo-empty">Sin coincidencias · escribe un nombre personalizado</div>'; return pool.map(function(n){ return '<div class="clasif-combo-opt" onmousedown="clasifPick('+i+',\''+n.replace(/'/g,"\\'")+'\',event)">'+tEsc(n)+'</div>'; }).join(''); }
-function _clasifMenuEl(i){ return document.getElementById('clasifMenu'+i); }
-function clasifRenderMenu(i,q){ var menu=_clasifMenuEl(i); if(!menu)return; var box=menu.closest('.clasif-combo'); var inp=box.querySelector('.clasif-combo-inp'); menu.innerHTML=clasifMenuHtml(i,q); var r=inp.getBoundingClientRect(); menu.style.left=r.left+'px'; menu.style.top=(r.bottom+4)+'px'; menu.style.width=r.width+'px'; box.classList.add('open'); }
-function clasifShow(i){ document.querySelectorAll('.clasif-combo.open').forEach(function(c){c.classList.remove('open');}); clasifRenderMenu(i,''); }
-function clasifToggle(i,e){ if(e){e.preventDefault();e.stopPropagation();} var box=_clasifMenuEl(i).closest('.clasif-combo'); if(box.classList.contains('open')){ box.classList.remove('open'); } else { clasifShow(i); var inp=box.querySelector('.clasif-combo-inp'); if(inp)inp.focus(); } }
-function clasifInput(i,v){ syncClasif(i,'nombre',v); clasifRenderMenu(i,v); }
-function clasifPick(i,name,e){ if(e)e.preventDefault(); if(_clasificados[i])_clasificados[i].nombre=name; var box=_clasifMenuEl(i).closest('.clasif-combo'); if(box){ box.classList.remove('open'); var inp=box.querySelector('.clasif-combo-inp'); if(inp)inp.value=name; } validateClasif(); }
-function _closeClasifCombos(){ document.querySelectorAll('.clasif-combo.open').forEach(function(c){c.classList.remove('open');}); }
-document.addEventListener('click',function(e){ if(!e.target||!e.target.closest||!e.target.closest('.clasif-combo')) _closeClasifCombos(); });
-window.addEventListener('scroll',_closeClasifCombos,true);
-function validateClasif(){ const ok=_clasificados.length>=2&&_clasificados.every(function(c){return (c.nombre||'').trim();}); const b=document.getElementById('btnClasifNext'); if(b)b.disabled=!ok; return ok; }
 /* ── Panel derivado de Clasificados (reparto/llave en vivo + alertas, según el conteo real) ── */
 var _CD_ICO={ trofeo:'<svg viewBox="0 0 16 16" fill="none"><path d="M4.5 2.5h7v3a3.5 3.5 0 01-7 0v-3z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M4.5 3.5h-2v1a2 2 0 002 2M11.5 3.5h2v1a2 2 0 01-2 2M6.5 13h3M8 9v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>', grid:'<svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="2.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>', bracket:'<svg viewBox="0 0 16 16" fill="none"><path d="M2 3.5h3.5v3H9M2 12.5h3.5v-3M9 5h2.5v3H14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' };
 function _cdRow(ico,text,warn){ return '<div class="wz-derived'+(warn?' warn':'')+'"><span class="wz-derived__ico">'+ico+'</span><b>'+text+'</b></div>'; }
@@ -1355,25 +1173,6 @@ function _cdMsg(type,title,text){ var ico=type==='caution'?_TICON.caution:_TICON
 var _ICO_LOCK='<svg viewBox="0 0 16 16" fill="none"><rect x="3.5" y="7" width="9" height="6" rx="1.2" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2" stroke="currentColor" stroke-width="1.4"/></svg>';
 var _GRP_COLORS=['#1f78d1','#1f8923','#7c3aed','#d74009','#0891b2','#be185d','#ca8a04','#0d9488'];
 function _sumItem(ico,lbl,val,cls){ return '<div class="clasif-sum-item'+(cls?' '+cls:'')+'"><span class="clasif-sum-item__ico">'+ico+'</span><div class="clasif-sum-item__txt"><span class="clasif-sum-item__lbl">'+lbl+'</span><span class="clasif-sum-item__val">'+val+'</span></div></div>'; }
-function renderClasifDerived(){ var el=document.getElementById('clasifDerived'); if(!el)return; var n=_clasificados.length, conj=W.tipo!=='individual'; var stats='', rules='', alerts='';
-  if(conj){ var g=Math.max(1,+W.nGrupos||2); var base=Math.floor(n/g), resto=n%g; var rep=resto? (g+' grupos ('+(base+1)+' y '+base+')'):(g+' grupos de '+base);
-    stats=_sumItem(_CD_ICO.trofeo,'Formato','Fase de grupos')+_sumItem(_CD_ICO.grid,'Reparto',rep);
-    /* Reglas del sorteo (grupo fijo): agrupadas por grupo + validación de capacidad */
-    var _pinned=new Array(g).fill(0), _byG={}, _any=false;
-    _clasificados.forEach(function(c){ var gi=(c.grupoFijo==null?-1:(c.grupoFijo|0)); if(gi>=0&&gi<g){ _pinned[gi]++; (_byG[gi]=_byG[gi]||[]).push((c.nombre||'').trim()||'(sin nombre)'); _any=true; } });
-    if(_any){ var rr=''; for(var _rg=0;_rg<g;_rg++){ if(_byG[_rg]&&_byG[_rg].length){ var col=_GRP_COLORS[_rg%_GRP_COLORS.length]; rr+='<div class="clasif-rule-row"><span class="clasif-gbadge" style="background:'+col+'" title="Grupo '+String.fromCharCode(65+_rg)+'">'+String.fromCharCode(65+_rg)+'</span><div class="clasif-rule-chips">'+_byG[_rg].map(function(nm){return '<span class="clasif-rule-chip">'+tEsc(nm)+'</span>';}).join('')+'</div></div>'; } }
-      rules='<div class="clasif-rules"><span class="clasif-rules__head">'+_ICO_LOCK+'Reglas del sorteo</span>'+rr+'</div>'; }
-    var minSize=(g>n)?0:base;
-    if(minSize<2) alerts+=_cdMsg('caution','Revisa la conformación','Con '+n+' equipo(s) repartidos en '+g+' grupo(s), al menos un grupo queda con menos de 2 equipos. Reduce el número de grupos o agrega equipos.');
-    else if(resto!==0) alerts+=_cdMsg('informative','Reparto desigual','Quedan '+resto+' grupo(s) con un equipo más ('+(base+1)+' vs '+base+'). Es válido; los grupos impares tendrán un descanso por jornada.');
-    for(var _gi=0;_gi<g;_gi++){ var _cap=base+(_gi<resto?1:0); if(_pinned[_gi]>_cap){ alerts+=_cdMsg('caution','Regla imposible en Grupo '+String.fromCharCode(65+_gi),'Fijaste '+_pinned[_gi]+' equipo(s) al Grupo '+String.fromCharCode(65+_gi)+' pero solo caben '+_cap+'. Quita una regla o cambia el número de grupos.'); } }
-  } else { var byes=n>1?(Math.pow(2,Math.ceil(Math.log2(n)))-n):0;
-    stats=_sumItem(_CD_ICO.bracket,'Formato','Eliminación directa','is-elim')+_sumItem(_CD_ICO.trofeo,'Cuadro','Llave de '+n+(byes?(' · '+byes+' bye'):''));
-    if(n<2) alerts+=_cdMsg('caution','Faltan participantes','Se necesitan al menos 2 participantes para armar la llave.');
-    else if(byes>0) alerts+=_cdMsg('informative','Cuadro con descansos',byes+' participante(s) avanzan directo en la primera ronda (descanso/bye) porque '+n+' no es potencia de 2.');
-  }
-  el.innerHTML='<div class="clasif-summary"><div class="clasif-summary__stats">'+stats+'</div>'+rules+'</div>'+(alerts?'<div class="clasif-alerts">'+alerts+'</div>':''); }
-function continueSorteo(){ if(!validateClasif())return; if(W.modo==='manual') startManual(); else if(W.modo==='transcrip') startTranscrip(); else startRuleta(); }
 function startRuleta(){ buildSorteo(); _assign=SorteoEngine.asignarGrupos(_sorteo.participantes,_sorteo.config.nGrupos,{shuffle:true}); _sorteo.manualGroups=_assign; _ruletaDone=false; showStage('ruletaStage'); document.getElementById('ruletaSub').textContent='Asignando participantes a los grupos…'; document.getElementById('ruletaNav').style.display='none'; document.getElementById('btnSkip').style.display=''; renderRuletaGrupos(_assign,[]); buildDrawSeq(); runRuletaAnim(0); }
 function buildDrawSeq(){ _drawSeq=[]; const maxLen=Math.max(0,..._assign.map(g=>g.length)); for(let pos=0;pos<maxLen;pos++)for(let g=0;g<_assign.length;g++){ if(_assign[g][pos]!=null)_drawSeq.push({name:_assign[g][pos],g,pos}); } }
 function renderRuletaGrupos(assign,filled){ const set=new Set(filled); const el=document.getElementById('ruletaGrupos'); el.innerHTML=assign.map((teams,gi)=>{ const L=String.fromCharCode(65+gi); const slots=teams.map(t=>{ const on=set.has(t); return `<div class="rg-slot${on?' filled':''}">`+(on?`<span class="rg-ava" style="background:${teamColorLocal(t)}">${teamInitLocal(t)}</span><span class="rg-name">${t}</span>`:`<span class="rg-name" style="color:var(--text-muted)">—</span>`)+`</div>`; }).join(''); return `<div class="rg-card"><div class="rg-head"><span class="rg-dot"></span>Grupo ${L}<span style="margin-left:auto;font-size:12px;font-weight:600;color:var(--text-secondary)">${teams.length} eq</span></div><div class="rg-body">${slots}</div></div>`; }).join(''); }
@@ -1383,10 +1182,9 @@ function buildCarouselTrack(winnerName){ const track=document.getElementById('rc
 function _rcarCenter(K){ const vp=document.querySelector('.rcar-viewport'),track=document.getElementById('rcarTrack'); if(!vp||!track||!track.children.length)return 0; const c=track.children,cw=c[0].offsetWidth,st=c.length>1?(c[1].offsetLeft-c[0].offsetLeft):cw; return vp.clientWidth/2-(K*st+cw/2); }
 function runRuletaAnim(i){ if(i>=_drawSeq.length){ finishRuleta(); return; } const item=_drawSeq[i]; const winIdx=buildCarouselTrack(item.name); const track=document.getElementById('rcarTrack'); let reduce=false; try{reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){} if(!track){ placeOne(item); _ruletaTimers.push(setTimeout(()=>runRuletaAnim(i+1),120)); return; } if(reduce){ track.style.transition='none'; track.style.transform='translateX('+_rcarCenter(winIdx)+'px)'; const w=track.children[winIdx]; if(w)w.classList.add('is-winner'); placeOne(item); _ruletaTimers.push(setTimeout(()=>runRuletaAnim(i+1),150)); return; } const startK=2+Math.floor(Math.random()*3); track.style.transition='none'; track.style.transform='translateX('+_rcarCenter(startK)+'px)'; void track.offsetWidth; track.style.transition='transform 1150ms cubic-bezier(.12,.78,.28,1)'; track.style.transform='translateX('+_rcarCenter(winIdx)+'px)'; _ruletaTimers.push(setTimeout(()=>{ const w=track.children[winIdx]; if(w)w.classList.add('is-winner'); placeOne(item); _ruletaTimers.push(setTimeout(()=>runRuletaAnim(i+1),300)); },1210)); }
 function skipRuleta(){ _ruletaTimers.forEach(t=>{clearTimeout(t);clearInterval(t);}); _ruletaTimers=[]; const all=[]; _assign.forEach(g=>g.forEach(t=>all.push(t))); renderRuletaGrupos(_assign,all); finishRuleta(); }
-function finishRuleta(){ if(_ruletaDone)return; _ruletaDone=true; document.getElementById('ruletaSub').textContent='Grupos conformados. Continúa para ver el calendario y la fase final.'; document.getElementById('btnSkip').style.display='none'; document.getElementById('ruletaNav').style.display=''; }
+function finishRuleta(){ if(_ruletaDone)return; _ruletaDone=true; document.getElementById('ruletaSub').textContent='Grupos conformados. Continúa para ver los enfrentamientos.'; document.getElementById('btnSkip').style.display='none'; document.getElementById('ruletaNav').style.display=''; }
 const _PV_TABS=[
-  {id:'grupos',label:'Grupos y calendario',icon:'<svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 6.5h12M5 1.5v3M11 1.5v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',render:function(c){return (window.CompRender&&CompRender.renderGrupos)?CompRender.renderGrupos(c):'';}},
-  {id:'posiciones',label:'Posiciones',icon:'<svg viewBox="0 0 16 16" fill="none"><path d="M3 13.5V8M8 13.5V2.5M13 13.5V6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',render:function(c){return (c.grupos||[]).map(function(g){return CompRender.renderStandings(g);}).join('');}},
+  {id:'grupos',label:'Grupos y enfrentamientos',icon:'<svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 6.5h12M5 1.5v3M11 1.5v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',render:function(c){return (window.CompRender&&CompRender.renderGrupos)?CompRender.renderGrupos(c):'';}},
   {id:'final',label:'Fase final',icon:'<svg viewBox="0 0 16 16" fill="none"><path d="M4.5 2.5h7v3a3.5 3.5 0 01-7 0v-3z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M4.5 3.5h-2v1a2 2 0 002 2M11.5 3.5h2v1a2 2 0 01-2 2M6.5 13h3M8 9v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',render:function(c){
     if(c.bracket) return CompRender.renderBracket(c)+CompRender.renderMedalleria(c);
     /* Decia "Un solo grupo" tambien con varios grupos, que es falso: lo que pasa
@@ -1397,238 +1195,47 @@ const _PV_TABS=[
       : 'Este sorteo todavía no tiene fase final generada.')+'</div>';
   }}
 ];
-const _PV_TABS_ELIM=[
-  {id:'llave',label:'Llave de eliminación',icon:'<svg viewBox="0 0 16 16" fill="none"><path d="M2 3.5h3.5v4H9M2 12.5h3.5v-4M9 6.5h2.5v3H14M11.5 8H14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',render:function(c){return CompRender.renderBracket(c);}},
-  {id:'medalleria',label:'Medallería',icon:'<svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="10" r="3.5" stroke="currentColor" stroke-width="1.3"/><path d="M6 6.6L4.5 2h3L9 5.2M10 6.6L11.5 2h-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',render:function(c){return CompRender.renderMedalleria(c);}}
-];
 let _pvComp=null,_pvTab='grupos',_activeTabs=_PV_TABS;
-/* El juego de tabs se elige por lo que el sorteo CONTIENE, no por su etiqueta
-   sisCls. Hay sorteos marcados 'elim' cuyo contenido es un round-robin en un
-   solo grupo: con el juego de eliminacion sus partidos quedaban inalcanzables,
-   porque ese juego no tiene "Grupos y calendario". Solo un comp con llave y sin
-   grupos usa el juego de eliminacion. */
-function _tabsFor(comp){
-  var grupos=((comp&&comp.grupos)||[]).length>0;
-  return (comp&&comp.bracket&&!grupos)?_PV_TABS_ELIM:_PV_TABS;
-}
-function _primeraTab(tabs){ return tabs[0].id; }
-/* ── F5: Programación (fecha/hora/escenario por partido) ── */
-var ESCENARIOS=['Coliseo El Campín','Polideportivo El Salitre','Coliseo Cubierto Norte','Estadio La Independencia','Cancha Auxiliar 1','Cancha Auxiliar 2'];
-var _PROG_TAB={id:'programa',label:'Programación',icon:'<svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 6.5h12M5 1.5v3M11 1.5v3M5.5 9.5h2M5.5 11.5h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',render:function(c){return renderPrograma(c);}};
-/* Primera del menu: entrar a un sorteo desde la lista es para programar. */
-_PV_TABS.unshift(_PROG_TAB); _PV_TABS_ELIM.unshift(_PROG_TAB);
-function _progMatches(comp){ var rows=[]; (comp.grupos||[]).forEach(function(g){ (g.partidos||[]).forEach(function(p){ if(p.status!=='bye'&&p.t1&&p.t2&&!/descansa/i.test(String(p.t2))) rows.push({id:p.id,t1:p.t1,t2:p.t2,ctx:g.nombre+' · Jornada '+p.jornada,m:p}); }); }); (comp.bracket||[]).forEach(function(rd){ (rd.matches||[]).forEach(function(m){ if(m.status!=='bye'&&m.t1&&m.t2) rows.push({id:m.id,t1:m.t1,t2:m.t2,ctx:rd.round,m:m}); }); }); return rows; }
-function _findMatchAny(comp,id){ var r=_progMatches(comp).find(function(x){return String(x.id)===String(id);}); return r?r.m:null; }
-/* ── 1.2 · Bloqueo por digitación ─────────────────────────────────────
-   Un partido FINALIZADO (status 'done') queda en solo lectura: ni fecha, ni
-   hora, ni escenario. Modificar la programación de algo ya jugado y digitado
-   desincroniza el sorteo con lo digitado (Juanma).
-
-   'in-progress' NO bloquea: la digitación está abierta, el partido no está
-   finalizado, y mover su horario sigue siendo legítimo.
-
-   Los mutadores llevan guarda además de no pintarse los campos: la UI puede
-   cambiar, la regla no.
-   ─────────────────────────────────────────────────────────────────────── */
-function _progLocked(m){ return !!(m && m.status==='done'); }
-/* _ICO_LOCK ya existe mas arriba (16px, "Reglas del sorteo"); este es el chico
-   para las etiquetas de solo lectura. Nombre distinto para no pisarlo. */
-var _ICO_LOCK_SM='<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="3.5" y="7" width="9" height="6.5" rx="1.4" stroke="currentColor" stroke-width="1.3"/><path d="M5.75 7V5.25a2.25 2.25 0 014.5 0V7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
-/* Cierre de mensajes informativos. NO va en empty states ni en validaciones:
-   cerrarlos borraria justo el motivo por el que no puedes seguir. */
-var _ICO_X='<svg viewBox="0 0 20 20" fill="none"><path d="M6.5 6.5l7 7M13.5 6.5l-7 7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
-function _msgDismissHTML(fn){ return '<button class="naowee-message__dismiss" type="button" aria-label="Cerrar mensaje" onclick="'+fn+'">'+_ICO_X+'</button>'; }
-/* renderPrograma se re-ejecuta en cada cambio de hora, pagina o vista, asi que
-   el cierre debe recordarse o el mensaje reaparece. Mismo patron que _progView. */
-var _progInfoOff=(function(){ try{ return localStorage.getItem('naowee-prog-info')==='off'; }catch(e){ return false; } })();
-function progDismissInfo(){ _progInfoOff=true; try{localStorage.setItem('naowee-prog-info','off');}catch(e){} progRerender(); }
-function progDismissCenefa(){ var c=document.getElementById('progEditCenefa'); if(c)c.innerHTML=''; }
-/* Campo en solo lectura con el patrón del DS: --readonly quita borde y fondo,
-   así el valor deja de parecer editable. Sin valor va un guion, no el
-   placeholder, que insinuaría que se puede escribir. */
-function _progRoFieldHTML(val,cls){ return '<div class="naowee-textfield naowee-textfield--small naowee-textfield--readonly'+(cls?' '+cls:'')+'"><div class="naowee-textfield__input-wrap"><input class="naowee-textfield__input" readonly tabindex="-1" value="'+tEsc(val||'—')+'"></div></div>'; }
-function _progScoreHTML(m){ return (m.s1!=null&&m.s2!=null)?('<span class="prog-score">'+tEsc(m.s1)+' - '+tEsc(m.s2)+'</span>'):''; }
-function progSet(id,field,val){ var m=_findMatchAny(_pvComp,id); if(_progLocked(m))return; if(m)m[field]=val; var c=document.getElementById('progCount'); if(c)c.textContent=_progMatches(_pvComp).filter(function(x){return x.m.fecha;}).length; _progSyncActions(); }
-/* ── 3.5 · Escenario desde lista quemada ─────────────────────────────
-   Antes era un <input> de texto libre: se podia teclear cualquier cosa y
-   ESCENARIOS solo servia para sembrar datos de demo. El acuerdo era
-   SELECCIONAR de una lista mientras el modulo de Escenarios no este conectado.
-   Se elige por INDICE, no por el string, para no tener que escapar nombres en
-   el onclick; -1 limpia la asignacion. Sustituir ESCENARIOS por la lista de
-   Danna cuando llegue: es el unico sitio que hay que tocar.
-   ─────────────────────────────────────────────────────────────────────── */
-function progSetEsc(id,idx,e){ if(e)e.stopPropagation();
-  var m=_findMatchAny(_pvComp,id); if(_progLocked(m))return;
-  if(m)m.escenario=(idx<0?'':ESCENARIOS[idx]||'');
-  document.querySelectorAll('.naowee-dropdown--open').forEach(function(d){d.classList.remove('naowee-dropdown--open');});
-  progRerender(); _progSyncActions(); }
-var _ICO_PIN='<svg viewBox="0 0 16 16" width="14" height="14" fill="none"><path d="M8 14s4.5-4.2 4.5-7.4A4.5 4.5 0 008 2.2a4.5 4.5 0 00-4.5 4.4C3.5 9.8 8 14 8 14z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="8" cy="6.5" r="1.6" stroke="currentColor" stroke-width="1.3"/></svg>';
-function progEscDropdown(id,esc){
-  var opts='<div class="naowee-dropdown__option'+(!esc?' naowee-dropdown__option--selected':'')+'" onclick="progSetEsc(\''+id+'\',-1,event)" style="color:var(--text-secondary)">Sin asignar</div>';
-  opts+=ESCENARIOS.map(function(nm,i){ return '<div class="naowee-dropdown__option'+(esc===nm?' naowee-dropdown__option--selected':'')+'" onclick="progSetEsc(\''+id+'\','+i+',event)">'+tEsc(nm)+'</div>'; }).join('');
-  return '<div class="naowee-dropdown naowee-dropdown--small prog-dd prog-esc-dd"><button type="button" class="naowee-dropdown__trigger" onclick="tddToggle(this,event)"><span class="naowee-dropdown__'+(esc?'value':'placeholder')+'">'+(esc?tEsc(esc):'Escenario / lugar')+'</span><span class="naowee-dropdown__controls"><span class="naowee-dropdown__chevron">'+_ICO_PIN+'</span></span></button><div class="naowee-dropdown__menu prog-dd-menu">'+opts+'</div></div>'; }
-/* Bloque canónico de equipo (DOS TONOS): nombre (institución+municipio, negro) + meta (región·categoría, gris).
-   ÚNICA fuente para vista Lista Y Tarjetas → evita que la lista vuelva a divergir a "versión corta". */
-function _progTeamBlock(comp,name){ var meta=(comp&&comp.teamMeta&&comp.teamMeta[name])||''; return '<div class="prog-team"><span class="prog-team__name">'+tEsc(name)+'</span>'+(meta?'<span class="prog-team__meta">'+tEsc(meta)+'</span>':'')+'</div>'; }
-var _ICO_CALF='<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 6.5h12M5 1.5v3M11 1.5v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
-var _ICO_GRIDV='<svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>';
-var _ICO_LISTV='<svg viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M2.5 8h11M2.5 12h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
-var _progView=(function(){ try{ return localStorage.getItem('naowee-prog-view')||'cards'; }catch(e){ return 'cards'; } })();
-function setProgView(v){ _progView=v; try{localStorage.setItem('naowee-prog-view',v);}catch(e){} progRerender(); }
-function _progDateFieldHTML(id,m){ return '<div class="prog-datefield naowee-textfield naowee-textfield--small" onclick="dpOpen(\''+id+'\',this)"><div class="naowee-textfield__input-wrap"><input class="naowee-textfield__input" readonly placeholder="Fecha" value="'+(_fmtFechaHuman(m.fecha))+'"><span class="prog-fieldico">'+_ICO_CALF+'</span></div></div>'; }
-function _progStatusBadge(m){ if(_progLocked(m)) return '<span class="naowee-badge naowee-badge--positive naowee-badge--small">Finalizado</span>'; if(m.status==='in-progress') return '<span class="naowee-badge naowee-badge--caution naowee-badge--quiet naowee-badge--small">En curso</span>'; if(m.fecha&&m.hora) return '<span class="naowee-badge naowee-badge--positive naowee-badge--quiet naowee-badge--small">Programado</span>'; if(m.fecha) return '<span class="naowee-badge naowee-badge--informative naowee-badge--quiet naowee-badge--small">Con fecha</span>'; return '<span class="naowee-badge naowee-badge--neutral naowee-badge--quiet naowee-badge--small">Sin programar</span>'; }
-function _progCardTeam(comp,name){ return _progTeamBlock(comp,name); }
-function _progCard(comp,x){ var m=x.m, lock=_progLocked(m);
-  /* Finalizado: el centro muestra el marcador en vez de "vs", los tres campos
-     pasan a solo lectura y se explica por que no se pueden tocar. */
-  var centro=lock?('<div class="prog-card__vs prog-card__vs--score">'+_progScoreHTML(m)+'</div>'):'<div class="prog-card__vs"><span>vs</span></div>';
-  var campos=lock
-    ? '<div class="prog-field"><span class="prog-field__label">Fecha</span>'+_progRoFieldHTML(_fmtFechaHuman(m.fecha))+'</div><div class="prog-field"><span class="prog-field__label">Hora</span>'+_progRoFieldHTML(m.hora)+'</div><div class="prog-field prog-field--wide"><span class="prog-field__label">Escenario / lugar</span>'+_progRoFieldHTML(m.escenario?tEsc(m.escenario):'')+'</div><div class="prog-field prog-field--wide"><span class="prog-lockmsg">'+_ICO_LOCK_SM+' Partido finalizado y digitado: la programación queda en solo lectura.</span></div>'
-    : '<div class="prog-field"><span class="prog-field__label">Fecha</span>'+_progDateFieldHTML(x.id,m)+'</div><div class="prog-field"><span class="prog-field__label">Hora</span>'+progHoraDropdown(x.id,m.hora)+'</div><div class="prog-field prog-field--wide"><span class="prog-field__label">Escenario / lugar</span>'+progEscDropdown(x.id,m.escenario)+'</div>';
-  /* Anatomia del componente de la plataforma: tile + identidad + badge arriba a
-     la derecha. El bloque de equipos hace de titulo —conserva el meta de cada
-     uno (region · municipio), que se perderia si fuese una sola linea de texto—
-     y el contexto grupo/jornada baja a subtitulo. */
-  return '<div class="naowee-card naowee-card--outline prog-card'+(m.fecha?' is-done':'')+(lock?' is-locked':'')+'">'
-    +'<div class="naowee-card__header prog-card__header">'
-      +'<span class="prog-card__tile" aria-hidden="true">'+(comp&&comp.emoji||'🏆')+'</span>'
-      +'<div class="prog-card__ident">'
-        +'<div class="prog-card__teams">'+_progCardTeam(comp,x.t1)+centro+_progCardTeam(comp,x.t2)+'</div>'
-        +'<div class="prog-card__ctx">'+tEsc(x.ctx)+'</div>'
-      +'</div>'
-      +_progStatusBadge(m)
-    +'</div>'
-    +'<div class="naowee-card__body prog-card__fields">'+campos+'</div>'
-  +'</div>'; }
-function _progRowList(comp,x){ var m=x.m; var done=!!m.fecha, lock=_progLocked(m);
-  var separador=lock?('<span class="prog-vs prog-vs--score">'+_progScoreHTML(m)+'</span>'):'<span class="prog-vs">vs</span>';
-  var campos=lock
-    ? _progRoFieldHTML(_fmtFechaHuman(m.fecha),'prog-datefield')+_progRoFieldHTML(m.hora,'prog-hora-dd')+_progRoFieldHTML(m.escenario?tEsc(m.escenario):'')
-    : _progDateFieldHTML(x.id,m)+progHoraDropdown(x.id,m.hora)+progEscDropdown(x.id,m.escenario);
-  /* Vista Lista = densidad. Los dos equipos van en UNA linea y el detalle por
-     equipo (municipio) se deja a la vista Tarjetas; aqui solo la region, que es
-     comun. Sin el punto de estado: lo dice el badge, que antes faltaba. */
-  var meta=[tEsc(x.ctx), comp&&comp.region?tEsc(comp.region):''].filter(Boolean).join(' · ');
-  return '<div class="prog-row'+(done?' is-done':'')+(lock?' is-locked':'')+'">'
-    +'<div class="prog-row__info">'
-      +'<div class="prog-row__match">'
-        +'<span class="prog-row__team">'+tEsc(x.t1)+'</span>'+separador+'<span class="prog-row__team">'+tEsc(x.t2)+'</span>'
-      +'</div>'
-      +'<div class="prog-row__ctx">'+meta+(lock?(' <span class="prog-lockmsg">'+_ICO_LOCK_SM+' solo lectura</span>'):'')+'</div>'
-    +'</div>'
-    +_progStatusBadge(m)
-    +'<div class="prog-row__fields">'+campos+'</div>'
-  +'</div>'; }
-var _PROG_MATCH_PAGE_SIZE=8, _progMatchPage=1;
-function _progMatchPagerHTML(pgs){ return '<nav class="naowee-pagination naowee-pagination--small prog-matchpager" aria-label="Paginación de partidos"><div class="naowee-pagination__pages"><span class="naowee-pagination__label">Página</span><input class="naowee-pagination__input" value="'+_progMatchPage+'" onchange="progMatchGoPage(this.value)" aria-label="Página actual"><span class="naowee-pagination__total">de <strong>'+pgs+'</strong></span></div><div class="naowee-pagination__controls"><button class="naowee-pagination__btn" type="button" onclick="progMatchGoPage('+(_progMatchPage-1)+')"'+(_progMatchPage<=1?' disabled':'')+' aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="naowee-pagination__btn" type="button" onclick="progMatchGoPage('+(_progMatchPage+1)+')"'+(_progMatchPage>=pgs?' disabled':'')+' aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></nav>'; }
-function progMatchGoPage(n){ _progMatchPage=Math.max(1,parseInt(n,10)||1); progRerender(); }
-function renderPrograma(comp){ var rows=_progMatches(comp); if(!rows.length) return '<div class="naowee-message naowee-message--informative" style="width:100%"><div class="naowee-message__header"><span class="naowee-message__icon">'+_TICON.info+'</span><span class="naowee-message__body">Aún no hay partidos con ambos competidores definidos para programar.</span></div></div>';
-  var done=rows.filter(function(x){return x.m.fecha;}).length;
-  var head=_progInfoOff?'':'<div class="naowee-message naowee-message--informative" style="width:100%;margin-bottom:14px"><div class="naowee-message__header"><span class="naowee-message__icon">'+_TICON.info+'</span><span class="naowee-message__title">Programación de partidos</span>'+_msgDismissHTML('progDismissInfo()')+'</div><p class="naowee-message__text">Asigna fecha, hora y escenario a cada partido. <b><span id="progCount">'+done+'</span> de '+rows.length+'</b> con fecha asignada. '+(_progEditId?'Usa «Guardar cambios» para actualizar el sorteo.':'Se guarda al confirmar el sorteo.')+'</p></div>';
-  var total=rows.length, pgs=Math.max(1,Math.ceil(total/_PROG_MATCH_PAGE_SIZE)); if(_progMatchPage>pgs)_progMatchPage=pgs; if(_progMatchPage<1)_progMatchPage=1;
-  var pageRows=rows.slice((_progMatchPage-1)*_PROG_MATCH_PAGE_SIZE,_progMatchPage*_PROG_MATCH_PAGE_SIZE);
-  var pager=(pgs>1)?_progMatchPagerHTML(pgs):'<span></span>';
-  var toggle='<div class="prog-viewbar">'+pager+'<div class="prog-viewtoggle" role="group" aria-label="Cambiar vista"><button type="button" class="prog-vt'+(_progView==='cards'?' is-active':'')+'" onclick="setProgView(\'cards\')" title="Tarjetas" aria-label="Tarjetas" aria-pressed="'+(_progView==='cards')+'">'+_ICO_GRIDV+'</button><button type="button" class="prog-vt'+(_progView==='list'?' is-active':'')+'" onclick="setProgView(\'list\')" title="Lista" aria-label="Lista" aria-pressed="'+(_progView==='list')+'">'+_ICO_LISTV+'</button></div></div>';
-  var body=(_progView==='list')?('<div class="prog-list">'+pageRows.map(function(x){return _progRowList(comp,x);}).join('')+'</div>'):('<div class="prog-cards">'+pageRows.map(function(x){return _progCard(comp,x);}).join('')+'</div>');
-  return head+toggle+body; }
-/* ── F5: datepicker canónico (.naowee-datepicker popover) + timepicker (dropdown de franjas) ── */
-var _DP_MONTHS=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-var _DP_WD=['L','M','M','J','V','S','D'];
-var _dpMatchId=null,_dpView={y:0,m:0};
-function _dpToIso(d){ var mm=('0'+(d.getMonth()+1)).slice(-2),dd=('0'+d.getDate()).slice(-2); return d.getFullYear()+'-'+mm+'-'+dd; }
-function _fmtFechaHuman(iso){ if(!iso)return ''; var p=String(iso).split('-'); if(p.length!==3)return iso; return parseInt(p[2],10)+' '+_DP_MONTHS[parseInt(p[1],10)-1].slice(0,3)+' '+p[0]; }
+function _tabsFor(comp){ return _PV_TABS; }
 var _progPanelId='previewPanel',_progEditId=null;
-function progRerender(){ var p=document.getElementById(_progPanelId||'previewPanel'); if(p)p.innerHTML=renderPrograma(_pvComp); }
-function _dpEnsure(){ var p=document.getElementById('progDatePop'); if(!p){ p=document.createElement('div'); p.id='progDatePop'; p.className='prog-datepop'; p.style.display='none'; document.body.appendChild(p); } return p; }
-function dpOpen(id,fieldEl){ var m=_findMatchAny(_pvComp,id); if(!m||_progLocked(m))return; document.querySelectorAll('.naowee-dropdown--open').forEach(function(d){d.classList.remove('naowee-dropdown--open');}); _dpMatchId=id; var base=m.fecha?new Date(m.fecha+'T00:00:00'):new Date(); _dpView={y:base.getFullYear(),m:base.getMonth()}; _dpRender(); var pop=_dpEnsure(); pop.style.display='block'; _dpPosition(fieldEl); }
-function dpClose(){ var p=document.getElementById('progDatePop'); if(p)p.style.display='none'; }
-function _dpPosition(fieldEl){ var pop=_dpEnsure(); var r=fieldEl.getBoundingClientRect(); var h=pop.offsetHeight||340, w=pop.offsetWidth||300; var left=Math.min(r.left, window.innerWidth-w-10); var top=(window.innerHeight-r.bottom-8<h && r.top>h)?(r.top-6-h):(r.bottom+6); pop.style.left=Math.max(8,left)+'px'; pop.style.top=Math.max(8,top)+'px'; }
-function _dpRender(){ var pop=_dpEnsure(); var m=_findMatchAny(_pvComp,_dpMatchId); var sel=m&&m.fecha; var y=_dpView.y, mo=_dpView.m; var first=new Date(y,mo,1); var sw=(first.getDay()+6)%7; var dim=new Date(y,mo+1,0).getDate(); var dp=new Date(y,mo,0).getDate(); var todayIso=_dpToIso(new Date()); var cells=[],i; for(i=sw-1;i>=0;i--)cells.push({n:dp-i,o:true,iso:_dpToIso(new Date(y,mo-1,dp-i))}); for(i=1;i<=dim;i++)cells.push({n:i,o:false,iso:_dpToIso(new Date(y,mo,i))}); while(cells.length%7!==0){var x=cells.length-(sw+dim)+1;cells.push({n:x,o:true,iso:_dpToIso(new Date(y,mo+1,x))});}
-  var weeks=''; for(i=0;i<cells.length;i+=7){ var row=''; for(var k=0;k<7;k++){ var c=cells[i+k]; var cl='naowee-datepicker__day'; if(c.o)cl+=' naowee-datepicker__day--other-month'; if(c.iso===todayIso)cl+=' naowee-datepicker__day--today'; if(sel&&c.iso===sel)cl+=' naowee-datepicker__day--selected'; row+='<button type="button" class="'+cl+'" data-iso="'+c.iso+'">'+c.n+'</button>'; } weeks+='<div class="naowee-datepicker__week">'+row+'</div>'; }
-  pop.innerHTML='<div class="naowee-datepicker"><div class="naowee-datepicker__calendar"><div class="naowee-datepicker__header"><div class="naowee-datepicker__month-selector"><span class="naowee-datepicker__month">'+_DP_MONTHS[mo]+' '+y+'</span></div><div class="naowee-datepicker__controls"><button type="button" class="naowee-datepicker__nav" data-nav="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><button type="button" class="naowee-datepicker__nav" data-nav="1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div></div><div class="naowee-datepicker__content"><div class="naowee-datepicker__week">'+_DP_WD.map(function(d){return '<div class="naowee-datepicker__weekday">'+d+'</div>';}).join('')+'</div>'+weeks+'</div></div></div>';
-  pop.querySelectorAll('[data-nav]').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation(); _dpView.m+=(+b.dataset.nav); if(_dpView.m<0){_dpView.m=11;_dpView.y--;} if(_dpView.m>11){_dpView.m=0;_dpView.y++;} _dpRender(); }); });
-  pop.querySelectorAll('.naowee-datepicker__day').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation(); var mm=_findMatchAny(_pvComp,_dpMatchId); if(_progLocked(mm))return; if(mm)mm.fecha=b.dataset.iso; dpClose(); progRerender(); _progSyncActions(); }); });
-}
-var _HORAS=(function(){ var a=[]; for(var h=6;h<=22;h++){ var hh=(h<10?'0':'')+h; a.push(hh+':00'); if(h<22)a.push(hh+':30'); } return a; })();
-function progHoraDropdown(id,hora){ var opts=_HORAS.map(function(h){ return '<div class="naowee-dropdown__option'+(hora===h?' naowee-dropdown__option--selected':'')+'" onclick="progSetHora(\''+id+'\',\''+h+'\',event)">'+h+'</div>'; }).join(''); return '<div class="naowee-dropdown naowee-dropdown--small prog-dd prog-hora-dd"><button type="button" class="naowee-dropdown__trigger" onclick="tddToggle(this,event)"><span class="naowee-dropdown__'+(hora?'value':'placeholder')+'">'+(hora||'Hora')+'</span><span class="naowee-dropdown__controls"><span class="naowee-dropdown__chevron"><svg viewBox="0 0 16 16" width="14" height="14" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v3.2l2 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></button><div class="naowee-dropdown__menu prog-dd-menu prog-hora-menu">'+opts+'</div></div>'; }
-function progSetHora(id,h,e){ if(e)e.stopPropagation(); var m=_findMatchAny(_pvComp,id); if(_progLocked(m))return; if(m)m.hora=h; document.querySelectorAll('.naowee-dropdown--open').forEach(function(d){d.classList.remove('naowee-dropdown--open');}); progRerender(); _progSyncActions(); }
-document.addEventListener('click',function(e){ if(e.target&&e.target.closest&&(e.target.closest('#progDatePop')||e.target.closest('.prog-datefield')))return; dpClose(); });
-window.addEventListener('resize',dpClose);
 /* ── F5: editar programación de un sorteo publicado (desde el menú) ── */
-function openProgEdit(){ _progEditId=null; _progPanelId='previewPanel'; showStage('progEditStage');
-  /* La lista no es un resultado: sin barra de tabs y sin la tarjeta del detalle,
-     que si no quedaria una table-card dentro de otra tarjeta. */
+function openProgEdit(){ _progEditId=null; _progPanelId='previewPanel'; showStage('progEditStage'); document.body.dataset.screen='sorteos'; document.body.dataset.route='/home/events/'+EVENT.code+'/draws/'+PROMOTION.code; setCrumbs([_promoLabel()]);
   var _tb=document.getElementById('progEditTabs'); if(_tb)_tb.style.display='none';
-  var _wr=document.getElementById('progEditWrap'); if(_wr)_wr.classList.remove('is-detalle'); var t=document.getElementById('progEditTitle'),s=document.getElementById('progEditSub'); if(t)t.textContent='Lista de sorteos'; if(s)s.textContent='Todos los sorteos creados. Entra a uno para editarlo o programar sus partidos.'; var g=document.getElementById('btnGuardarProg'); if(g)g.style.display='none'; var d=document.getElementById('btnDescartarProg'); if(d)d.style.display='none'; var cs=document.getElementById('btnCrearSorteo'); if(cs)cs.style.display=''; _progBaseline=null; var ba=document.getElementById('btnProgBackArrow'); if(ba)ba.style.display='none'; var c=document.getElementById('progEditCenefa'); if(c)c.innerHTML=''; var nav=document.getElementById('navProgEdit'); if(nav)nav.classList.add('active'); renderProgEditList(); }
+  var _wr=document.getElementById('progEditWrap'); if(_wr)_wr.classList.remove('is-detalle');
+  var t=document.getElementById('progEditTitle'),sub=document.getElementById('progEditSub'); if(t)t.textContent=_promoLabel(); if(sub)sub.textContent='Sorteos de esta promoción. Fase '+PROMOTION.to+': '+_phaseDates(_phase(PROMOTION.toCode))+'.';
+  var cs=document.getElementById('btnCrearSorteo'); if(cs)cs.style.display=''; var ba=document.getElementById('btnProgBackArrow'); if(ba)ba.style.display='none'; var c=document.getElementById('progEditCenefa'); if(c)c.innerHTML=''; var da=document.getElementById('detailActions'); if(da)da.innerHTML='';
+  renderProgEditList(); }
 /* ── F5: lista escalable de programaciones (filtros región/deporte/fecha + paginación) ── */
-var _PROG_PAGE_SIZE=10, _progPage=1, _progFilters={q:'',region:'',deporte:'',fecha:''};
+var _PROG_PAGE_SIZE=10, _progPage=1, _progFilters={q:'',deporte:''};
 function _progNorm(s){ return (s==null?'':String(s)).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); }
 function _progUniq(a){ var seen={},out=[]; a.forEach(function(v){ if(v!=null&&v!==''&&!seen[v]){seen[v]=1;out.push(v);} }); return out; }
-function _progMonthKey(iso){ return iso?String(iso).slice(0,7):''; }
-function _progMonthLabel(k){ if(!k)return ''; var p=String(k).split('-'); var m=_DP_MONTHS[(+p[1]||1)-1]||''; return (m.charAt(0).toUpperCase()+m.slice(1))+' '+p[0]; }
-function _deriveProgFecha(r){ var ms=_progMatches((r&&r.comp)||{}); var ds=ms.map(function(x){return x.m.fecha;}).filter(Boolean).sort(); if(ds.length)return ds[0]; if(r&&r.ts){ var d=new Date(r.ts); if(!isNaN(d))return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);} return ''; }
-function _enrichProgRec(r){ if(!r||r._enriched)return r; if(!r.region)r.region=(r.comp&&r.comp.region)||'Centro'; if(!r.evento)r.evento=(r.comp&&r.comp.evento)||'Evento del módulo'; if(!r.fecha)r.fecha=_deriveProgFecha(r); r._enriched=true; return r; }
-/* Semilla demo: alimenta SOLO esta lista (no toca SorteoStore → no aparece en Resultados/vista pública) */
+function _enrichProgRec(r){ if(!r||r._enriched)return r; if(!r.promotion)r.promotion={code:'regional-nacional',from:'Regional',to:'Nacional'}; if(!r.estado)r.estado='ABIERTO'; r._enriched=true; return r; }
+/* ── Semilla de la promoción Regional → Nacional (spec v3 §3) ──
+   Tres sorteos: uno cerrado y dos abiertos. Alimenta SOLO esta lista; no toca
+   SorteoStore, así que un sorteo cerrado en la demo se guarda aparte. Los
+   enfrentamientos nacen VACÍOS: sin fecha, hora, escenario ni marcador. */
 var _INSTS=['Colegio San José','I.E. La Salle','Gimnasio Moderno','Colegio Champagnat','I.E. Antonio Nariño','Colegio Bolívar','Liceo Los Andes','I.E. Santa Teresa','Colegio San Ignacio','I.E. El Carmen','Colegio Americano','I.E. La Merced','Colegio Calasanz','I.E. J. C. Mutis','Colegio Nueva Granada','I.E. Rafael Uribe'];
 var _MUNIS={Norte:['Barranquilla','Cartagena','Santa Marta','Valledupar','Montería','Sincelejo'],Centro:['Bogotá','Tunja','Ibagué','Manizales','Pereira','Armenia'],Sur:['Cali','Popayán','Pasto','Neiva','Florencia','Mocoa'],Oriente:['Bucaramanga','Cúcuta','Villavicencio','Yopal','Arauca','Duitama']};
-function _seedComp(dep,sys,nP,fecha,reg,evt,cat,sex,nombre,i){
-  var munis=_MUNIS[reg]||['Ciudad'], teamMeta={}, teams=[];
-  for(var t=0;t<nP;t++){ var muni=munis[t%munis.length]; var name=_INSTS[(i*3+t)%_INSTS.length]+' de '+muni; teams.push(name); teamMeta[name]=[reg,muni].filter(Boolean).join(' · '); }
-  var ng=(sys.c==='elim')?1:Math.max(1,sys.g||1), per=Math.ceil(nP/ng), grupos=[], mid=0, total=0;
-  for(var g=0;g<ng;g++){ var gt=teams.slice(g*per,(g+1)*per), partidos=[];
-    for(var a=0;a<gt.length;a++) for(var b=a+1;b<gt.length;b++){ mid++; partidos.push({id:'sm'+i+'-'+mid,t1:gt[a],t2:gt[b],jornada:((a+b)%3)+1,status:'ok'}); }
-    grupos.push({nombre:(ng>1?('Grupo '+String.fromCharCode(65+g)):'Fase única'),partidos:partidos}); total+=partidos.length; }
-  var ratios=[0,0,0.2,0.35,0.5,0.75,1], ratio=ratios[i%ratios.length], toDo=Math.round(total*ratio), c=0;
-  grupos.forEach(function(gr){ gr.partidos.forEach(function(p){ if(c<toDo){ p.fecha=fecha; p.hora='08:00'; p.escenario=ESCENARIOS[c%ESCENARIOS.length]; c++; } }); });
-  return { nombre:nombre, emoji:dep.e, sistema:sys.s, sisCls:sys.c, grupos:grupos, region:reg, evento:evt, fecha:fecha, deporteLabel:dep.l, categoria:cat, sexo:sex, teamMeta:teamMeta };
+var PROMOTION={ code:'regional-nacional', from:'Regional', to:'Nacional', event:'Juegos Intercolegiados Nacionales 2026' }; /* la fija openPromo() */
+function _seedComp(dep,nGrupos,nP,cat,sex,nombre,i){
+  var regs=['Norte','Centro','Sur','Oriente'], teamMeta={}, teams=[];
+  for(var t=0;t<nP;t++){ var reg=regs[t%regs.length], munis=_MUNIS[reg], muni=munis[(i+t)%munis.length]; var name=_INSTS[(i*3+t)%_INSTS.length]+' de '+muni; teams.push(name); teamMeta[name]=reg+' · '+muni; }
+  var per=Math.ceil(nP/nGrupos), grupos=[], mid=0;
+  for(var g=0;g<nGrupos;g++){ var gt=teams.slice(g*per,(g+1)*per), partidos=[];
+    for(var a=0;a<gt.length;a++) for(var b=a+1;b<gt.length;b++){ mid++; partidos.push({id:'sm'+i+'-'+mid,t1:gt[a],t2:gt[b],jornada:((a+b)%3)+1,status:'pending'}); }
+    grupos.push({nombre:'Grupo '+String.fromCharCode(65+g),equipos:gt,partidos:partidos}); }
+  return { nombre:nombre, emoji:dep.e, sistema:'Fase de grupos · todos contra todos', sisCls:'grupos', grupos:grupos, evento:PROMOTION.event, deporteLabel:dep.l, categoria:cat, sexo:sex, teamMeta:teamMeta };
 }
-/* ── 1.2 · Semilla de digitación (caso mixto) ─────────────────────────
-   Los sorteos sembrados nacían todos con los partidos pendientes, así que el
-   bloqueo por digitación no tenía nada que bloquear y no se podía ver en la
-   demo. Esto le mete resultados a UN sorteo, dejando los tres estados
-   conviviendo en la misma pantalla: finalizados (bloqueados), uno en curso y
-   el resto pendientes.
-
-   `i` es el índice del generador: i=3 → "Voleibol Sub-18 Masculino"
-   (seed-4-voleibol), 45 partidos, 16 con fecha. Solo se digitan partidos que
-   YA tienen fecha: sin fecha no se pudo jugar. Se aplica ANTES de _seedTabla
-   para que recalcStandings (que filtra por status==='done') derive posiciones
-   de verdad en vez de dejarlas en ceros.
-   ─────────────────────────────────────────────────────────────────────── */
-var _SEED_DIGITADOS={
-  3:{ finalizados:6, enCurso:1, marcadores:[[3,0],[3,1],[2,3],[3,2],[0,3],[3,1]] }
-};
-function _seedDigitacion(comp,i){
-  var cfg=_SEED_DIGITADOS[i]; if(!cfg) return comp;
-  var conFecha=[];
-  (comp.grupos||[]).forEach(function(g){ (g.partidos||[]).forEach(function(pt){ if(pt.fecha) conFecha.push(pt); }); });
-  var paso=Math.max(1,Math.floor(conFecha.length/Math.max(1,cfg.finalizados))), elegidos=[];
-  for(var k=0;k<conFecha.length&&elegidos.length<cfg.finalizados;k+=paso) elegidos.push(conFecha[k]);
-  elegidos.forEach(function(pt,n){
-    var mk=cfg.marcadores[n%cfg.marcadores.length];
-    pt.s1=mk[0]; pt.s2=mk[1]; pt.status='done'; pt.winner=(mk[0]>mk[1])?1:2;
-  });
-  /* El "en curso" va sobre un partido con fecha que no haya quedado finalizado. */
-  var libres=conFecha.filter(function(pt){return pt.status!=='done';});
-  libres.slice(0,cfg.enCurso||0).forEach(function(pt){ pt.status='in-progress'; });
-  return comp;
-}
-/* Los 36 sembrados nacian todos con origen:'sorteo', asi que la columna "Modo"
-   habria salido identica en las 36 filas. Se reparten los tres valores. */
-var _SEED_ORIGEN=['sorteo','sorteo','manual','sorteo','transcripcion','manual','sorteo'];
 function _buildProgSeed(){
-  var DEP=[{l:'Boccia',e:'🎯'},{l:'Baloncesto',e:'🏀'},{l:'Fútbol',e:'⚽'},{l:'Voleibol',e:'🏐'},{l:'Atletismo',e:'🏃'},{l:'Natación',e:'🏊'},{l:'Judo',e:'🥋'},{l:'Arquería',e:'🏹'},{l:'Tenis de Mesa',e:'🏓'},{l:'Ciclismo',e:'🚴'},{l:'Boxeo',e:'🥊'},{l:'Ajedrez',e:'♟'}];
-  var REG=['Norte','Centro','Sur','Oriente'], EVT=['Juegos Departamentales 2026','Copa Regional 2026','Festival Interclubes 2026','Torneo Nacional Juvenil 2026'];
-  var CAT=['Sub-15','Sub-18','Sub-20','Mayores','Libre'], SEX=['Masculino','Femenino','Mixto'];
-  var SYS=[{s:'Fase de grupos',c:'grupos',g:2},{s:'Round Robin',c:'grupos',g:1},{s:'Fase de Grupos + Final',c:'grupos',g:2},{s:'Eliminación directa',c:'elim',g:1}];
-  var NP=[6,8,8,10,12,14,16], out=[];
-  for(var i=0;i<36;i++){
-    var dep=DEP[i%DEP.length], reg=REG[i%REG.length], evt=EVT[(i*3)%EVT.length], cat=CAT[(i*2)%CAT.length], sex=SEX[i%SEX.length], sys=SYS[i%SYS.length], nP=NP[i%NP.length];
-    var month=6+(i%3), day=1+((i*7)%27), fecha='2026-'+('0'+month).slice(-2)+'-'+('0'+day).slice(-2);
-    var nombre=dep.l+' '+cat+' '+sex, comp=_seedTabla(_seedDigitacion(_seedComp(dep,sys,nP,fecha,reg,evt,cat,sex,nombre,i),i));
-    out.push({ id:'seed-'+(i+1)+'-'+_progNorm(dep.l).replace(/[^a-z0-9]+/g,'-'), _seed:true,_enriched:true, prueba:{deporteLabel:dep.l,emoji:dep.e,categoria:cat,sexo:sex,tipo:(sys.c==='elim'?'individual':'conjunto')}, comp:comp, region:reg, evento:evt, fecha:fecha, estado:'PUBLICADO', origen:_SEED_ORIGEN[i%_SEED_ORIGEN.length], ts:(Date.parse(fecha+'T08:00:00')||0) });
-  }
-  return out;
+  var rows=[
+    { dep:{l:'Baloncesto',e:'🏀'}, cat:'Sub-18', sex:'Femenino',  nP:8, g:2, estado:'CERRADO', ts:Date.parse('2026-09-23T10:20:00'), cerradoPor:'Daniel Barreto' },
+    { dep:{l:'Fútbol',e:'⚽'},     cat:'Sub-16', sex:'Masculino', nP:8, g:2, estado:'ABIERTO', ts:Date.parse('2026-09-22T16:05:00') },
+    { dep:{l:'Voleibol',e:'🏐'},   cat:'Sub-18', sex:'Masculino', nP:6, g:2, estado:'ABIERTO', ts:Date.parse('2026-09-22T11:40:00') }
+  ];
+  return rows.map(function(r,i){
+    var nombre=r.dep.l+' '+r.cat+' '+r.sex, comp=_seedTabla(_seedComp(r.dep,r.g,r.nP,r.cat,r.sex,nombre,i));
+    return { id:'seed-'+(i+1)+'-'+_progNorm(r.dep.l).replace(/[^a-z0-9]+/g,'-'), _seed:true,_enriched:true, promotion:PROMOTION, prueba:{deporteLabel:r.dep.l,emoji:r.dep.e,categoria:r.cat,sexo:r.sex,tipo:'conjunto'}, comp:comp, estado:r.estado, ts:r.ts, cerradoTs:(r.estado==='CERRADO'?r.ts:null), cerradoPor:r.cerradoPor||null };
+  });
 }
 /* Los comps sembrados solo traen grupos y partidos. Sin `tabla`, la pestaña
    Posiciones mostraba "Sin tabla de posiciones." una vez por grupo — invisible
@@ -1653,8 +1260,11 @@ function _seedTabla(comp){
   return comp;
 }
 var _PROG_SEED=_buildProgSeed(), _PROG_SEED_MAP={}; _PROG_SEED.forEach(function(r){_PROG_SEED_MAP[r.id]=r;});
-function _progAll(){ var real=(window.SorteoStore)?SorteoStore.list().filter(function(r){return r.estado!=='ANULADO';}):[]; real.forEach(_enrichProgRec); return real.concat(_PROG_SEED); }
-function _getProgRec(id){ return _PROG_SEED_MAP[id]||(window.SorteoStore?SorteoStore.get(id):null); }
+function _progAll(){ if(_demoState==='empty') return []; var real=(window.SorteoStore)?SorteoStore.list().filter(function(r){return r.estado!=='ANULADO';}):[]; real.forEach(_enrichProgRec); return _mergeSeed(real).filter(function(r){ return r.promotion&&r.promotion.code===PROMOTION.code; }); }
+function _estadoBadge(r){ return r.estado==='CERRADO'?'<span class="naowee-badge naowee-badge--positive naowee-badge--small">Cerrado</span>':'<span class="naowee-badge naowee-badge--caution naowee-badge--quiet naowee-badge--small">Abierto</span>'; }
+function _getProgRec(id){ return (window.SorteoStore?SorteoStore.get(id):null)||_PROG_SEED_MAP[id]||null; }
+/* Semillas que ya se guardaron en el store (cerradas o resorteadas) no se duplican. */
+function _mergeSeed(real){ var ids={}; real.forEach(function(r){ ids[r.id]=1; }); return real.concat(_PROG_SEED.filter(function(r){ return !ids[r.id]; })); }
 var _ICO_PSEARCH='<svg viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.3" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
 var _ICO_PCLR='<svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
 var _ICO_PCHEV='<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -1665,13 +1275,14 @@ function _progFilterDD(id,ph){ return '<div class="naowee-dropdown naowee-dropdo
 function renderProgEditList(){
   var el=document.getElementById('progEditBody'); if(!el)return;
   var all=_progAll();
-  if(!all.length){ el.innerHTML='<div class="naowee-empty-state"><span class="naowee-empty-state__icon">'+_ICO_PEMPTY+'</span><h3 class="naowee-empty-state__title">Aún no hay sorteos publicados</h3><p class="naowee-empty-state__description">Confirma un sorteo y aquí podrás asignarle fecha, hora y escenario a sus partidos.</p></div>'; return; }
-  el.innerHTML='<div class="prog-edit-list"><div class="naowee-table-card prog-tc">'
+  var banner=_originBannerHTML();
+  if(!all.length){ el.innerHTML=banner+'<div class="naowee-empty-state"><span class="naowee-empty-state__icon">'+_ICO_PEMPTY+'</span><h3 class="naowee-empty-state__title">Aún no hay sorteos en esta promoción</h3><p class="naowee-empty-state__description">Crea el primero con «Crear sorteo».</p><div class="naowee-empty-state__action"><button class="naowee-btn naowee-btn--loud naowee-btn--small" onclick="openCrearSorteo()">Crear sorteo</button></div></div>'; return; }
+  el.innerHTML=banner+'<div class="prog-edit-list"><div class="naowee-table-card prog-tc">'
     +'<nav class="naowee-pagination naowee-pagination--small prog-pager" id="progPager" aria-label="Paginación de programaciones"></nav>'
     +'<div class="naowee-table-card__toolbar">'
       +'<div class="naowee-table-card__toolbar-left">'
-        +'<div class="naowee-searchbox naowee-searchbox--medium prog-search"><div class="naowee-searchbox__input-wrap"><span class="naowee-searchbox__icon">'+_ICO_PSEARCH+'</span><input class="naowee-searchbox__input" id="progSearchInput" type="text" placeholder="Buscar competencia o deporte…" oninput="progOnSearch(this.value)"><button type="button" class="naowee-searchbox__clear" aria-label="Limpiar búsqueda" onclick="progClearSearch()">'+_ICO_PCLR+'</button></div></div>'
-        +_progFilterDD('ddFRegion','Todas las regiones')+_progFilterDD('ddFDeporte','Todos los deportes')+_progFilterDD('ddFFecha','Todas las fechas')
+        +'<div class="naowee-searchbox naowee-searchbox--medium prog-search"><div class="naowee-searchbox__input-wrap"><span class="naowee-searchbox__icon">'+_ICO_PSEARCH+'</span><input class="naowee-searchbox__input" id="progSearchInput" type="text" placeholder="Buscar prueba o deporte…" oninput="progOnSearch(this.value)"><button type="button" class="naowee-searchbox__clear" aria-label="Limpiar búsqueda" onclick="progClearSearch()">'+_ICO_PCLR+'</button></div></div>'
+        +_progFilterDD('ddFDeporte','Todos los deportes')
       +'</div>'
       +'<button class="naowee-btn naowee-btn--mute naowee-btn--small" id="btnProgClear" onclick="progClearFilters()" disabled>Limpiar</button>'
     +'</div>'
@@ -1680,10 +1291,7 @@ function renderProgEditList(){
   _progBuildFilterMenus(all); _progSyncToolbarUI(); renderProgRows();
 }
 function _progBuildFilterMenus(all){
-  _progFillMenu('ddFRegion','region','Todas las regiones',_progUniq(all.map(function(r){return r.region;})).sort());
   _progFillMenu('ddFDeporte','deporte','Todos los deportes',_progUniq(all.map(function(r){return r.prueba&&r.prueba.deporteLabel;})).sort());
-  var months=_progUniq(all.map(function(r){return _progMonthKey(r.fecha);})).sort();
-  _progFillMenu('ddFFecha','fecha','Todas las fechas',months.map(function(m){return {v:m,l:_progMonthLabel(m)};}));
 }
 function _progFillMenu(ddId,kind,allLabel,items){
   var menu=document.getElementById(ddId+'-menu'); if(!menu)return; var cur=_progFilters[kind];
@@ -1693,7 +1301,7 @@ function _progFillMenu(ddId,kind,allLabel,items){
 }
 function progPickFilter(kind,val,el){
   _progFilters[kind]=val; _progPage=1;
-  var ddId=(kind==='region')?'ddFRegion':(kind==='deporte')?'ddFDeporte':'ddFFecha', w=document.getElementById(ddId);
+  var ddId='ddFDeporte', w=document.getElementById(ddId);
   if(w){ w.querySelectorAll('.naowee-dropdown__option').forEach(function(o){o.classList.toggle('naowee-dropdown__option--selected',o===el);}); w.classList.remove('naowee-dropdown--open'); }
   var label=el?(el.dataset.label||el.textContent.trim()):'', isAll=!val, trg=w?w.querySelector('.naowee-dropdown__value, .naowee-dropdown__placeholder'):null;
   if(trg){ trg.textContent=label; trg.classList.toggle('naowee-dropdown__placeholder',isAll); trg.classList.toggle('naowee-dropdown__value',!isAll); }
@@ -1707,55 +1315,40 @@ function _progSyncTrigger(ddId,kind,allLabel,labelFn){
 function _progSyncToolbarUI(){
   var inp=document.getElementById('progSearchInput'); if(inp)inp.value=_progFilters.q||'';
   var sp=document.querySelector('.prog-search'); if(sp)sp.classList.toggle('naowee-searchbox--has-value',!!_progFilters.q);
-  _progSyncTrigger('ddFRegion','region','Todas las regiones',null);
   _progSyncTrigger('ddFDeporte','deporte','Todos los deportes',null);
-  _progSyncTrigger('ddFFecha','fecha','Todas las fechas',_progMonthLabel);
 }
 function progOnSearch(v){ _progFilters.q=v; _progPage=1; var sp=document.querySelector('.prog-search'); if(sp)sp.classList.toggle('naowee-searchbox--has-value',!!(v&&v.length)); renderProgRows(); }
 function progClearSearch(){ var inp=document.getElementById('progSearchInput'); if(inp)inp.value=''; progOnSearch(''); }
-function progClearFilters(){ _progFilters={q:'',region:'',deporte:'',fecha:''}; _progPage=1; var all=_progAll(); _progBuildFilterMenus(all); _progSyncToolbarUI(); renderProgRows(); }
+function progClearFilters(){ _progFilters={q:'',deporte:''}; _progPage=1; var all=_progAll(); _progBuildFilterMenus(all); _progSyncToolbarUI(); renderProgRows(); }
 function progGoPage(n){ _progPage=Math.max(1,n||1); renderProgRows(); }
 function _progFilter(all){
   var f=_progFilters, qn=_progNorm(f.q);
   return all.filter(function(r){
-    if(f.region && r.region!==f.region) return false;
     if(f.deporte && !(r.prueba&&r.prueba.deporteLabel===f.deporte)) return false;
-    if(f.fecha && _progMonthKey(r.fecha)!==f.fecha) return false;
-    if(qn){ var hay=_progNorm(((r.comp&&r.comp.nombre)||'')+' '+((r.prueba&&r.prueba.deporteLabel)||'')+' '+(r.region||'')); if(hay.indexOf(qn)<0) return false; }
+    if(qn){ var hay=_progNorm(((r.comp&&r.comp.nombre)||'')+' '+((r.prueba&&r.prueba.deporteLabel)||'')); if(hay.indexOf(qn)<0) return false; }
     return true;
   });
 }
-/* El campo `origen` se guardaba en cada sorteo pero nunca se leia. Aqui pasa a
-   ser la columna "Modo": con que se produjo el sorteo. Las claves son las que
-   escribe confirmSorteo(); 'transcripcion' es el modo hoy llamado "Ya sorteado". */
-var _MODO_LABEL={ sorteo:'Automático', manual:'Manual', transcripcion:'Ya sorteado' };
-/* "Fase de Grupos + Final" no cabe con 8 columnas: version corta para la tabla,
-   el nombre largo se sigue viendo en el subtitulo del detalle. */
-var _SISTEMA_CORTO={ 'Fase de Grupos + Final':'Grupos + Final', 'Eliminación directa':'Elim. directa' };
 function _progRowHTML(r){
-  var c=r.comp||{}, ms=_progMatches(c), done=ms.filter(function(x){return x.m.fecha;}).length, tot=ms.length;
-  var pc=(tot===0||done===0)?'neutral':(done>=tot?'positive':'caution');
-  var prog='<span class="naowee-badge naowee-badge--'+pc+' naowee-badge--quiet">'+done+'/'+tot+'</span>';
+  var c=r.comp||{}, ng=(c.grupos||[]).length, ne=(c.grupos||[]).reduce(function(s,g){return s+((g.equipos||[]).length);},0);
   var sub=((r.prueba&&r.prueba.categoria)||'')+((r.prueba&&r.prueba.sexo)?(' · '+r.prueba.sexo):'');
   return '<tr>'
-    +'<td data-label="Competencia" class="naowee-table__cell-name"><div class="prog-comp"><span class="prog-comp__emoji">'+((r.prueba&&r.prueba.emoji)||c.emoji||'🏆')+'</span><span class="prog-comp__txt"><span class="naowee-table__cell-primary">'+tEsc(c.nombre||'Sorteo')+'</span>'+(sub?'<span class="naowee-table__cell-sub">'+tEsc(sub)+'</span>':'')+'</span></div></td>'
+    +'<td data-label="Prueba" class="naowee-table__cell-name"><div class="prog-comp"><span class="prog-comp__emoji">'+((r.prueba&&r.prueba.emoji)||c.emoji||'🏆')+'</span><span class="prog-comp__txt"><span class="naowee-table__cell-primary">'+tEsc(c.nombre||'Sorteo')+'</span>'+(sub?'<span class="naowee-table__cell-sub">'+tEsc(sub)+'</span>':'')+'</span></div></td>'
     +'<td data-label="Deporte" class="naowee-table__cell-muted">'+tEsc((r.prueba&&r.prueba.deporteLabel)||'—')+'</td>'
-    +'<td data-label="Sistema" class="naowee-table__cell-muted">'+tEsc(_SISTEMA_CORTO[c.sistema]||c.sistema||'—')+'</td>'
-    +'<td data-label="Modo"><span class="naowee-badge naowee-badge--neutral naowee-badge--quiet naowee-badge--small">'+tEsc(_MODO_LABEL[r.origen]||'—')+'</span></td>'
-    +'<td data-label="Región" class="naowee-table__cell-muted">'+tEsc(r.region||'—')+'</td>'
-    +'<td data-label="Fecha" class="naowee-table__cell-muted">'+tEsc(_fmtFechaHuman(r.fecha)||'—')+'</td>'
-    +'<td data-label="Programados">'+prog+'</td>'
-    +'<td class="prog-actioncell" style="text-align:right"><button class="naowee-btn naowee-btn--mute naowee-btn--small" onclick="editProg(\''+r.id+'\')">'+_ICO_PEDIT+' Editar</button></td>'
+    +'<td data-label="Equipos" class="naowee-table__cell-muted">'+ne+'</td>'
+    +'<td data-label="Grupos" class="naowee-table__cell-muted">'+ng+'</td>'
+    +'<td data-label="Estado">'+_estadoBadge(r)+'</td>'
+    +'<td class="prog-actioncell" style="text-align:right"><button class="naowee-btn naowee-btn--mute naowee-btn--small" onclick="editProg(\''+r.id+'\')">Ver resultado</button></td>'
   +'</tr>';
 }
 function renderProgRows(){
   var mount=document.getElementById('progBodyMount'); if(!mount)return;
   var all=_progAll(), filtered=_progFilter(all), total=filtered.length;
   var pages=Math.max(1,Math.ceil(total/_PROG_PAGE_SIZE)); if(_progPage>pages)_progPage=pages;
-  if(!total){ mount.innerHTML='<div class="naowee-empty-state"><span class="naowee-empty-state__icon">'+_ICO_PEMPTY+'</span><h3 class="naowee-empty-state__title">Sin resultados</h3><p class="naowee-empty-state__description">Ninguna programación coincide con los filtros aplicados.</p><div class="naowee-empty-state__action"><button class="naowee-btn naowee-btn--mute naowee-btn--small" onclick="progClearFilters()">Limpiar filtros</button></div></div>'; }
-  else { var start=(_progPage-1)*_PROG_PAGE_SIZE, rows=filtered.slice(start,start+_PROG_PAGE_SIZE); mount.innerHTML='<div class="naowee-table-card__table-wrap"><table class="naowee-table--in-card"><thead><tr><th>Competencia</th><th>Deporte</th><th>Sistema</th><th>Modo</th><th>Región</th><th>Fecha</th><th>Programados</th><th></th></tr></thead><tbody>'+rows.map(_progRowHTML).join('')+'</tbody></table></div>'; }
+  if(!total){ mount.innerHTML='<div class="naowee-empty-state"><span class="naowee-empty-state__icon">'+_ICO_PEMPTY+'</span><h3 class="naowee-empty-state__title">Sin resultados</h3><p class="naowee-empty-state__description">Ningún sorteo coincide con la búsqueda.</p><div class="naowee-empty-state__action"><button class="naowee-btn naowee-btn--mute naowee-btn--small" onclick="progClearFilters()">Limpiar filtros</button></div></div>'; }
+  else { var start=(_progPage-1)*_PROG_PAGE_SIZE, rows=filtered.slice(start,start+_PROG_PAGE_SIZE); mount.innerHTML='<div class="naowee-table-card__table-wrap"><table class="naowee-table--in-card"><thead><tr><th>Prueba</th><th>Deporte</th><th>Equipos</th><th>Grupos</th><th>Estado</th><th></th></tr></thead><tbody>'+rows.map(_progRowHTML).join('')+'</tbody></table></div>'; }
   _progRenderPager(total,pages);
-  var f=_progFilters, any=!!(f.q||f.region||f.deporte||f.fecha), b=document.getElementById('btnProgClear'); if(b)b.disabled=!any;
+  var f=_progFilters, any=!!(f.q||f.deporte), b=document.getElementById('btnProgClear'); if(b)b.disabled=!any;
 }
 function _progRenderPager(total,pages){
   var p=document.getElementById('progPager'); if(!p)return;
@@ -1763,72 +1356,28 @@ function _progRenderPager(total,pages){
     +'<div class="naowee-pagination__controls"><button class="naowee-pagination__btn" type="button" onclick="progGoPage('+(_progPage-1)+')"'+(_progPage<=1?' disabled':'')+' aria-label="Página anterior"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="naowee-pagination__btn" type="button" onclick="progGoPage('+(_progPage+1)+')"'+(_progPage>=pages?' disabled':'')+' aria-label="Página siguiente"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>';
   var inp=document.getElementById('progPageInput'); if(inp){ inp.addEventListener('change',function(){progGoPage(parseInt(this.value,10)||1);}); inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){this.blur();progGoPage(parseInt(this.value,10)||1);} }); }
 }
-function editProg(id){ var rec=_getProgRec(id); if(!rec||!rec.comp)return; showStage('progEditStage'); _progEditId=id; _progMatchPage=1; _pvComp=rec.comp; _progPanelId='progEditBody';
-  var t=document.getElementById('progEditTitle'),s=document.getElementById('progEditSub'); if(t)t.textContent=(rec.comp.nombre||'Programación'); if(s)s.textContent=_progEditSub(_pvComp);
-  var g=document.getElementById('btnGuardarProg'); if(g)g.style.display=''; var cs=document.getElementById('btnCrearSorteo'); if(cs)cs.style.display='none'; var ba=document.getElementById('btnProgBackArrow'); if(ba)ba.style.display=''; var c=document.getElementById('progEditCenefa'); if(c)c.innerHTML=''; _progBaseline=_progSnapshot(_pvComp); _progSyncActions();
-  /* Todo el resultado queda accesible, no solo la programación: mismo juego de
-     tabs que el preview, montado en este stage. Arranca en Programación porque
-     entrar desde la lista es para programar partidos. */
-  _pvMount={tabs:'progEditTabs',panel:'progEditBody'};
-  _activeTabs=_tabsFor(_pvComp);
-  _pvTab='programa';
+function editProg(id){ var rec=_getProgRec(id); if(!rec||!rec.comp)return; showStage('progEditStage'); _progEditId=id; _pvComp=rec.comp; _progPanelId='progEditBody';
+  document.body.dataset.screen='detalle'; document.body.dataset.route='/home/events/'+EVENT.code+'/draws/'+PROMOTION.code+'/'+id; setCrumbs([{label:_promoLabel(),go:openProgEdit},rec.comp.nombre||'Sorteo']);
+  var t=document.getElementById('progEditTitle'),sub=document.getElementById('progEditSub'); if(t)t.textContent=(rec.comp.nombre||'Sorteo');
+  if(sub){ var ng=(rec.comp.grupos||[]).length; sub.textContent=_promoLabel()+' · '+ng+' grupos · '+(rec.estado==='CERRADO'?('Cerrado el '+new Date(rec.cerradoTs||rec.ts).toLocaleDateString('es-CO',{day:'numeric',month:'short',year:'numeric'})+(rec.cerradoPor?(' por '+rec.cerradoPor):'')):'Abierto: todavía se puede resortear.'); }
+  var cs=document.getElementById('btnCrearSorteo'); if(cs)cs.style.display='none'; var ba=document.getElementById('btnProgBackArrow'); if(ba)ba.style.display=''; var c=document.getElementById('progEditCenefa'); if(c)c.innerHTML='';
+  /* Acciones por estado: Abierto → Resortear / Cerrar sorteo; Cerrado → Ver vista pública / Copiar enlace. */
+  var da=document.getElementById('detailActions'); if(da){ da.innerHTML=(rec.estado==='CERRADO')
+    ? '<button class="naowee-btn naowee-btn--loud" type="button" onclick="verPublicoDe(\''+id+'\')">Ver vista pública</button><button class="naowee-btn naowee-btn--mute" type="button" onclick="copiarEnlaceDe(\''+id+'\',this)">Copiar enlace</button>'
+    : '<button class="naowee-btn naowee-btn--mute" type="button" onclick="detailResortear(\''+id+'\')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.6 8a5.6 5.6 0 11-1.64-3.96M13.6 2.2v3h-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Resortear</button><button class="naowee-btn naowee-btn--loud" type="button" onclick="detailCerrar(\''+id+'\')">Cerrar sorteo</button>'; }
+  _pvMount={tabs:'progEditTabs',panel:'progEditBody'}; _activeTabs=_tabsFor(_pvComp); _pvTab='grupos';
   var tabs=document.getElementById('progEditTabs'); if(tabs)tabs.style.display='';
   var wrap=document.getElementById('progEditWrap'); if(wrap)wrap.classList.add('is-detalle');
   renderPvTabs();
   try{document.querySelector('.page').scrollTo(0,0);}catch(e){} }
-/* Subtítulo del detalle: dice de qué competencia se trata y cuántos partidos
-   llevan fecha, que es lo que se viene a hacer aquí. */
-function _progEditSub(comp){
-  var ms=_progMatches(comp), con=ms.filter(function(x){return x.m.fecha;}).length;
-  var meta=(comp.sistema||'')+((comp.grupos&&comp.grupos.length)?(' · '+comp.grupos.length+' grupos'):'');
-  return meta+' · '+con+' de '+ms.length+' partidos con fecha. Asigna fecha, hora y escenario; guarda para actualizar el sorteo.';
-}
-/* ── Estado sucio de la programación ──────────────────────────────────
-   El detalle se edita sobre `rec.comp` POR REFERENCIA, así que "guardar" es
-   persistir en el store y "descartar" es devolver los campos al valor que
-   tenían al entrar. `_progBaseline` guarda ese valor de entrada.
-   ─────────────────────────────────────────────────────────────────────── */
-var _progBaseline=null, _progPendingBack=false;
-function _progSnapshot(comp){ return JSON.stringify(_progMatches(comp).map(function(x){ return [String(x.id), x.m.fecha||'', x.m.hora||'', x.m.escenario||'']; })); }
-/* Compara contra el baseline en vez de levantar un flag: si el usuario deshace
-   su cambio a mano, "Guardar cambios" se deshabilita solo. */
-function _progIsDirty(){ return !!(_progBaseline && _pvComp && _progSnapshot(_pvComp)!==_progBaseline); }
-function _progSyncActions(){
-  var dirty=_progIsDirty();
-  var g=document.getElementById('btnGuardarProg'); if(g)g.disabled=!dirty;
-  var d=document.getElementById('btnDescartarProg'); if(d)d.style.display=(dirty&&_progEditId)?'':'none';
-  /* El subtítulo lleva el contador "N de M con fecha": que no quede desfasado. */
-  var s=document.getElementById('progEditSub'); if(s&&_progEditId&&_pvComp)s.textContent=_progEditSub(_pvComp);
-}
-function _progRestoreBaseline(){
-  if(!_progBaseline||!_pvComp)return;
-  var base={}; JSON.parse(_progBaseline).forEach(function(r){ base[r[0]]={fecha:r[1],hora:r[2],escenario:r[3]}; });
-  _progMatches(_pvComp).forEach(function(x){ var b=base[String(x.id)]; if(!b)return; x.m.fecha=b.fecha||''; x.m.hora=b.hora||''; x.m.escenario=b.escenario||''; });
-}
-/* Pregunta antes de perder cambios. `fromBack` distingue las dos entradas:
-   el botón se queda en la vista, el back-arrow sale después de restaurar. */
-function _progDiscardAsk(fromBack){
-  if(!_progIsDirty()){ if(fromBack)_progEditBackNow(); return; }
-  _progPendingBack=!!fromBack;
-  var o=document.getElementById('progDiscardOverlay'); if(o)o.classList.add('open');
-}
-function progDiscardCancel(){ var o=document.getElementById('progDiscardOverlay'); if(o)o.classList.remove('open'); _progPendingBack=false; }
-function progDiscardConfirm(){
-  var back=_progPendingBack;
-  progDiscardCancel();
-  _progRestoreBaseline();
-  if(back){ _progEditBackNow(); return; }
-  progRerender(); _progSyncActions();
-}
-function descartarProg(){ _progDiscardAsk(false); }
-document.getElementById('progDiscardOverlay')?.addEventListener('click',function(e){ if(e.target===this)progDiscardCancel(); });
-document.addEventListener('keydown',function(e){ if(e.key==='Escape')progDiscardCancel(); });
-function progEditBack(){ _progDiscardAsk(true); }
-function _progEditBackNow(){ if(_progEditId){ openProgEdit(); } else { var nav=document.getElementById('navProgEdit'); if(nav)nav.classList.remove('active'); showStage('wizardStage'); } }
-function guardarProg(){ if(!_progEditId||!_progIsDirty())return; var rec=_getProgRec(_progEditId); if(rec){ rec.comp=_pvComp; if(!rec._seed&&window.SorteoStore)SorteoStore.save(rec); } _progBaseline=_progSnapshot(_pvComp); _progSyncActions(); var c=document.getElementById('progEditCenefa'); if(c){ c.innerHTML='<div class="naowee-message naowee-message--positive" role="status" style="width:100%;margin-bottom:14px"><div class="naowee-message__header"><span class="naowee-message__icon">'+_TICON.ok+'</span><span class="naowee-message__title">Programación guardada</span>'+_msgDismissHTML('progDismissCenefa()')+'</div><p class="naowee-message__text">Los cambios de fecha, hora y escenario quedaron guardados en este sorteo.</p></div>'; try{document.querySelector('.page').scrollTo({top:0,behavior:'smooth'});}catch(e){} } }
+function progEditBack(){ openProgEdit(); }
 function _attachTeamMeta(comp,sorteo){ if(!comp||comp.teamMeta)return; try{ var parts=(sorteo&&sorteo.participantes)||[], reg=(sorteo&&sorteo.region)||comp.region||'', map={}, any=false; parts.forEach(function(p){ if(p&&typeof p==='object'&&p.nombre){ var meta=_teamMetaStr(p.nombre,p.delegacion,reg); if(meta){ map[p.nombre]=meta; any=true; } } }); if(any)comp.teamMeta=map; }catch(e){} }
-function showPreview(comp){ _pvComp=comp||SorteoEngine.toComp(_sorteo); _sorteo.resultado=_pvComp; _attachTeamMeta(_pvComp,_sorteo); _progPanelId='previewPanel'; _pvMount={tabs:'previewTabs',panel:'previewPanel'}; showStage('previewStage'); const b=document.getElementById('btnConfirmSorteo'); if(b){b.disabled=false;b.textContent='Confirmar sorteo';} var _pc=document.getElementById('previewCenefa'); if(_pc)_pc.innerHTML='';
-  var _isTrans=(W.modo==='transcrip'); var _bb=document.getElementById('btnPreviewBack'); if(_bb){ _bb.innerHTML=_isTrans?'← Volver al registro':'← Parámetros'; _bb.onclick=_isTrans?backTranscrip:backToWizard; } var _rs=document.getElementById('btnResortear'); if(_rs)_rs.style.display=_isTrans?'none':''; var _st=document.querySelector('#previewStage .sorteo-title'); if(_st)_st.textContent=_isTrans?'Sorteo registrado':'Resultado del sorteo'; var _ss=document.querySelector('#previewStage .sorteo-sub'); if(_ss)_ss.textContent=_isTrans?'Estos son los grupos/llaves que registraste. Revisa y confírmalos para publicar.':'Revisa el resultado y confírmalo para publicarlo.'; var isElim=_pvComp.sisCls==='elim'; _activeTabs=_tabsFor(_pvComp); var sub=isElim?((_pvComp.sistema||'Eliminación directa')+' · '+((_sorteo&&_sorteo.participantes)?_sorteo.participantes.length:0)+' participantes'):((_pvComp.sistema||'')+' · '+(_pvComp.grupos?_pvComp.grupos.length:0)+' grupos · '+(_pvComp.jornadasCount||0)+' jornadas'); document.getElementById('previewHead').innerHTML='<div class="pv-head"><span class="pv-emoji">'+(_pvComp.emoji||'🏆')+'</span><div><div class="pv-title">'+(_pvComp.nombre||'Sorteo')+'</div><div class="pv-sub">'+sub+'</div></div></div>'; _pvTab=(_activeTabs.find(function(t){return t.id!=='programa';})||_activeTabs[0]).id; renderPvTabs(); }
+function showPreview(comp){ _pvComp=comp||SorteoEngine.toComp(_sorteo); _sorteo.resultado=_pvComp; _attachTeamMeta(_pvComp,_sorteo); _progPanelId='previewPanel'; _pvMount={tabs:'previewTabs',panel:'previewPanel'}; showStage('previewStage'); document.body.dataset.screen='crear'; setCrumbs([{label:_promoLabel(),go:openProgEdit},'Crear sorteo']);
+  const b=document.getElementById('btnConfirmSorteo'); if(b){b.disabled=false;b.textContent='Cerrar sorteo';} var _pc=document.getElementById('previewCenefa'); if(_pc)_pc.innerHTML='';
+  var _rs=document.getElementById('btnResortear'); if(_rs)_rs.style.display='';
+  _activeTabs=_tabsFor(_pvComp); _pvTab='grupos';
+  var ph=document.getElementById('previewHead'); if(ph){ var pr=_sorteo.prueba||{}; ph.innerHTML='<div class="pv-head"><span class="pv-emoji">'+(pr.emoji||'🏆')+'</span><div><div class="pv-title">'+tEsc([pr.deporteLabel,pr.categoria,pr.sexo].filter(Boolean).join(' · '))+'</div><div class="pv-sub">'+tEsc(_promoLabel())+' · '+(_pvComp.grupos||[]).length+' grupos · '+tEsc(_pvComp.sistema||'')+'</div></div></div>'; }
+  renderPvTabs(); }
 /* Punto de montaje de las tabs: el mismo juego sirve para el resultado recién
    sorteado (previewStage) y para un sorteo abierto desde la lista. */
 let _pvMount={tabs:'previewTabs',panel:'previewPanel'};
@@ -1836,126 +1385,11 @@ function renderPvTabs(){ const tb=document.getElementById(_pvMount.tabs); if(tb)
 function switchPvTab(id){ if(id===_pvTab) return; const oi=_activeTabs.findIndex(function(t){return t.id===_pvTab;}), ni=_activeTabs.findIndex(function(t){return t.id===id;}); _pvTab=id; renderPvTabs(); const p=document.getElementById(_pvMount.panel); if(p){ p.style.animation='none'; void p.offsetWidth; p.style.animation=(ni>oi?'tabSlideR':'tabSlideL')+' .28s cubic-bezier(.32,.72,0,1)'; } }
 /* Ir a crear: limpia el activo de "Lista de sorteos" en el sub-nav, que
    openProgEdit() enciende al abrir el listado (ahora es el aterrizaje). */
-function openCrearSorteo(){ var nav=document.getElementById('navProgEdit'); if(nav)nav.classList.remove('active'); showStage('wizardStage'); }
-function backToWizard(){ _ruletaTimers.forEach(t=>{clearTimeout(t);clearInterval(t);}); _ruletaTimers=[]; openCrearSorteo(); }
-function reSortear(){ if(W.modo==='transcrip') startTranscrip(); else if(W.modo==='manual') startManual(); else startRuleta(); }
-function confirmSorteo(){ const b=document.getElementById('btnConfirmSorteo'); if(b){b.disabled=true;b.textContent='Sorteo confirmado';}
-  var _savedId=null;
-  try{ if(window.SorteoStore&&_pvComp){ var id=SorteoStore.pruebaId(_sorteo); _sorteo.sorteoId=id; _savedId=id; SorteoStore.save({ id:id, prueba:_sorteo.prueba, comp:_pvComp, estado:'PUBLICADO', origen:(W.modo==='transcrip'?'transcripcion':(W.modo==='manual'?'manual':'sorteo')), ts:Date.now() }); } }catch(e){}
-  fireConfetti();
-  /* Al confirmar, enviar a la programación del sorteo recién creado. */
-  if(_savedId){ setTimeout(function(){ try{ editProg(_savedId); }catch(e){ openProgEdit(); } }, 950); }
-  else { showPublishPanel(); }
-}
 function _publicoURL(){ var id=(_sorteo&&_sorteo.sorteoId)||''; return location.origin+location.pathname.replace(/[^/]*$/,'sorteo-publico.html')+'?id='+encodeURIComponent(id); }
 function verPublico(){ try{ window.open(_publicoURL(),'_blank','noopener'); }catch(e){} }
 function copiarEnlace(btn){ var url=_publicoURL(); function ok(){ if(btn){ var t=btn.innerHTML; btn.textContent='¡Enlace copiado!'; setTimeout(function(){btn.innerHTML=t;},1600); } } function fb(){ try{ var ta=document.createElement('textarea'); ta.value=url; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); ok(); }catch(e){} } try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(ok,fb); } else fb(); }catch(e){ fb(); } }
 var _ICO_OK='<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 9.4l2.6 2.6L13 6" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function _cenefa(variant,icon,title,msg,actions){ var el=document.getElementById('previewCenefa'); if(!el)return; el.innerHTML='<div class="sorteo-cenefa sorteo-cenefa--'+variant+'" role="status"><div class="sorteo-cenefa__inner"><span class="sorteo-cenefa__icon">'+icon+'</span><div class="sorteo-cenefa__body"><div class="sorteo-cenefa__title">'+title+'</div>'+(msg?'<p class="sorteo-cenefa__msg">'+msg+'</p>':'')+'</div>'+(actions?'<div class="sorteo-cenefa__actions">'+actions+'</div>':'')+'</div></div>'; try{document.querySelector('.page').scrollTo({top:0,behavior:'smooth'});}catch(e){} }
-function showPublishPanel(){ var actions='<button class="naowee-btn naowee-btn--loud naowee-btn--small" onclick="verPublico()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3.5H3.5A1.5 1.5 0 002 5v7.5A1.5 1.5 0 003.5 14H11a1.5 1.5 0 001.5-1.5V10M9.5 2.5H13.5V6.5M13 3L7.5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Ver vista pública</button><button class="naowee-btn naowee-btn--mute naowee-btn--small" onclick="copiarEnlace(this)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="1.8" stroke="currentColor" stroke-width="1.4"/><path d="M3.4 10.5A1.5 1.5 0 012 9V3.4A1.5 1.5 0 013.4 2H9a1.5 1.5 0 011.5 1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Copiar enlace</button><button class="naowee-btn naowee-btn--mute naowee-btn--small" onclick="exportarPDF()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1.8v6.4M5.3 5.8L8 8.5l2.7-2.7M3 10.5v2a1 1 0 001 1h8a1 1 0 001-1v-2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Exportar PDF</button>'; _cenefa('positive',_ICO_OK,'Sorteo guardado y publicado','Quedó disponible en la pestaña <b>Resultados</b> del evento. Compártelo o expórtalo.',actions); }
-function exportarPDF(){ if(!_pvComp)return; var panel=document.getElementById('previewPanel'); if(!panel)return; var saved=panel.innerHTML; panel.innerHTML=_activeTabs.map(function(t){ return '<section class="pv-print-sec"><h3 class="pv-print-h">'+t.label+'</h3>'+t.render(_pvComp)+'</section>'; }).join(''); document.body.classList.add('printing'); var done=false; var restore=function(){ if(done)return; done=true; document.body.classList.remove('printing'); panel.innerHTML=saved; window.removeEventListener('afterprint',restore); }; window.addEventListener('afterprint',restore); try{ window.print(); }catch(e){} setTimeout(restore,2000); }
-/* ── Sorteo MANUAL (ruleta giratoria) ── */
-let _manualSeq=[],_manualGroups=[],_manualSizes=[],_manualDrawn=0,_manualSpin=false,_manualFree=[],_manualFreeIdx=0;
-function segmentSync(seg){ if(!seg)return; var pill=seg.querySelector('.naowee-segment__pill'); var a=seg.querySelector('.naowee-segment__item--active')||seg.querySelector('.naowee-segment__item'); if(!pill||!a)return; var sr=seg.getBoundingClientRect(), ar=a.getBoundingClientRect(); var bl=parseFloat(getComputedStyle(seg).borderLeftWidth)||0; pill.style.width=ar.width+'px'; pill.style.setProperty('--segment-pill-x',(ar.left-sr.left-bl)+'px'); }
-function setModo(m){ W.modo=m; var seg=document.getElementById('modoSeg'); if(seg){ var pill=seg.querySelector('.naowee-segment__pill'); if(pill)pill.classList.remove('naowee-segment__pill--no-anim'); [].forEach.call(seg.querySelectorAll('.naowee-segment__item'),function(b){b.classList.toggle('naowee-segment__item--active',b.dataset.modo===m);}); segmentSync(seg); } const h=document.getElementById('modoHint'); if(h) h.textContent=(m==='manual')?'Manual: gira la ruleta; cada giro asigna un equipo a un grupo (sorteo en vivo).':(m==='transcrip')?'Ya sorteado: el sorteo se hizo afuera; aquí registras los grupos o las llaves resultantes.':'Automático: el sistema arma los grupos al instante.'; }
-function startManual(){ buildSorteo(); const n=_sorteo.config.nGrupos;
-  _manualSizes=SorteoEngine.asignarGrupos(_sorteo.participantes,n,{shuffle:true}).map(function(g){return g.length;});
-  _manualGroups=Array.from({length:n},function(){return [];}); _manualSpin=false;
-  /* Reglas: pre-colocar los equipos fijados; la ruleta solo sortea los libres */
-  _manualFree=[]; _manualFreeIdx=0;
-  _sorteo.participantes.forEach(function(p){ var gi=SorteoEngine.fixedGroupIndex(p,n); if(gi>=0 && _manualGroups[gi].length<_manualSizes[gi]){ _manualGroups[gi].push(p.nombre); } else { _manualFree.push(p); } });
-  _manualDrawn=_manualGroups.reduce(function(s,gg){return s+gg.length;},0);
-  /* Orden de llenado para los libres: grupos con cupo restante */
-  _manualSeq=[]; var placed=_manualGroups.map(function(gg){return gg.length;}), rem=_manualFree.length;
-  while(rem>0){ var moved=false; for(var g=0;g<n;g++){ if(placed[g]<_manualSizes[g]){ _manualSeq.push(g); placed[g]++; rem--; moved=true; if(rem<=0)break; } } if(!moved)break; }
-  showStage('manualStage');
-  /* Pildora con la prueba que se esta sorteando. */
-  var pr=_sorteo.prueba||{}, partes=[pr.deporteLabel,pr.sexo,pr.categoria].filter(Boolean);
-  var pill=document.getElementById('manualPrueba');
-  if(pill){ if(partes.length){ pill.textContent=partes.join(' · '); pill.hidden=false; } else { pill.hidden=true; } }
-  var hayFijados=_manualFree.length<_sorteo.participantes.length;
-  document.getElementById('manualSub').textContent=hayFijados?'Equipos fijados ya ubicados por regla. Gira para sortear el resto.':'Gira la ruleta: cada giro asigna un equipo a un grupo.';
-  var bg=document.getElementById('btnGirar'); bg.style.display=(_manualFree.length?'':'none'); bg.disabled=false; bg.innerHTML='Girar la ruleta'; document.getElementById('btnManualNext').disabled=(_manualFree.length>0);
-  /* La ruleta usa su propia paleta de marca por POSICION, no teamColorLocal():
-     ese hash daba 10 colores de libreria (los defaults de Flat UI) que no son
-     de Naowee. Son tintes de --azul (#002B5B) y --accent (#d74009) mas un gris
-     frio; el naranja va apagado a proposito para no competir con el boton
-     "Girar la ruleta", que sí es --accent puro. Los avatares de los grupos
-     conservan su color por equipo: ahi el color SI distingue. */
-  var items=_manualFree.map(function(p,i){return {label:p.nombre,color:_WHEEL_COLORS[i%_WHEEL_COLORS.length]};});
-  if(window.RuletaWheel && items.length) RuletaWheel.mount(document.getElementById('manualWheel'), items);
-  renderManualGrupos(); updateManualProgress();
-}
-function renderManualGrupos(){ var el=document.getElementById('manualGrupos'); if(!el)return; el.innerHTML=_manualGroups.map(function(teams,gi){ var L=String.fromCharCode(65+gi); var cap=_manualSizes[gi]||teams.length; var slots=''; for(var i=0;i<cap;i++){ var t=teams[i]; slots += t ? '<div class="rg-slot filled"><span class="rg-ava" style="background:'+teamColorLocal(t)+'">'+teamInitLocal(t)+'</span><span class="rg-name">'+t+'</span></div>' : '<div class="rg-slot"><span class="rg-name" style="color:var(--text-muted)">—</span></div>'; } return '<div class="rg-card"><div class="rg-head"><span class="rg-dot"></span>Grupo '+L+'<span style="margin-left:auto;font-size:12px;font-weight:600;color:var(--text-secondary)">'+teams.length+'/'+cap+'</span></div><div class="rg-body">'+slots+'</div></div>'; }).join(''); }
-function updateManualProgress(){ var total=_sorteo.participantes.length; var p=document.getElementById('manualProgress'); if(p) p.textContent=_manualDrawn+' / '+total+' equipos sorteados'; }
-async function girarManual(){ if(_manualSpin)return; var total=_sorteo.participantes.length; if(_manualDrawn>=total)return; _manualSpin=true; var bg=document.getElementById('btnGirar'); bg.disabled=true; bg.innerHTML='Girando…';
-  var idx=-1; try{ idx=await RuletaWheel.spin(); }catch(e){} _manualSpin=false; bg.disabled=false; bg.innerHTML='Girar la ruleta';
-  if(idx<0)return; var src=_manualFree[idx]||_sorteo.participantes[idx]; var team=src&&src.nombre; var g=_manualSeq[_manualFreeIdx]; if(g==null||team==null)return; _manualGroups[g].push(team); _manualFreeIdx++; _manualDrawn++;
-  renderManualGrupos(); updateManualProgress();
-  if(_manualDrawn>=total){ bg.style.display='none'; document.getElementById('btnManualNext').disabled=false; document.getElementById('manualSub').textContent='¡Sorteo completo! Continúa para ver el calendario y la fase final.'; }
-}
-function showPreviewManual(){ _sorteo.manualGroups=_manualGroups; showPreview(); }
-
-/* ═══ F4 — TRANSCRIPCIÓN EXTERNA (grupos manual + bracket manual con progresión) ═══ */
-var _tFmt='grupos',_tGrupos=2,_tAssign=[],_tComp=null,_tDecisions={};
-var _TICON={ info:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M7 7h2v4H7z" fill="#fff"/><circle cx="8" cy="5" r="1" fill="#fff"/></svg>', caution:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M7 5h2v4H7z" fill="#fff"/><circle cx="8" cy="11" r="1" fill="#fff"/></svg>', ok:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 8l1.6 1.6L10.5 6.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' };
-function tEsc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch];}); }
-function _findInComp(comp,id){ if(!comp||!comp.bracket)return null; for(var r=0;r<comp.bracket.length;r++){ var ms=comp.bracket[r].matches; for(var i=0;i<ms.length;i++) if(ms[i].id===id) return ms[i]; } return null; }
-
-function startTranscrip(){ buildSorteo(); _tGrupos=Math.max(2,Math.min(8,+W.nGrupos||2)); _tAssign=tDefaultAssign(); _tDecisions={}; _tFmt=(W.tipo==='individual')?'bracket':'grupos';
-  showStage('transcripStage'); setTFmt(_tFmt); }
-function backTranscrip(){ showStage('transcripStage'); renderTBody(); var seg=document.getElementById('tFmtSeg'); if(seg)segmentSync(seg); }
-
-function setTFmt(f){ _tFmt=f; var seg=document.getElementById('tFmtSeg'); if(seg){ var pill=seg.querySelector('.naowee-segment__pill'); if(pill)pill.classList.remove('naowee-segment__pill--no-anim'); [].forEach.call(seg.querySelectorAll('.naowee-segment__item'),function(b){b.classList.toggle('naowee-segment__item--active',b.dataset.fmt===f);}); segmentSync(seg); }
-  var btn=document.getElementById('btnTranscrip'), sub=document.getElementById('transcripSub');
-  if(f==='bracket'){ if(btn){btn.textContent='Ver resultado de la llave';btn.disabled=false;} if(sub)sub.textContent='Marca el ganador de cada partido: el avance se propaga ronda a ronda.'; _tComp=SorteoEngine.toCompBracket(_sorteo); _tDecisions={}; }
-  else { if(btn)btn.textContent='Conformar grupos'; if(sub)sub.textContent='Asigna cada clasificado a su grupo (puedes reasignar).'; }
-  renderTBody(); }
-
-function renderTBody(){ var el=document.getElementById('tBody'); if(!el)return; el.innerHTML=(_tFmt==='bracket')?renderTBracket():renderTGrupos(); var cs=el.querySelector('#tCountSeg'); if(cs)segmentSync(cs); }
-
-/* ── Grupos manual ── */
-function tDefaultAssign(){ var n=_clasificados.length,m=_tGrupos,base=Math.floor(n/m),extra=n%m,a=[],g=0,cnt=0,cap=base+(0<extra?1:0); for(var i=0;i<n;i++){ if(cnt>=cap){g++;cnt=0;cap=base+(g<extra?1:0);} a.push(Math.min(g,m-1)); cnt++; } return a; }
-function tBuildGroups(){ var groups=[]; for(var g=0;g<_tGrupos;g++)groups.push([]); _clasificados.forEach(function(c,i){ var g=_tAssign[i]; if(g==null||g<0||g>=_tGrupos)g=0; groups[g].push((c.nombre||'').trim()); }); return groups; }
-function tGroupDropdown(i){ var cur=_tAssign[i],opts=''; for(var g=0;g<_tGrupos;g++){ opts+='<div class="naowee-dropdown__option'+(g===cur?' naowee-dropdown__option--selected':'')+'" onclick="tAssignGrupo('+i+','+g+',event)">Grupo '+String.fromCharCode(65+g)+'</div>'; } var curL=(cur!=null&&cur>=0&&cur<_tGrupos)?('Grupo '+String.fromCharCode(65+cur)):'Selecciona';
-  return '<div class="naowee-dropdown naowee-dropdown--small"><button type="button" class="naowee-dropdown__trigger" onclick="tddToggle(this,event)"><span class="naowee-dropdown__value">'+curL+'</span><span class="naowee-dropdown__controls"><span class="naowee-dropdown__chevron"><svg viewBox="0 0 16 16" width="14" height="14" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></button><div class="naowee-dropdown__menu">'+opts+'</div></div>'; }
-function tCountDropdown(){ var opts=''; for(var g=2;g<=8;g++){ opts+='<div class="naowee-dropdown__option'+(g===_tGrupos?' naowee-dropdown__option--selected':'')+'" onclick="tSetGrupos('+g+',event)">'+g+' grupos</div>'; } return '<div class="naowee-dropdown naowee-dropdown--small" style="display:inline-block;min-width:118px"><button type="button" class="naowee-dropdown__trigger" onclick="tddToggle(this,event)"><span class="naowee-dropdown__value">'+_tGrupos+' grupos</span><span class="naowee-dropdown__controls"><span class="naowee-dropdown__chevron"><svg viewBox="0 0 16 16" width="14" height="14" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></button><div class="naowee-dropdown__menu">'+opts+'</div></div>'; }
-function _tMaxGrupos(){ return Math.max(2,Math.min(8,Math.floor(_clasificados.length/2))); }
-function tCountSegment(){ var maxG=_tMaxGrupos(); var items=''; for(var g=2;g<=maxG;g++){ items+='<button type="button" class="naowee-segment__item'+(g===_tGrupos?' naowee-segment__item--active':'')+'" data-g="'+g+'" onclick="tSetGrupos('+g+')">'+g+'</button>'; } return '<div class="naowee-segment naowee-segment--small" id="tCountSeg"><span class="naowee-segment__pill naowee-segment__pill--no-anim"></span>'+items+'</div>'; }
-function _positionDDMenu(trigger,menu){ var r=trigger.getBoundingClientRect(); menu.style.position='fixed'; menu.style.left=Math.round(r.left)+'px'; menu.style.right='auto'; menu.style.width=Math.round(r.width)+'px'; menu.style.minWidth=Math.round(r.width)+'px'; menu.style.zIndex='2100'; var below=window.innerHeight-r.bottom-8; if(below<170 && r.top>below){ menu.style.top='auto'; menu.style.bottom=Math.round(window.innerHeight-r.top+6)+'px'; } else { menu.style.bottom='auto'; menu.style.top=Math.round(r.bottom+6)+'px'; } }
-function tddToggle(btn,e){ if(e)e.stopPropagation(); try{dpClose();}catch(_e){} var dd=btn.closest('.naowee-dropdown'); var open=dd.classList.contains('naowee-dropdown--open'); document.querySelectorAll('.naowee-dropdown--open').forEach(function(d){d.classList.remove('naowee-dropdown--open');}); if(!open){ dd.classList.add('naowee-dropdown--open'); var hm=dd.querySelector('.prog-dd-menu'); if(hm) _positionDDMenu(btn,hm); } }
-/* los menus de hora y escenario son position:fixed → cerrarlos al hacer scroll para que no se despeguen del campo */
-document.addEventListener('scroll',function(){ document.querySelectorAll('.prog-dd.naowee-dropdown--open').forEach(function(d){d.classList.remove('naowee-dropdown--open');}); },true);
-function tAssignGrupo(i,g,e){ if(e)e.stopPropagation(); _tAssign[i]=g; document.querySelectorAll('.naowee-dropdown--open').forEach(function(d){d.classList.remove('naowee-dropdown--open');}); renderTBody(); }
-function tSetGrupos(g,e){ if(e)e.stopPropagation(); _tGrupos=g; _tAssign=tDefaultAssign(); document.querySelectorAll('.naowee-dropdown--open').forEach(function(d){d.classList.remove('naowee-dropdown--open');}); renderTBody(); }
-function renderTGrupos(){ var n=_clasificados.length, maxG=_tMaxGrupos(); if(_tGrupos>maxG){ _tGrupos=maxG; _tAssign=tDefaultAssign(); }
-  var groups=tBuildGroups();
-  var rows=_clasificados.map(function(c,i){ var nm=(c.nombre||'').trim()||'(sin nombre)'; return '<div class="tg-row"><span class="clasif-pos">'+(i+1)+'</span><span class="tg-ava" style="background:'+teamColorLocal(nm)+'">'+teamInitLocal(nm)+'</span><span class="tg-name">'+tEsc(nm)+'</span>'+tGroupDropdown(i)+'</div>'; }).join('');
-  var preview=groups.map(function(teams,gi){ var L=String.fromCharCode(65+gi); var slots=teams.length?teams.map(function(t){return '<div class="rg-slot filled"><span class="rg-ava" style="background:'+teamColorLocal(t)+'">'+teamInitLocal(t)+'</span><span class="rg-name">'+tEsc(t)+'</span></div>';}).join(''):'<div class="rg-slot"><span class="rg-name" style="color:var(--text-muted)">Sin equipos</span></div>'; return '<div class="rg-card"><div class="rg-head"><span class="rg-dot"></span>Grupo '+L+'<span style="margin-left:auto;font-size:12px;font-weight:600;color:var(--text-secondary)">'+teams.length+' eq</span></div><div class="rg-body">'+slots+'</div></div>'; }).join('');
-  var bad=groups.some(function(t){return t.length<2;});
-  setTimeout(function(){ var b=document.getElementById('btnTranscrip'); if(b)b.disabled=bad; },0);
-  var sizes=groups.map(function(t){return t.length;}).join(', ');
-  var fb=bad
-    ? '<div class="naowee-message naowee-message--caution" style="width:100%;margin-bottom:14px"><div class="naowee-message__header"><span class="naowee-message__icon">'+_TICON.caution+'</span><span class="naowee-message__title">Revisa la conformación</span></div><p class="naowee-message__text">Cada grupo debe tener al menos 2 equipos. Con '+n+' equipo(s), usa menos grupos o cambia al formato <b>Llave</b>.</p></div>'
-    : '<div class="naowee-message naowee-message--informative" style="width:100%;margin-bottom:14px"><div class="naowee-message__header"><span class="naowee-message__icon">'+_TICON.info+'</span><span class="naowee-message__title">Reparto de grupos</span></div><p class="naowee-message__text"><b>'+n+'</b> equipos en <b>'+_tGrupos+'</b> grupos ('+sizes+' por grupo). Reasigna con los desplegables si el sorteo físico fue distinto.</p></div>';
-  return '<div class="tg-ctrl">N.º de grupos: '+tCountSegment()+'</div>'+fb+'<div class="tg-grid"><div class="tg-list">'+rows+'</div><div class="tg-preview">'+preview+'</div></div>'; }
-
-/* ── Bracket manual + progresión ── */
-function tPick(mid,side){ var m=_findInComp(_tComp,mid); if(!m||!m.t1||!m.t2)return; _tDecisions[mid]=side; tRecompute(); }
-function tRecompute(){ var comp=SorteoEngine.toCompBracket(_sorteo); var ids=[]; comp.bracket.forEach(function(rd){rd.matches.forEach(function(m){ids.push(m.id);});}); ids.forEach(function(id){ var m=_findInComp(comp,id); if(m&&_tDecisions[id]&&m.t1&&m.t2&&m.status!=='bye'){ comp=SorteoEngine.advanceWinner(comp,id,_tDecisions[id]); } }); _tComp=comp; renderTBody(); }
-function tCompHtml(m,side,decidable){ var name=side===1?m.t1:m.t2; var has=!!name; var win=m.winner===side; var cls=''; if(win)cls+=' is-win'; if(!decidable)cls+=' is-disabled'; var click=decidable?' onclick="tPick(\''+m.id+'\','+side+')"':''; var ava=has?('<span class="tbk-ca" style="background:'+teamColorLocal(name)+'">'+teamInitLocal(name)+'</span>'):'<span class="tbk-ca" style="background:#cfd3e6">?</span>'; var nm=has?tEsc(name):'<span style="color:var(--text-muted)">Por definir</span>'; var radio='<span class="naowee-radio'+(win?' naowee-radio--selected':'')+'"><span class="naowee-radio__circle"></span></span>'; return '<div class="tbk-comp'+cls+'"'+click+'>'+radio+ava+'<span class="tbk-cn">'+nm+'</span></div>'; }
-function tMatchHtml(m){ var isBye=m.status==='bye'; var decidable=!!m.t1&&!!m.t2&&!isBye; var badge=isBye?'<span class="naowee-badge naowee-badge--neutral naowee-badge--quiet naowee-badge--small">BYE</span>':(m.status==='done')?'<span class="naowee-badge naowee-badge--positive naowee-badge--small">Definido</span>':decidable?'<span class="naowee-badge naowee-badge--caution naowee-badge--small">Por jugar</span>':'<span class="naowee-badge naowee-badge--neutral naowee-badge--quiet naowee-badge--small">Pendiente</span>'; var tag=m.medal==='oro'?'🥇 Final':m.medal==='bronce'?'🥉 3.er puesto':''; return '<div class="tbk-match">'+tCompHtml(m,1,decidable)+tCompHtml(m,2,decidable)+'<div class="tbk-foot"><span class="tbk-mid">'+tag+'</span>'+badge+'</div></div>'; }
-function renderTBracket(){ if(!_tComp||!_tComp.bracket||!_tComp.bracket.length) return '<div class="naowee-message naowee-message--informative" style="width:100%"><div class="naowee-message__header"><span class="naowee-message__icon">'+_TICON.info+'</span><span class="naowee-message__body">Se necesitan al menos 2 clasificados para armar una llave.</span></div></div>';
-  var main=_tComp.bracket.filter(function(r){return !/tercer puesto/i.test(r.round);});
-  var ter=_tComp.bracket.filter(function(r){return /tercer puesto/i.test(r.round);});
-  var cols=main.map(function(rd){ return '<div class="tbk-col"><div class="tbk-col-title">'+tEsc(rd.round)+'</div>'+rd.matches.map(tMatchHtml).join('')+'</div>'; }).join('');
-  var t3=ter.length?('<div class="tbk-col tbk-col--3p"><div class="tbk-col-title">'+tEsc(ter[0].round)+'</div>'+ter[0].matches.map(tMatchHtml).join('')+'</div>'):'';
-  var fin=main.length?main[main.length-1].matches[0]:null; var champ=(fin&&fin.winner)?(fin.winner===1?fin.t1:fin.t2):null;
-  var banner=champ?('<div class="naowee-message naowee-message--positive" style="width:100%;margin-bottom:14px"><div class="naowee-message__header"><span class="naowee-message__icon">'+_TICON.ok+'</span><span class="naowee-message__body">🏆 Campeón: <b>'+tEsc(champ)+'</b></span></div></div>'):('<div class="naowee-message naowee-message--informative" style="width:100%;margin-bottom:14px"><div class="naowee-message__header"><span class="naowee-message__icon">'+_TICON.info+'</span><span class="naowee-message__body">Marca el ganador de cada partido tocando al competidor; el avance se propaga ronda a ronda.</span></div></div>');
-  return banner+'<div class="tbk-scroll"><div class="tbk-cols">'+cols+t3+'</div></div>'; }
-
-function confirmTranscrip(){ if(_tFmt==='bracket'){ if(_tComp) showPreview(_tComp); return; } var groups=tBuildGroups(); if(groups.some(function(t){return t.length<2;})){ var b=document.getElementById('btnTranscrip'); if(b){b.classList.add('naowee-shake'); setTimeout(function(){b.classList.remove('naowee-shake');},480);} return; } buildSorteo(); _sorteo.config.nGrupos=_tGrupos; _sorteo.manualGroups=groups; showPreview(); }
-
 document.addEventListener('click',function(e){ if(!e.target||!e.target.closest||!e.target.closest('.naowee-dropdown')) document.querySelectorAll('.naowee-dropdown--open').forEach(function(d){d.classList.remove('naowee-dropdown--open');}); });
 
 /* ── Back/forward del navegador ⇄ stages in-page ──
@@ -1963,11 +1397,275 @@ document.addEventListener('click',function(e){ if(!e.target||!e.target.closest||
    (_stageHistReady), así que el aterrizaje de abajo deja el historial correcto. */
 window.addEventListener('popstate',function(e){ var st=(e&&e.state&&e.state.naoweeStage); if(st){ showStage(st,{noPush:true}); } });
 
-/* ── Aterrizaje del módulo ──
-   Sorteo abre en el LISTADO de sorteos creados, no en el wizard: primero se ve
-   lo que ya existe y desde ahí se crea con "Crear sorteo". */
-openProgEdit();
 </script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   v3 · Sorteo dentro del evento: promociones, participantes de la fase
+   origen, líderes de grupo, cierre confirmado y breadcrumb de la suite.
+   Rutas equivalentes en suite-web-v2:
+     /home/events/:code/draws                       → S1 promociones
+     /home/events/:code/draws/:promotionCode        → S2 sorteos de la promoción
+     /home/events/:code/draws/:promotionCode/new    → S3 crear
+     /home/events/:code/draws/:promotionCode/:draw  → S4 detalle
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Evento en contexto (spec v3 §3). En la suite viene de GET /events/:code
+   y GET /event-rules/events/:code/phase-eligibility. ── */
+var EVENT={
+  code:'jin-2026', name:'Juegos Intercolegiados Nacionales 2026', status:'En curso',
+  phases:[
+    { code:'municipal',     seq:1, name:'Municipal',     start:'2026-05-04', end:'2026-06-30', promotionMode:'DATA_ENTRY', hasResults:true  },
+    { code:'departamental', seq:2, name:'Departamental', start:'2026-07-06', end:'2026-08-14', promotionMode:'DATA_ENTRY', hasResults:false },
+    { code:'regional',      seq:3, name:'Regional',      start:'2026-08-24', end:'2026-09-25', promotionMode:'DATA_ENTRY', hasResults:true  },
+    { code:'nacional',      seq:4, name:'Nacional',      start:'2026-10-12', end:'2026-11-30', promotionMode:'MANUAL',     hasResults:false }
+  ],
+  /* Deportes de conjunto del catálogo del evento y hasta qué fase es elegible cada uno. */
+  teamSports:[
+    { label:'Baloncesto',   emoji:'🏀', upTo:4 },
+    { label:'Fútbol',       emoji:'⚽', upTo:4 },
+    { label:'Fútbol Sala',  emoji:'🥅', upTo:4 },
+    { label:'Voleibol',     emoji:'🏐', upTo:4 },
+    { label:'Balonmano',    emoji:'🤾', upTo:4 },
+    { label:'Béisbol',      emoji:'⚾', upTo:3 },
+    { label:'Rugby Sevens', emoji:'🏉', upTo:3 }
+  ]
+};
+var TODAY=new Date('2026-09-23T12:00:00');
+var _demoState=(new URLSearchParams(location.search).get('state')||'');   /* empty | error → estados para el dev */
+function _phase(code){ return EVENT.phases.filter(function(f){return f.code===code;})[0]||null; }
+var _MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+function _fmtD(iso){ var d=new Date(iso+'T12:00:00'); return d.getDate()+' '+_MES[d.getMonth()]; }
+function _phaseDates(f){ if(!f)return ''; return _fmtD(f.start)+' – '+_fmtD(f.end)+' '+f.end.slice(0,4); }
+function _promoLabel(){ return PROMOTION.from+' → '+PROMOTION.to; }
+function _eligibleSportLabels(){ var pr=PROMOTIONS.filter(function(p){return p.code===PROMOTION.code;})[0]; return pr?pr.sports.map(function(x){return x.label;}):EVENT_TEAM_SPORTS; }
+/* Promociones válidas = pares de fases consecutivas con al menos un deporte
+   de conjunto elegible en la fase destino. */
+function derivePromotions(){
+  var out=[], ph=EVENT.phases.slice().sort(function(a,b){return a.seq-b.seq;});
+  for(var i=0;i<ph.length-1;i++){
+    var from=ph[i], to=ph[i+1];
+    var sports=EVENT.teamSports.filter(function(sp){ return sp.upTo>=to.seq; });
+    if(!sports.length) continue;
+    var code=from.code+'-'+to.code, ended=new Date(to.end+'T23:59:59')<TODAY;
+    out.push({ code:code, from:from.name, to:to.name, fromCode:from.code, toCode:to.code, fromSeq:from.seq, toSeq:to.seq, sports:sports, ended:ended });
+  }
+  return out;
+}
+var PROMOTIONS=derivePromotions();
+function _drawsOf(code){
+  if(_demoState==='empty') return [];
+  var real=(window.SorteoStore)?SorteoStore.list().filter(function(r){return r.estado!=='ANULADO';}):[];
+  real.forEach(_enrichProgRec);
+  return _mergeSeed(real).filter(function(r){ return r.promotion&&r.promotion.code===code; });
+}
+
+/* ── Breadcrumb del header (como el de la suite: Inicio › Eventos › evento › …) ── */
+var _crumbs=[];
+function setCrumbs(tail){
+  _crumbs=[{label:'Inicio'},{label:'Eventos'},{label:EVENT.name},{label:'Sorteos',go:openPromos}].concat(tail||[]);
+  renderCrumbs();
+}
+function renderCrumbs(){
+  var nav=document.getElementById('breadcrumb'); if(!nav) return;
+  nav.innerHTML=_crumbs.map(function(c,i){
+    var last=i===_crumbs.length-1, label=typeof c==='string'?c:c.label, go=(typeof c==='object'&&c.go);
+    var el=last?'<span class="crumbs__cur">'+tEsc(label)+'</span>':(go?'<a data-crumb="'+i+'">'+tEsc(label)+'</a>':'<span>'+tEsc(label)+'</span>');
+    return (i?'<span class="crumbs__sep">›</span>':'')+el;
+  }).join('');
+  nav.querySelectorAll('a[data-crumb]').forEach(function(a){ a.addEventListener('click',function(){ var c=_crumbs[+a.dataset.crumb]; if(c&&c.go)c.go(); }); });
+}
+function crumbBack(){ for(var i=_crumbs.length-2;i>=0;i--){ var c=_crumbs[i]; if(c&&c.go){ c.go(); return; } } }
+
+/* ── S1 · Promociones ── */
+var _ICO_ARROW='<svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var _ICO_CHEV_L='<svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function openPromos(){
+  showStage('promoStage'); document.body.dataset.screen='promociones'; document.body.dataset.route='/home/events/'+EVENT.code+'/draws';
+  setCrumbs([]); renderPromos();
+}
+function renderPromos(){
+  var el=document.getElementById('promoBody'); if(!el)return;
+  if(_demoState==='error'){ el.innerHTML='<div class="naowee-message naowee-message--negative" style="max-width:560px"><div class="naowee-message__header"><span class="naowee-message__icon">'+_TICON.caution+'</span><span class="naowee-message__title">No pudimos cargar las promociones del evento</span></div><p class="naowee-message__text">Reintenta. Si el problema sigue, revisa que el evento tenga fases configuradas.</p><div style="margin-top:10px"><button class="naowee-btn naowee-btn--mute naowee-btn--small" onclick="_demoState=\'\';renderPromos()">Reintentar</button></div></div>'; return; }
+  var list=(_demoState==='empty')?[]:PROMOTIONS;
+  if(!list.length){ el.innerHTML='<div class="naowee-empty-state"><span class="naowee-empty-state__icon">'+_ICO_PEMPTY+'</span><h3 class="naowee-empty-state__title">Este evento no tiene promociones para sortear</h3><p class="naowee-empty-state__description">Revisa la elegibilidad por fase de los deportes de conjunto en el catálogo deportivo.</p></div>'; return; }
+  el.innerHTML='<div class="promo-grid">'+list.map(function(pr){
+    var draws=_drawsOf(pr.code), origin=_phase(pr.fromCode);
+    var sportsDone={}; draws.forEach(function(r){ if(r.prueba&&r.prueba.deporteLabel) sportsDone[r.prueba.deporteLabel]=1; });
+    var nDone=Object.keys(sportsDone).length, nSports=pr.sports.length, pct=nSports?Math.round(100*nDone/nSports):0;
+    var estado = pr.ended ? '<span class="naowee-badge naowee-badge--neutral naowee-badge--quiet naowee-badge--small">Fase terminada</span>'
+               : (origin&&origin.hasResults ? '<span class="naowee-badge naowee-badge--positive naowee-badge--quiet naowee-badge--small">Resultados cargados</span>'
+                                             : '<span class="naowee-badge naowee-badge--caution naowee-badge--quiet naowee-badge--small">Sin resultados aún</span>');
+    var progreso = pr.ended ? '' : ('<span>'+_cfgPl(draws.length,'sorteo','sorteos')+' · '+nDone+' de '+nSports+' deportes con sorteo</span>');
+    return '<button type="button" class="promo-card'+(pr.ended?' is-off':'')+'" '+(pr.ended?'aria-disabled="true"':'onclick="openPromo(\''+pr.code+'\')"')+'>'
+      +'<span class="promo-card__step" aria-hidden="true">'+pr.fromSeq+_ICO_ARROW+pr.toSeq+'</span>'
+      +'<span class="promo-card__text">'
+        +'<span class="promo-card__title">'+tEsc(pr.from)+' → '+tEsc(pr.to)+'</span>'
+        +'<span class="promo-card__meta"><span>'+tEsc(pr.from)+': '+_phaseDates(origin)+'</span>'+estado+'</span>'
+        +(progreso?'<span class="promo-card__meta">'+progreso+'</span><span class="promo-card__bar"><i style="width:'+pct+'%"></i></span>':'')
+      +'</span>'
+      +'<span class="promo-card__arrow">'+_ICO_CHEV_L+'</span>'
+    +'</button>';
+  }).join('')+'</div>';
+}
+function openPromo(code){
+  var pr=PROMOTIONS.filter(function(p){return p.code===code;})[0]; if(!pr||pr.ended) return;
+  PROMOTION={ code:pr.code, from:pr.from, to:pr.to, fromCode:pr.fromCode, toCode:pr.toCode, event:EVENT.name };
+  _progFilters={q:'',deporte:''}; _progPage=1;
+  openProgEdit();
+}
+/* Banner no bloqueante de S2/S3 cuando la fase origen no tiene resultados. */
+function _originBannerHTML(){
+  var f=_phase(PROMOTION.fromCode); if(!f||f.hasResults) return '';
+  return '<div class="naowee-message naowee-message--informative s2-banner" style="width:100%"><div class="naowee-message__header"><span class="naowee-message__icon">'+_TICON.info+'</span><span class="naowee-message__title">'+tEsc(f.name)+' aún no tiene resultados cargados</span></div><p class="naowee-message__text">Los clasificados no se marcan solos. Podrás elegirlos a mano al crear cada sorteo.</p></div>';
+}
+
+/* ── S3 · Asistente de 4 pasos ── */
+var STEPS=['Prueba','Participantes','Grupos y líderes','Sorteo'];
+function _stepperHTML(n,withIds){
+  var h='<div class="naowee-stepper naowee-stepper--pulse">';
+  STEPS.forEach(function(lbl,i){ var k=i+1, done=k<n, act=k===n;
+    if(i) h+='<div class="naowee-stepper__connector'+(k<=n?' naowee-stepper__connector--done':'')+'"'+(withIds?' id="wzLine'+i+'"':'')+'></div>';
+    h+='<div class="naowee-stepper__step'+(act?' naowee-stepper__step--active':'')+(done?' naowee-stepper__step--done':'')+'"'+(withIds?' id="wzStep'+k+'"':'')+'><span class="naowee-stepper__number">'+(done?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>':k)+'</span><span class="naowee-stepper__label">'+lbl+'</span></div>';
+  });
+  return h+'</div>';
+}
+function _renderSteppers(n){ var a=document.getElementById('wzStepper'); if(a)a.innerHTML=_stepperHTML(n,true); var b=document.getElementById('clasifSteps'); if(b)b.innerHTML=_stepperHTML(n,false); }
+function openCrearSorteo(){
+  _editingId=null; showStage('wizardStage'); document.body.dataset.screen='crear'; document.body.dataset.route='/home/events/'+EVENT.code+'/draws/'+PROMOTION.code+'/new';
+  setCrumbs([{label:_promoLabel(),go:openProgEdit},'Crear sorteo']);
+  var sub=_promoLabel()+'. Cada prueba (deporte, categoría y rama) es un sorteo independiente dentro de esta promoción.';
+  ['wzPromoSub','clasifPromoSub'].forEach(function(id){ var e=document.getElementById(id); if(e)e.textContent=sub; });
+  selTipo('conjunto');   /* el catálogo depende de la promoción */
+  goStep(1);
+}
+function goStep(n){ n=Math.max(1,Math.min(4,n)); W.step=n; _renderSteppers(n);
+  if(n===2){ showStage('clasifStage'); document.body.dataset.screen='crear'; renderClasifList(); return; }
+  if(n===4){ startRuleta(); return; }
+  showStage('wizardStage');
+  document.getElementById('panel1').classList.toggle('active',n===1);
+  document.getElementById('panel2').classList.toggle('active',n===3);
+  document.getElementById('btnBack').classList.toggle('is-hidden',n===1);
+  var next=document.getElementById('btnNext');
+  if(n===1){ next.textContent='Siguiente'; refreshStep1(); }
+  else { next.textContent='Sortear'; var ig=document.getElementById('inGrupos'); if(ig)ig.value=W.nGrupos; recalcCfg(); }
+}
+function next(){ if(W.step===1){ goStep(2); return; } if(W.step===3){ goStep(4); return; } goStep(W.step+1); }
+function backToWizard(){ _ruletaTimers.forEach(function(t){clearTimeout(t);clearInterval(t);}); _ruletaTimers=[]; goStep(3); }
+function _cfgSyncNext(){ if(W.step!==3)return; var b=document.getElementById('btnNext'); if(b) b.disabled=(W.cfgOk===false||_selCount()<2); }
+
+/* ── Paso 2 · Participantes: todas las instituciones inscritas en la fase
+   origen para la prueba; las clasificadas vienen marcadas. ── */
+var _partKey='';
+function _loadParticipants(){
+  var key=PROMOTION.code+'|'+W.deporteLabel+'|'+W.categoria+'|'+W.sexo; if(key===_partKey) return; _partKey=key;
+  var seed=0; for(var i=0;i<key.length;i++) seed=(seed*31+key.charCodeAt(i))>>>0;
+  var n=12+(seed%13);                                      /* 12–24 instituciones */
+  var origin=_phase(PROMOTION.fromCode), marked=(origin&&origin.hasResults)?8:0;
+  _clasificados=[]; for(var k=0;k<n;k++){ var p=_INST_POOL[(k+seed)%_INST_POOL.length]; _clasificados.push({ nombre:p.n, delegacion:p.r, on:k<marked, clasificado:k<marked, grupoFijo:null }); }
+  W.nGrupos=2;
+}
+function _selected(){ return _clasificados.filter(function(c){return c.on;}); }
+function _selCount(){ return _selected().length; }
+var _ICO_TICK='<svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l2.8 2.8L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function renderClasifList(){
+  var el=document.getElementById('clasifList'); if(!el)return;
+  var origin=_phase(PROMOTION.fromCode);
+  var t=document.getElementById('clasifTitle'); if(t) t.textContent='Instituciones inscritas en '+PROMOTION.from+' para '+[W.deporteLabel,W.categoria,W.sexo].filter(Boolean).join(' ')+'. '+(origin&&origin.hasResults?'Las clasificadas vienen marcadas; puedes cambiar cualquiera.':'Marca las que participan en el sorteo.');
+  var b=document.getElementById('clasifBanner'); if(b) b.innerHTML=_originBannerHTML();
+  if(!_clasificados.length){ el.innerHTML='<div class="naowee-empty-state"><span class="naowee-empty-state__icon">'+_ICO_PEMPTY+'</span><h3 class="naowee-empty-state__title">No hay instituciones inscritas en '+tEsc(PROMOTION.from)+' para esta prueba</h3><p class="naowee-empty-state__description">Revisa las inscripciones de la fase antes de sortear.</p></div>'; }
+  else el.innerHTML=_clasificados.map(function(c,i){
+    return '<div class="part-row'+(c.on?' is-on':'')+'" role="checkbox" aria-checked="'+(c.on?'true':'false')+'" tabindex="0" onclick="clasifToggle('+i+')" onkeydown="if(event.key===\' \'||event.key===\'Enter\'){event.preventDefault();clasifToggle('+i+')}">'
+      +'<span class="part-row__cb">'+(c.on?_ICO_TICK:'')+'</span>'
+      +'<span class="part-row__txt"><span class="part-row__name">'+tEsc(c.nombre)+'</span><span class="part-row__meta">'+tEsc(c.delegacion)+' · '+tEsc(_muniFromName(c.nombre))+'</span></span>'
+      +(c.clasificado?'<span class="naowee-badge naowee-badge--positive naowee-badge--quiet naowee-badge--small">Clasificada</span>':'')
+    +'</div>'; }).join('');
+  _clasifSync();
+}
+function clasifToggle(i){ var c=_clasificados[i]; if(!c)return; c.on=!c.on; if(!c.on)c.grupoFijo=null; var row=document.querySelectorAll('#clasifList .part-row')[i]; if(row){ row.classList.toggle('is-on',c.on); row.setAttribute('aria-checked',c.on?'true':'false'); row.querySelector('.part-row__cb').innerHTML=c.on?_ICO_TICK:''; } _clasifSync(); }
+function clasifSelectAll(on){ _clasificados.forEach(function(c){ c.on=!!on; if(!on)c.grupoFijo=null; }); renderClasifList(); }
+function _clasifSync(){
+  var n=_selCount(), tot=_clasificados.length, cnt=document.getElementById('clasifCount'); if(cnt) cnt.innerHTML='<b>'+n+'</b> seleccionadas de '+tot;
+  var d=document.getElementById('clasifDerived'); if(d) d.innerHTML=(tot&&n<2)?'<div style="padding:0 16px 14px">'+_cdMsg('caution','Selecciona al menos 2 instituciones','Un sorteo necesita como mínimo dos participantes para formar un grupo.')+'</div>':'';
+  var b=document.getElementById('btnClasifNext'); if(b) b.disabled=n<2;
+}
+function validateClasif(){ return _selCount()>=2; }
+
+/* ── Paso 3 · Líderes: un selector por grupo; un equipo no lidera dos grupos. ── */
+function renderLeaders(){
+  var box=document.getElementById('leadersBox'); if(!box)return;
+  var g=Math.max(1,+W.nGrupos||1), sel=_selected();
+  sel.forEach(function(c){ if(c.grupoFijo!=null&&c.grupoFijo>=g) c.grupoFijo=null; });
+  var h=''; for(var gi=0;gi<g;gi++){ var L=String.fromCharCode(65+gi), cur=sel.filter(function(c){return c.grupoFijo===gi;})[0];
+    h+='<label class="leader"><span class="leader__head"><span class="clasif-gbadge" style="background:'+_GRP_COLORS[gi%_GRP_COLORS.length]+'">'+L+'</span>Grupo '+L+'</span>'
+      +'<select onchange="setLeader('+gi+',this.value)"><option value="">Sin líder (al azar)</option>'
+      +sel.map(function(c){ var taken=c.grupoFijo!=null&&c.grupoFijo!==gi; return '<option value="'+tEsc(c.nombre)+'"'+(cur&&cur.nombre===c.nombre?' selected':'')+(taken?' disabled':'')+'>'+tEsc(c.nombre)+(taken?' · líder del Grupo '+String.fromCharCode(65+c.grupoFijo):'')+'</option>'; }).join('')
+      +'</select></label>'; }
+  box.innerHTML=h;
+}
+function setLeader(gi,name){ _clasificados.forEach(function(c){ if(c.grupoFijo===gi) c.grupoFijo=null; }); if(name){ var c=_clasificados.filter(function(x){return x.on&&x.nombre===name;})[0]; if(c) c.grupoFijo=gi; } renderLeaders(); }
+
+/* ── Paso 4 · Sortear / resultado / cierre ── */
+function buildSorteo(){ var parts=_selected().map(function(c){ return { nombre:c.nombre, delegacion:c.delegacion, grupoFijo:(c.grupoFijo==null?null:c.grupoFijo) }; }); _sorteo={ prueba:{deporteLabel:W.deporteLabel||'Deporte',emoji:W.emoji||'🏆',categoria:W.categoria||'General',sexo:W.sexo||'Mixto',tipo:'conjunto'}, config:{nGrupos:Math.max(1,+W.nGrupos||2)}, participantes:parts }; return _sorteo; }
+function continueSorteo(){ if(!validateClasif())return; goStep(4); }
+function reSortear(){ startRuleta(); }
+var _closeAfter=null, _editingId=null;
+/* Reconstruye el estado del asistente desde un registro guardado (para resortear desde el detalle). */
+function _sorteoFromRec(rec){ var pr=rec.prueba||{}; W.tipo='conjunto'; W.deporteLabel=pr.deporteLabel||''; W.emoji=pr.emoji||'🏆'; W.categoria=pr.categoria||''; W.sexo=pr.sexo||''; W.nGrupos=(rec.config&&rec.config.nGrupos)||(rec.comp&&rec.comp.grupos?rec.comp.grupos.length:2);
+  var parts=(rec.participantes&&rec.participantes.length)?rec.participantes.slice():[]; if(!parts.length&&rec.comp){ (rec.comp.grupos||[]).forEach(function(g){ (g.equipos||[]).forEach(function(t){ parts.push({nombre:(typeof t==='string'?t:(t&&t.nombre)||''),delegacion:'',clasificado:true,grupoFijo:null}); }); }); }
+  _partKey=PROMOTION.code+'|'+W.deporteLabel+'|'+W.categoria+'|'+W.sexo;
+  _clasificados=parts.map(function(p){ return {nombre:p.nombre,delegacion:p.delegacion||'',on:true,clasificado:!!p.clasificado,grupoFijo:(p.grupoFijo==null?null:p.grupoFijo)}; });
+  W.nEquipos=_clasificados.length; return buildSorteo(); }
+function detailResortear(id){ var rec=_getProgRec(id); if(!rec||rec.estado==='CERRADO') return; _editingId=id; _sorteoFromRec(rec); startRuleta(); }
+function detailCerrar(id){ var rec=_getProgRec(id); if(!rec||rec.estado==='CERRADO') return;
+  _closeAfter=function(){ rec.estado='CERRADO'; rec.cerradoTs=Date.now(); rec.cerradoPor='Daniel Barreto'; try{ SorteoStore.save(rec); }catch(e){} fireConfetti(); setTimeout(function(){ editProg(id); showPublishPanel(id); },700); };
+  var m=document.getElementById('closeConfirmMsg'); if(m) m.textContent='No podrás resortear. Los enfrentamientos quedarán creados en la fase '+PROMOTION.to+' para que Digitación los programe.'; var v=document.getElementById('closeConfirm'); if(v){ v.style.display=''; var b=v.querySelector('.naowee-btn--loud'); if(b) b.focus(); } }
+function _publicoURLDe(id){ return location.origin+location.pathname.replace(/[^/]*$/,'sorteo-publico.html')+'?id='+encodeURIComponent(id); }
+/* La vista pública lee del store; una semilla cerrada se persiste al compartirla. */
+function _ensureStored(id){ var rec=_getProgRec(id); if(rec&&window.SorteoStore&&!SorteoStore.get(id)){ try{ SorteoStore.save(rec); }catch(e){} } }
+function verPublicoDe(id){ _ensureStored(id); try{ window.open(_publicoURLDe(id),'_blank','noopener'); }catch(e){} }
+function copiarEnlaceDe(id,btn){ _ensureStored(id); var url=_publicoURLDe(id); function ok(){ if(btn){ var t=btn.innerHTML; btn.textContent='¡Enlace copiado!'; setTimeout(function(){btn.innerHTML=t;},1600); } } function fb(){ try{ var ta=document.createElement('textarea'); ta.value=url; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); ok(); }catch(e){} } try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(ok,fb); } else fb(); }catch(e){ fb(); } }
+function confirmSorteo(){ _closeAfter=null; var m=document.getElementById('closeConfirmMsg'); if(m) m.textContent='No podrás resortear. Los enfrentamientos quedarán creados en la fase '+PROMOTION.to+' para que Digitación los programe.'; var v=document.getElementById('closeConfirm'); if(v){ v.style.display=''; var b=v.querySelector('.naowee-btn--loud'); if(b) b.focus(); } }
+function closeConfirmHide(){ var v=document.getElementById('closeConfirm'); if(v) v.style.display='none'; _closeAfter=null; }
+function confirmSorteoDo(){
+  if(_closeAfter){ var f=_closeAfter; closeConfirmHide(); f(); return; }
+  closeConfirmHide();
+  var b=document.getElementById('btnConfirmSorteo'); if(b){b.disabled=true;b.textContent='Sorteo cerrado';}
+  var _savedId=null;
+  try{ if(window.SorteoStore&&_pvComp){ var id=_editingId||(PROMOTION.code+'-'+SorteoStore.pruebaId(_sorteo)); _editingId=null; _sorteo.sorteoId=id; _savedId=id;
+    SorteoStore.save({ id:id, promotion:{code:PROMOTION.code,from:PROMOTION.from,to:PROMOTION.to,fromCode:PROMOTION.fromCode,toCode:PROMOTION.toCode}, prueba:_sorteo.prueba, participantes:_sorteo.participantes, config:_sorteo.config, comp:_pvComp, estado:'CERRADO', ts:Date.now(), cerradoTs:Date.now(), cerradoPor:'Daniel Barreto' }); } }catch(e){}
+  fireConfetti();
+  if(_savedId){ setTimeout(function(){ try{ editProg(_savedId); showPublishPanel(_savedId); }catch(e){ openProgEdit(); } }, 950); }
+  else { showPublishPanel(); }
+}
+function showPublishPanel(id){ var actions=id
+    ? '<button class="naowee-btn naowee-btn--loud naowee-btn--small" onclick="verPublicoDe(\''+id+'\')">Ver vista pública</button><button class="naowee-btn naowee-btn--mute naowee-btn--small" onclick="copiarEnlaceDe(\''+id+'\',this)">Copiar enlace</button>'
+    : '<button class="naowee-btn naowee-btn--loud naowee-btn--small" onclick="verPublico()">Ver vista pública</button><button class="naowee-btn naowee-btn--mute naowee-btn--small" onclick="copiarEnlace(this)">Copiar enlace</button>'; var host=document.getElementById(document.body.dataset.screen==='detalle'?'progEditCenefa':'previewCenefa'); if(host){ host.innerHTML='<div class="sorteo-cenefa sorteo-cenefa--positive" role="status"><div class="sorteo-cenefa__inner"><span class="sorteo-cenefa__icon">'+_ICO_OK+'</span><div class="sorteo-cenefa__body"><div class="sorteo-cenefa__title">Sorteo cerrado</div><p class="sorteo-cenefa__msg">Los enfrentamientos ya están en la fase '+tEsc(PROMOTION.to)+'. Digitación se encarga de programarlos.</p></div><div class="sorteo-cenefa__actions">'+actions+'</div></div></div>'; } }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeConfirmHide(); });
+
+/* ── Aterrizaje por URL: ?promo=<code>[&draw=<id>] simula las rutas anidadas. ── */
+(function landing(){
+  var q=new URLSearchParams(location.search), promo=q.get('promo'), draw=q.get('draw');
+  if(promo && PROMOTIONS.some(function(p){return p.code===promo&&!p.ended;})){
+    openPromo(promo);
+    if(draw){ var rec=_getProgRec(draw); if(rec) editProg(draw); }
+    return;
+  }
+  openPromos();
+})();
+</script>
+
+<!-- Confirmación de cierre (sin window.confirm) -->
+<div id="closeConfirm" class="modal-veil" style="display:none" role="dialog" aria-modal="true" aria-labelledby="closeConfirmTitle">
+  <div class="modal-card">
+    <h2 id="closeConfirmTitle">¿Cerrar el sorteo?</h2>
+    <p id="closeConfirmMsg"></p>
+    <div class="modal-card__actions">
+      <button class="naowee-btn naowee-btn--mute" type="button" onclick="closeConfirmHide()">Seguir revisando</button>
+      <button class="naowee-btn naowee-btn--loud" type="button" onclick="confirmSorteoDo()">Cerrar sorteo</button>
+    </div>
+  </div>
+</div>
 
 <!-- Demo role switcher (footer flotante — solo sandbox) -->
 <div id="demoRoleSwitcherRoot"></div>
@@ -1975,27 +1673,28 @@ openProgEdit();
 <!-- Shell compartido: mismo sidebar/header/demo-switcher que lista.html (activeId 'sorteo') -->
 <script type="module">
   import { mountSidebar, mountHeader, mountDemoRoleSwitcher, resolveRoleCode } from './shared/sidebar.js';
-  const roleCode = resolveRoleCode('EVENT_COORDINATOR');
+  const roleCode = resolveRoleCode('ACCESS_MANAGER');
   /* Basename SIN extension: si el servidor usa URLs limpias (/sorteo en vez de
      /sorteo.html) la comparacion contra LEGACY_MAP fallaba y onActiveChange
      —que corre en CADA montaje, no solo al hacer clic— redirigia en bucle. */
   const baseName = (ruta) => (ruta.split('/').pop() || '').replace(/\.html$/, '');
   const currentFile = baseName(window.location.pathname) || 'sorteo';
   /* Demo de sorteo independiente: la única página propia es esta. */
-  const LEGACY_MAP = { 'inicio': 'sorteo.html', 'sorteo': 'sorteo.html' };
+  const LEGACY_MAP = { 'event-draws': 'sorteo.html' };
   const { role } = mountSidebar({
     rootEl: document.getElementById('sidebarRoot'),
     roleCode,
-    activeId: 'sorteo',
+    activeId: 'event-draws',
     onActiveChange: (activeId) => {
       const target = LEGACY_MAP[activeId];
       if (target) { if (baseName(target) === currentFile) return; window.location.href = target + '?role=' + encodeURIComponent(roleCode); return; }
-      const isLocal = ['localhost','127.0.0.1'].includes(window.location.hostname);
-      const SHELL_BASE = isLocal ? 'http://localhost:5100' : 'https://naowee-tech.github.io/naowee-test-sidebar-shell';
-      window.location.href = `${SHELL_BASE}/perfil.html?role=${roleCode}&active=${activeId}`;
+      /* Los demás ítems del menú de la suite son inertes en esta demo. */
     }
   });
   mountHeader({ headerEl: document.getElementById('topHeader'), role });
+  /* Breadcrumb a la izquierda del header, como en la suite. */
+  document.getElementById('topHeader').insertAdjacentHTML('afterbegin', '<nav class="crumbs" id="breadcrumb" aria-label="Ruta"></nav>');
+  if (typeof window.renderCrumbs === 'function') window.renderCrumbs();
   mountDemoRoleSwitcher({ rootEl: document.getElementById('demoRoleSwitcherRoot'), currentRoleCode: roleCode });
 </script>
 </body>

@@ -22,6 +22,7 @@ export const ROLES = {
   ADMIN:                  { code: 'ADMIN',                  label: 'Administrador',         color: '#1f8923', userName: 'Andrea Salas',    userEmail: 'andrea.salas@mindeporte.gov.co',     assignedRoles: ['ADMIN', 'EVENT_MANAGER'] },
   USER_MANAGER:           { code: 'USER_MANAGER',           label: 'Gestor de usuarios',    color: '#1f78d1', userName: 'Laura Martínez',   userEmail: 'laura.martinez@mindeporte.gov.co',    assignedRoles: ['USER_MANAGER'] },
   EVENT_MANAGER:          { code: 'EVENT_MANAGER',          label: 'Gestor de eventos',     color: '#FF7500', userName: 'Andrés Gómez',     userEmail: 'andres.gomez@mindeporte.gov.co',      assignedRoles: ['EVENT_MANAGER', 'EVENT_COORDINATOR'] },
+  ACCESS_MANAGER:         { code: 'ACCESS_MANAGER',         label: 'Access Manager',        color: '#002B5B', userName: 'Daniel Barreto',   userEmail: 'daniel.barreto@mindeporte.gov.co',    assignedRoles: ['ACCESS_MANAGER'] },
   EVENT_COORDINATOR:      { code: 'EVENT_COORDINATOR',      label: 'Coordinador de eventos', color: '#FF7500', userName: 'Laura Méndez',   userEmail: 'laura.mendez@mindeporte.gov.co',    assignedRoles: ['EVENT_COORDINATOR'] },
   DIGITIZER:              { code: 'DIGITIZER',              label: 'Digitador',             color: '#d74009', userName: 'Carlos Restrepo',     userEmail: 'carlos.restrepo@mindeporte.gov.co',      assignedRoles: ['DIGITIZER'] },
   DOCUMENTATION_MANAGER:  { code: 'DOCUMENTATION_MANAGER',  label: 'Gestor de docs',        color: '#1f78d1', userName: 'Camila Vélez',     userEmail: 'camila.velez@mindeporte.gov.co',      assignedRoles: ['DOCUMENTATION_MANAGER', 'DOCUMENTATION_REVIEWER'] },
@@ -253,14 +254,51 @@ export const MENU_BY_ROLE = {
   ]
 };
 
-/* Demo de Sorteo independiente: el sidebar solo expone el módulo de sorteo,
-   sin importar el rol. MENU_BY_ROLE se conserva como referencia del catálogo
-   institucional, pero no se usa para renderizar. */
-const SORTEO_MENU = [
-  { section: 'COMPETENCIAS', items: [ITEMS.sorteo] }
+/* ── Demo de Sorteo · chrome de suite-web-v2 ────────────────────────────
+   El sidebar reproduce el menú real del Access Manager en la suite. Solo un
+   ítem tiene página en esta demo: "Sorteos", hijo de "Listado de eventos"
+   (el sorteo cuelga del evento, igual que Gestión de usuarios). El resto se
+   pinta inerte (sin `route`) para que el dev vea dónde cae. */
+const EVENT_CODE = 'jin-2026';
+const SUITE_ITEMS = {
+  analitica:      { id: 'analitica',        label: 'Analítica',                icon: 'chart' },
+  gestUsuarios:   { id: 'gest-usuarios',    label: 'Gestión de usuarios',      icon: 'users' },
+  documentacion:  { id: 'documentacion',    label: 'Documentación',            icon: 'doc',   children: [ { id: 'doc-aprobacion', label: 'Aprobación' } ] },
+  eventos:        { id: 'events',           label: 'Listado de eventos',       icon: 'calendar',
+                    children: [
+                      { id: 'event-users',          label: 'Gestión de usuarios' },
+                      { id: 'event-draws',          label: 'Sorteos', route: `/home/events/${EVENT_CODE}/draws` },
+                      { id: 'event-departments',    label: 'Departamentos' },
+                      { id: 'event-municipalities', label: 'Municipios' },
+                      { id: 'event-institutions',   label: 'Instituciones' },
+                      { id: 'event-athletes',       label: 'Deportistas' },
+                      { id: 'event-support',        label: 'Personal de apoyo' }
+                    ] },
+  docEventos:     { id: 'docs-events',      label: 'Documentación',            icon: 'doc',   children: [ { id: 'docs-events-aprobacion', label: 'Aprobación' } ] },
+  bloqueoProm:    { id: 'bloqueo-prom',     label: 'Bloqueo de promociones',   icon: 'shield' },
+  gestAccesos:    { id: 'gest-accesos',     label: 'Gestión de accesos',       icon: 'idCard' },
+  cupos:          { id: 'quotas',           label: 'Cupos',                    icon: 'ticket' },
+  miDoc:          { id: 'mi-doc',           label: 'Mi documentación',         icon: 'doc' },
+  personalAcred:  { id: 'personal-acred',   label: 'Personal de acreditación', icon: 'userCheck' },
+  digitacion:     { id: 'digitacion',       label: 'Digitación',               icon: 'module', children: [ { id: 'digitacion-inicio', label: 'Inicio' } ] },
+  mapa:           { id: 'mapa',             label: 'Mapa',                     icon: 'map' },
+  escenarios:     { id: 'escenarios',       label: 'Escenarios',               icon: 'pin' },
+  usuariosEsc:    { id: 'usuarios-esc',     label: 'Usuarios de escenarios',   icon: 'users' },
+  administracion: { id: 'administracion',   label: 'Administración',           icon: 'gear',  children: [ { id: 'admin-catalogos', label: 'Catálogos' } ] },
+  parametrizacion:{ id: 'parametrizacion',  label: 'Parametrización',          icon: 'gear' },
+  entregaAcred:   { id: 'entrega-acred',    label: 'Entrega de acreditaciones',icon: 'idCard' },
+  auditoria:      { id: 'auditoria',        label: 'Auditoría',                icon: 'audit' },
+};
+const SUITE_MENU = [
+  { section: 'DASHBOARD',        items: [SUITE_ITEMS.analitica] },
+  { section: 'GESTIÓN',          items: [SUITE_ITEMS.gestUsuarios, SUITE_ITEMS.documentacion] },
+  { section: 'EVENTO DEPORTIVO', items: [SUITE_ITEMS.eventos, SUITE_ITEMS.docEventos, SUITE_ITEMS.bloqueoProm, SUITE_ITEMS.gestAccesos, SUITE_ITEMS.cupos, SUITE_ITEMS.miDoc, SUITE_ITEMS.personalAcred, SUITE_ITEMS.digitacion] },
+  { section: 'ESCENARIOS',       items: [SUITE_ITEMS.mapa, SUITE_ITEMS.escenarios, SUITE_ITEMS.usuariosEsc] },
+  { section: 'ADMINISTRACIÓN',   items: [SUITE_ITEMS.administracion] },
+  { section: 'ACREDITACIONES',   items: [SUITE_ITEMS.parametrizacion, SUITE_ITEMS.entregaAcred, SUITE_ITEMS.auditoria] },
 ];
 export function getMenuForRole(roleCode) {
-  return SORTEO_MENU;
+  return SUITE_MENU;
 }
 
 /* Para un childId dado, retorna el id del item padre (parent) que lo contiene.
