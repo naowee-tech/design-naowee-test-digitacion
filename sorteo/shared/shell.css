@@ -1,0 +1,688 @@
+/* ═══════════════════════════════════════════════════════════════
+   NAOWEE SIDEBAR SHELL — sidebar + header + layout
+   Portado 1:1 desde naowee-test-incentivos (paridad con escenarios y digitación).
+   Tokens locales como puente al DS oficial.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --naranja:#FF7500; --azul:#002B5B;
+  --text-primary:#282834; --text-secondary:#646587;
+  --accent:#d74009;
+  --green:#1f8923; --green-bg:#e6f4e7;
+  --surface:#ffffff; --bg:#ffffff;
+  --border:#e7e9f3; --border-dark:#d0d4e6;
+  --sidebar-w:274px; --header-h:88px;
+  --radius-sm:6px; --radius-md:8px; --radius-lg:12px; --radius-xl:20px; --radius-full:9999px;
+  --font:'Inter',sans-serif;
+
+  --shadow-sm:0 1px 4px rgba(0,0,0,.08);
+  --shadow-md:0 4px 16px rgba(0,0,0,.12);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text-primary);
+  font-size:14px;
+}
+a{color:inherit;text-decoration:none}
+
+/* SHELL */
+.shell{display:flex;height:100vh;overflow:hidden}
+
+/* ═══ SIDEBAR con logos oficiales ═══ */
+.sidebar{
+  position:relative; /* anchor para .scroll-hint absolutely positioned */
+  width:var(--sidebar-w);min-width:var(--sidebar-w);
+  background:var(--surface);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;height:100vh;overflow:hidden;
+  /* Apple-style smooth easing */
+  transition:width .36s cubic-bezier(.32,.72,0,1),min-width .36s cubic-bezier(.32,.72,0,1);
+}
+
+.sidebar-logo{
+  height:var(--header-h);display:flex;align-items:center;gap:14px;
+  padding:0 20px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.sidebar-logo .sb-logo-img:first-of-type{margin-left:auto}
+.sidebar-logo .sb-logo-img:last-of-type{margin-right:auto}
+
+.burger-btn{
+  background:none;border:none;cursor:pointer;padding:0;
+  display:flex;align-items:center;justify-content:center;
+  width:24px;height:24px;flex-shrink:0;
+  border-radius:var(--radius-sm);transition:background .15s,transform .2s;
+}
+.burger-btn:hover{background:rgba(0,0,0,.06)}
+.burger-btn:active{transform:scale(.9)}
+.burger-btn svg{transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.sidebar.collapsed .burger-btn svg{transform:rotate(180deg)}
+
+.sb-logo-img{height:46px;width:auto;display:block;flex-shrink:0}
+.logo-sep{width:1px;height:36px;background:var(--border);flex-shrink:0}
+
+/* Sidebar-nav scrollable; sidebar-bottom (Cerrar sesión) fijo abajo */
+.sidebar-nav{
+  flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;
+  padding:20px 0 10px;display:flex;flex-direction:column;gap:6px;
+  /* Scrollbar discreto */
+  scrollbar-width:thin;scrollbar-color:var(--border-dark) transparent;
+}
+.sidebar-nav::-webkit-scrollbar{width:6px}
+.sidebar-nav::-webkit-scrollbar-track{background:transparent}
+.sidebar-nav::-webkit-scrollbar-thumb{background:var(--border-dark);border-radius:3px}
+.sidebar-nav::-webkit-scrollbar-thumb:hover{background:var(--text-secondary)}
+.nav-section{
+  flex-shrink:0; /* nunca comprimir — preferir scroll en .sidebar-nav */
+  font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;
+  color:#b5b9d4;padding:0 28px;line-height:16px;margin:10px 0 6px;
+}
+.nav-section:first-child{margin-top:0}
+
+.nav-row{
+  flex-shrink:0; /* mantiene height:44px aún con muchos items — scroll primero */
+  display:flex;align-items:center;gap:12px;height:44px;
+  padding:0 20px 0 0;border-radius:var(--radius-sm);cursor:pointer;
+  margin:0 10px;
+  transition:background .12s,padding .25s cubic-bezier(.4,0,.2,1),justify-content .25s,margin .28s cubic-bezier(.32,.72,0,1);
+  position:relative;
+}
+.nav-row:hover{background:#f5f6fa}
+.nav-row .icon{
+  width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  margin-left:28px;
+  color:var(--text-secondary); /* gris medio para iconos en estado idle (paridad con incentivos) */
+  transition:margin-left .25s cubic-bezier(.4,0,.2,1), color .25s ease;
+}
+.nav-row .lbl{
+  flex:1;font-size:14px;font-weight:600;color:var(--text-primary);
+  white-space:nowrap;overflow:hidden;
+  max-width:200px;opacity:1;
+  /* Entrada al expandir: ancho primero, opacity con delay */
+  transition:opacity .2s ease .18s, max-width .36s cubic-bezier(.32,.72,0,1) .04s;
+}
+.nav-row .nav-arrow{
+  width:22px;height:22px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  opacity:.7;color:var(--text-secondary);
+  transition:opacity .14s ease, transform .25s cubic-bezier(.32,.72,0,1), color .25s ease;
+}
+.nav-row.expanded .nav-arrow{transform:rotate(180deg);color:var(--accent);opacity:1}
+
+/* ═══ Indicador activo: barra naranja con animación de entrada ═══
+   El nombre `shell-active-bar` permite que el browser haga morph suave
+   entre la posición vieja y la nueva via View Transitions API.   */
+.active-bar{
+  position:absolute;left:-6px;top:8px;width:4px;height:28px;
+  background:var(--accent);border-radius:25px;
+  transform-origin:center;
+  animation:activeBarIn .42s cubic-bezier(.16,1,.3,1) both;
+  view-transition-name: shell-active-bar;
+}
+@keyframes activeBarIn{
+  0%   {opacity:0;transform:translateX(-8px) scaleY(.2)}
+  55%  {opacity:1}
+  100% {opacity:1;transform:translateX(0) scaleY(1)}
+}
+.nav-row.active{background:transparent}
+.nav-row.active:hover{background:transparent}
+.nav-row.active .lbl{
+  color:var(--accent);
+  transition:color .25s ease,opacity .14s ease .12s, max-width .26s cubic-bezier(.4,0,.2,1) .04s;
+}
+.nav-row.active .icon svg path,
+.nav-row.active .icon svg rect,
+.nav-row.active .icon svg circle,
+.nav-row.active .icon svg line,
+.nav-row.active .icon svg polyline,
+.nav-row.active .icon svg polygon{stroke:var(--accent);transition:stroke .25s ease}
+
+.sidebar-bottom{
+  flex-shrink:0;
+  padding:8px 0;border-top:1px solid var(--border);
+  background:var(--surface);
+}
+
+/* ═══ Scroll hint — pill "Ver más" azul Naowee ═══
+   Aparece cuando .sidebar-nav tiene overflow Y el usuario no está al
+   final. Indica que hay más opciones abajo. Sólido azul corporativo
+   #002B5B para máxima visibilidad, con margen amplio sobre Cerrar sesión.
+   Solo el chevron rebota (no el pill entero, para no distraer). */
+.scroll-hint{
+  position:absolute;
+  bottom:72px; /* sidebar-bottom (~56px) + 16px gap */
+  left:50%;
+  transform:translateX(-50%);
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 12px 7px 14px;
+  border-radius:var(--radius-full);
+  background:var(--azul);          /* #002B5B — azul corporativo */
+  color:#fff;
+  border:none;cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,43,91,.28);
+  font-family:inherit;
+  font-size:12px;font-weight:600;letter-spacing:.2px;
+  opacity:0;pointer-events:none;
+  transition:opacity .25s ease, background .15s ease, transform .2s ease, box-shadow .2s ease;
+  z-index:5;
+}
+.scroll-hint__lbl{line-height:1}
+.scroll-hint__chev{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:14px;height:14px;
+  /* Bounce sutil del chevron (el pill queda estático para no marear) */
+}
+.scroll-hint__chev svg{width:14px;height:14px}
+.scroll-hint.is-visible{
+  opacity:1;
+  pointer-events:auto;
+}
+.scroll-hint.is-visible .scroll-hint__chev{
+  animation:scrollHintChevBounce 1.6s ease-in-out infinite;
+}
+.scroll-hint:hover{
+  background:#003872;          /* azul un toque más claro al hover */
+  box-shadow:0 6px 20px rgba(0,43,91,.36);
+}
+.scroll-hint:active{
+  transform:translateX(-50%) scale(.96);
+}
+@keyframes scrollHintChevBounce{
+  0%, 100% { transform:translateY(0); }
+  50%      { transform:translateY(2px); }
+}
+.sidebar.collapsed .scroll-hint{display:none}
+@media (prefers-reduced-motion: reduce){
+  .scroll-hint.is-visible .scroll-hint__chev{animation:none}
+}
+
+/* ═══ Tooltip para sidebar colapsado ═══
+   Posicionado dinámicamente vía JS (position:fixed, no clipped por
+   overflow del sidebar). Aparece a la altura del .nav-row hovereado,
+   pegado al lado derecho del sidebar. */
+.nav-tooltip{
+  position:fixed;
+  background:var(--text-primary);
+  color:#fff;
+  padding:6px 10px;
+  border-radius:6px;
+  font-size:12px;font-weight:500;
+  white-space:nowrap;
+  pointer-events:none;
+  z-index:200;
+  box-shadow:0 4px 14px rgba(40,40,52,.18);
+  opacity:0;
+  transform:translateY(-50%) translateX(-4px);
+  transition:opacity .15s ease, transform .15s ease;
+}
+.nav-tooltip.is-visible{
+  opacity:1;
+  transform:translateY(-50%) translateX(0);
+}
+/* Pequeña flecha apuntando al sidebar */
+.nav-tooltip::before{
+  content:'';
+  position:absolute;
+  right:100%;top:50%;
+  transform:translateY(-50%);
+  border:5px solid transparent;
+  border-right-color:var(--text-primary);
+}
+
+/* ═══ Sub-nav (children) ═══ */
+.sub-nav{
+  flex-shrink:0; /* nunca comprimir cuando expande — el sidebar-nav ya scrollea */
+  display:flex;flex-direction:column;
+  overflow:hidden;max-height:0;opacity:0;
+  margin:0 10px;
+  transition:max-height .36s cubic-bezier(.32,.72,0,1), opacity .2s ease;
+}
+.nav-row.expanded + .sub-nav{max-height:500px;opacity:1}
+.sub-row{
+  position:relative;
+  display:flex;align-items:center;gap:10px;
+  padding:8px 12px 8px 60px;
+  border-radius:var(--radius-sm);cursor:pointer;
+  font-size:13px;font-weight:500;color:var(--text-secondary);
+  transition:background .12s, color .12s;
+  margin:1px 0;
+}
+.sub-row:hover{background:#f5f6fa;color:var(--text-primary)}
+.sub-row.active{color:var(--accent);font-weight:700;background:transparent}
+.sub-row.active:hover{background:#fff3e6}
+
+/* ═══ Conector en árbol padre→hijo (paridad con el módulo Eventos) ═══
+   Guía fina (línea vertical + codo curvo) que desciende del ícono del padre
+   y entra al sub-item, identificando visualmente la jerarquía. Solo expandido.
+   La línea se mantiene neutra; el activo se comunica por el dot + texto accent. */
+.sidebar:not(.collapsed) .sub-row::before{
+  content:'';position:absolute;left:40px;top:-9px;
+  width:12px;height:calc(50% + 9px);
+  border-left:1.5px solid var(--border-dark);
+  border-bottom:1.5px solid var(--border-dark);
+  border-bottom-left-radius:10px;
+  pointer-events:none;
+  transition:border-color var(--duration-normal,.2s) ease;
+}
+
+/* Dot indicador en sub-row activo — elemento real (no ::before) para que
+   el view-transition-name pueda hacer morph suave entre posiciones. */
+.sub-row__dot{
+  position:absolute;
+  left:52px;top:50%;
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--accent);
+  transform:translateY(-50%);
+  animation:subDotIn .32s cubic-bezier(.16,1,.3,1) both;
+  view-transition-name: shell-active-dot;
+}
+@keyframes subDotIn{
+  0%   {opacity:0;transform:translate(-4px,-50%) scale(.4)}
+  100% {opacity:1;transform:translate(0,-50%) scale(1)}
+}
+
+/* ═══ View Transitions — slide del active-bar y del dot ═══
+   Cuando el activeId cambia (sin recargar la página), el browser hace
+   morph suave entre la posición vieja y la nueva. Solo slide, sin fade
+   (paridad con incentivos). */
+::view-transition-group(shell-active-bar),
+::view-transition-group(shell-active-dot){
+  animation-duration: 360ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 5;
+}
+::view-transition-old(shell-active-bar),
+::view-transition-new(shell-active-bar),
+::view-transition-old(shell-active-dot),
+::view-transition-new(shell-active-dot){
+  animation: none; /* solo slide del group, sin fade del old/new */
+}
+@media (prefers-reduced-motion: reduce){
+  ::view-transition-group(shell-active-bar),
+  ::view-transition-group(shell-active-dot){
+    animation-duration: 1ms !important;
+  }
+}
+.sidebar.collapsed .sub-nav{display:none}
+
+/* ═══ Collapsed: fade sutil + hover/active como cuadrado del icono ═══ */
+.sidebar.collapsed{width:72px;min-width:72px;overflow:hidden}
+.sidebar.collapsed .sb-logo-img,
+.sidebar.collapsed .logo-sep,
+.sidebar.collapsed .nav-section{display:none}
+.sidebar.collapsed .nav-row .lbl,
+.sidebar.collapsed .nav-row .nav-arrow{
+  max-width:0;opacity:0;pointer-events:none;margin-left:0;margin-right:0;
+  /* Salida: fade primero, luego shrink */
+  transition:opacity .14s ease, max-width .3s cubic-bezier(.32,.72,0,1) .04s;
+}
+.sidebar.collapsed .sidebar-logo{justify-content:center;padding:0}
+.sidebar.collapsed .nav-row{justify-content:center;padding:0;gap:0;background:transparent}
+.sidebar.collapsed .nav-row:hover{background:transparent}
+.sidebar.collapsed .nav-row.active:hover{background:transparent}
+.sidebar.collapsed .nav-row .icon{margin-left:0}
+
+.sidebar.collapsed .nav-row::before{
+  content:'';position:absolute;left:50%;top:50%;
+  width:40px;height:40px;border-radius:8px;
+  transform:translate(-50%,-50%);
+  background:transparent;pointer-events:none;
+  transition:background .2s cubic-bezier(.32,.72,0,1);
+  z-index:0;
+}
+.sidebar.collapsed .nav-row:hover::before{background:#f5f6fa}
+.sidebar.collapsed .nav-row.active::before{background:#fff3e6}
+.sidebar.collapsed .nav-row.active:hover::before{background:#ffe4cf}
+.sidebar.collapsed .nav-row .icon{position:relative;z-index:1}
+.sidebar.collapsed .active-bar{display:none}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* ═══ TOP HEADER ═══ */
+.top-header{
+  height:var(--header-h);background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:flex-end;gap:16px;padding:0 24px;flex-shrink:0;
+  position:relative;z-index:20;
+}
+
+/* ═══ Profile switcher (user chip "Phil") ═══ */
+.profile-switcher{position:relative}
+.user-chip{
+  display:flex;align-items:center;gap:10px;
+  border:1px solid var(--border);border-radius:var(--radius-full);
+  padding:6px 8px 6px 6px;cursor:pointer;background:#fff;
+  transition:border-color .15s,box-shadow .15s;
+}
+.user-chip:hover{border-color:var(--border-dark)}
+.ava{position:relative;flex-shrink:0}
+.ava-ring{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;
+}
+.ava-dot{
+  position:absolute;bottom:-1px;right:-1px;width:12px;height:12px;
+  background:var(--green);border:2px solid #fff;border-radius:50%;
+}
+.user-info{display:flex;flex-direction:column;gap:1px;min-width:0}
+.user-name{
+  font-size:13px;font-weight:700;color:var(--text-primary);
+  max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.user-role{
+  font-size:11px;color:var(--text-secondary);
+  max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.user-chip__chevron{
+  display:flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:6px;
+  background:transparent;border:none;cursor:pointer;
+  color:var(--text-secondary);flex-shrink:0;margin-left:4px;
+  transition:background .15s,color .15s;
+}
+.user-chip__chevron:hover{background:#FFEDC7;color:var(--accent)}
+.user-chip__chevron svg{width:14px;height:14px;transition:transform .2s ease}
+.profile-switcher.open .user-chip__chevron svg{transform:rotate(180deg)}
+
+.profile-dd{
+  position:absolute;top:calc(100% + 8px);right:0;z-index:100;
+  width:280px;background:#fff;
+  border:1px solid var(--border);border-radius:12px;
+  box-shadow:0 8px 24px rgba(40,40,52,.12);
+  opacity:0;transform:translateY(-6px);pointer-events:none;
+  transition:opacity .2s,transform .2s;padding:6px;
+  text-decoration:none;
+}
+.profile-switcher.open .profile-dd{opacity:1;transform:translateY(0);pointer-events:auto}
+
+/* Header del dropdown — usuario + email + rol activo */
+.profile-dd__header{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:12px 12px 10px;
+}
+.profile-dd__user{
+  display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;
+}
+.profile-dd__user strong{
+  font-size:14px;font-weight:700;color:var(--text-primary);
+  line-height:1.25;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.profile-dd__user small{
+  font-size:11.5px;color:var(--text-secondary);font-weight:500;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  margin-bottom:2px;
+}
+.profile-dd__current-role{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;font-weight:700;
+  letter-spacing:.2px;
+  margin-top:2px;
+}
+.profile-dd__check-ico{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:12px;height:12px;
+}
+.profile-dd__check-ico svg{width:12px;height:12px}
+
+.profile-dd__sep{
+  height:1px;background:var(--border);
+  /* Margin negativo horizontal para compensar el padding:6px del .profile-dd
+     y que el divider quede de borde a borde. */
+  margin:4px -6px;
+}
+
+.profile-dd__label{
+  font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+  color:#b5b9d4;padding:6px 12px 4px;
+}
+
+.profile-dd__item{
+  display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;
+  font-size:13px;font-weight:500;color:var(--text-primary);
+  transition:background .12s, color .12s;border-radius:8px;
+  text-decoration:none;
+}
+.profile-dd__item:hover{background:#f5f6fa;text-decoration:none}
+.profile-dd__item--role{padding:8px 12px}
+.profile-dd__item--role .ava-ring{flex-shrink:0}
+.profile-dd__item .role-meta{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
+.profile-dd__item .role-meta span{
+  font-size:13px;font-weight:600;color:var(--text-primary);line-height:1.2;
+}
+.profile-dd__item .role-meta small{
+  font-size:11px;color:var(--text-secondary);font-weight:500;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+
+/* Iconos del dropdown */
+.profile-dd__icon{
+  width:18px;height:18px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-secondary);
+}
+.profile-dd__icon svg{width:18px;height:18px}
+
+/* Item destructivo (cerrar sesión) */
+.profile-dd__item--danger{color:#d11f1f}
+.profile-dd__item--danger:hover{background:#fff0ee;color:#a80f0f}
+.profile-dd__item--danger .profile-dd__icon{color:#d11f1f}
+
+/* PAGE */
+.page{flex:1;overflow-y:auto;overflow-x:hidden;padding:28px 32px 72px}
+
+/* ═══ Demo role switcher (pill flotante — solo sandbox) ═══
+   Permite alternar entre los 14 roles para fines de demo, sin volver
+   a index.html. Marcado claramente como "Demo" (badge naranja) para
+   diferenciarlo del avatar dropdown de producción. */
+.demo-role-switcher{
+  position:fixed;
+  bottom:14px;
+  left:50%;
+  transform:translateX(-50%);
+  /* z-index 9999 → arriba de map popovers (1500), tooltips (2000),
+     y cualquier overlay flotante de las páginas internas. Es un control
+     de demo siempre accesible. */
+  z-index:9999;
+}
+.demo-role-switcher__toggle{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 12px 8px 8px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-full);
+  box-shadow:0 4px 12px rgba(40,40,52,.08);
+  font-family:inherit;font-size:12px;font-weight:600;
+  color:var(--text-primary);
+  cursor:pointer;
+  transition:transform .2s cubic-bezier(.32,.72,0,1),
+             box-shadow .2s ease,
+             border-color .2s ease;
+}
+.demo-role-switcher__toggle:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(40,40,52,.12);
+  border-color:var(--border-dark);
+}
+.demo-role-switcher__badge{
+  font-size:9.5px;font-weight:800;letter-spacing:.6px;
+  background:var(--naranja);color:#fff;
+  padding:3px 7px;border-radius:var(--radius-full);
+  flex-shrink:0;
+}
+.demo-role-switcher__lbl{font-weight:600}
+.demo-role-switcher__chev{
+  display:inline-flex;align-items:center;justify-content:center;
+  color:var(--text-secondary);
+  transition:transform .2s ease;
+}
+.demo-role-switcher__chev svg{width:14px;height:14px}
+.demo-role-switcher.open .demo-role-switcher__chev{transform:rotate(180deg)}
+
+.demo-role-switcher__panel{
+  position:absolute;
+  bottom:calc(100% + 8px);
+  left:50%;
+  width:320px;max-height:72vh;
+  background:#fff;
+  border:1px solid var(--border);border-radius:12px;
+  box-shadow:0 12px 32px rgba(40,40,52,.16);
+  opacity:0;
+  transform:translate(-50%, 6px);
+  pointer-events:none;
+  transition:opacity .2s, transform .2s;
+  padding:8px 6px;
+  display:flex;flex-direction:column;
+}
+.demo-role-switcher.open .demo-role-switcher__panel{
+  opacity:1;
+  transform:translate(-50%, 0);
+  pointer-events:auto;
+}
+/* Gradient fade en el bottom — solo visible cuando hay contenido oculto abajo
+   (clase .has-overflow toggleada por JS). Indica que la lista es scrolleable. */
+.demo-role-switcher__panel::after{
+  content:'';
+  position:absolute;
+  bottom:8px;left:8px;right:8px;
+  height:34px;
+  background:linear-gradient(to top, #fff 30%, rgba(255,255,255,0));
+  border-radius:0 0 10px 10px;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .2s ease;
+}
+.demo-role-switcher__panel.has-overflow::after{opacity:1}
+.demo-role-switcher__panel-label{
+  font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+  color:#b5b9d4;padding:6px 12px 8px;flex-shrink:0;
+}
+.demo-role-switcher__list{
+  overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:var(--border-dark) transparent;
+}
+.demo-role-switcher__list::-webkit-scrollbar{width:6px}
+.demo-role-switcher__list::-webkit-scrollbar-thumb{background:var(--border-dark);border-radius:3px}
+
+.demo-role-switcher__item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 12px;border-radius:8px;
+  text-decoration:none;color:var(--text-primary);
+  transition:background .12s;
+}
+.demo-role-switcher__item:hover{background:#f5f6fa;text-decoration:none}
+.demo-role-switcher__item.is-active{background:#fff3e6}
+.demo-role-switcher__item.is-active:hover{background:#ffe4cf}
+.demo-role-switcher__group{
+  font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  color:#9ca0b8;padding:10px 12px 4px;
+}
+.demo-role-switcher__group:first-child{padding-top:2px}
+
+.demo-role-switcher__avatar{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;
+}
+.demo-role-switcher__meta{
+  display:flex;flex-direction:column;gap:1px;min-width:0;flex:1;
+}
+.demo-role-switcher__meta strong{
+  font-size:13px;font-weight:600;color:var(--text-primary);
+  line-height:1.2;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.demo-role-switcher__meta small{
+  font-size:11px;color:var(--text-secondary);font-weight:500;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.demo-role-switcher__check{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:18px;height:18px;color:var(--accent);flex-shrink:0;
+}
+.demo-role-switcher__check svg{width:16px;height:16px}
+
+/* Floating footer (paridad con incentivos/escenarios/digitacion) */
+.naowee-floating-footer{
+  position:fixed;bottom:14px;right:20px;z-index:50;
+  display:inline-flex;align-items:center;gap:10px;
+  padding:8px 14px;background:#fff;
+  border:1px solid var(--border);border-radius:9999px;
+  box-shadow:0 4px 12px rgba(40,40,52,.06);
+  font-size:11.5px;color:var(--text-secondary);
+  pointer-events:auto;
+  transition:opacity .25s ease, transform .25s ease;
+}
+/* Estado oculto al scrollear up (animación estandarizada en incentivos) */
+.naowee-floating-footer.is-hidden{
+  opacity:0;
+  transform:translateY(20px);
+  pointer-events:none;
+}
+.naowee-floating-footer__logo{height:18px;width:auto;display:block}
+.naowee-floating-footer__sep{width:1px;height:14px;background:var(--border);flex-shrink:0}
+.naowee-floating-footer__text{font-weight:500;line-height:1}
+.naowee-floating-footer__text strong{color:var(--text-primary);font-weight:700}
+
+/* Page placeholder (sandbox-only) */
+.page-placeholder{
+  background:var(--surface);
+  border:1px dashed var(--border-dark);
+  border-radius:var(--radius-xl);
+  padding:40px;text-align:center;color:var(--text-secondary);
+}
+.page-placeholder h1{
+  margin:0 0 8px;color:var(--text-primary);
+  font-size:22px;font-weight:700;
+}
+.page-placeholder p{margin:0;font-size:14px}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .sidebar{width:72px;min-width:72px;overflow:hidden}
+  .sidebar .sb-logo-img,
+  .sidebar .logo-sep,
+  .sidebar .lbl,
+  .sidebar .nav-arrow,
+  .sidebar .nav-section{display:none}
+  .sidebar .sidebar-logo{justify-content:center;padding:0}
+  .sidebar .nav-row{justify-content:center;padding:0}
+  .sidebar .nav-row .icon{margin-left:0}
+  .user-info{display:none}
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BOTÓN PRIMARIO LOUD — glow elevation naranja en hover
+   ───────────────────────────────────────────────────────────────
+   Patrón canónico Naowee (paridad con naowee-test-escenarios y el
+   PLAYBOOK-REFINAMIENTO). Aplica a:
+     • .naowee-btn--loud  (Design System oficial)
+     • .btn-orange        (legacy del shell)
+     • .btn-accent        (legacy de acciones primarias)
+
+   Idle: mantiene background sin oscurecer
+   Hover: lift -1px + sombra accent (naranja vibrante)
+   Active: vuelve al baseline con sombra interna sutil
+   ═══════════════════════════════════════════════════════════════ */
+.naowee-btn--loud,
+.btn-orange,
+.btn-accent{
+  transition:box-shadow .25s cubic-bezier(.32,.72,0,1),
+             transform .2s ease,
+             background .15s ease;
+}
+.naowee-btn--loud:hover:not(:disabled):not([disabled]),
+.btn-orange:hover:not(:disabled):not([disabled]),
+.btn-accent:hover:not(:disabled):not([disabled]){
+  box-shadow:0 8px 22px rgba(215,64,9,.32),
+             0 2px 6px rgba(215,64,9,.18);
+  transform:translateY(-1px);
+}
+.naowee-btn--loud:active:not(:disabled):not([disabled]),
+.btn-orange:active:not(:disabled):not([disabled]),
+.btn-accent:active:not(:disabled):not([disabled]){
+  transform:translateY(0);
+  box-shadow:0 2px 8px rgba(215,64,9,.22);
+}

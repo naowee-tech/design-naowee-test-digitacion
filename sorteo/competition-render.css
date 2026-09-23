@@ -1,0 +1,187 @@
+/* ═══════════════════════════════════════════════════════════
+   competition-render.css
+   Estilos READ-ONLY portados verbatim de detalle.html para
+   renderizar un objeto `comp` (grupos / round-robin / bracket /
+   medallería). Asume que el host ya define los tokens:
+     --accent #d74009, --green #1f8923, --text-primary,
+     --text-secondary, --surface, --border, --border-dark,
+     --radius-sm/md/lg/xl/full, --blue-info, --green-bg,
+     --green-border, --orange-bg, --shadow-sm, --naranja, --font.
+═══════════════════════════════════════════════════════════ */
+
+/* ─── FILTER PILLS (selector de grupo/jornada) ─── */
+.filter-pills{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.filter-pill{padding:6px 16px;border-radius:var(--radius-full);font-size:12px;font-weight:500;border:1px solid var(--border-dark);background:var(--surface);color:var(--text-secondary);cursor:pointer;transition:all .15s;font-family:var(--font)}
+.filter-pill:hover{border-color:var(--accent);color:var(--accent)}
+.filter-pill.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* ─── MATCH CARDS (partidos / enfrentamientos) ─── */
+.match-card{display:flex;align-items:center;padding:16px 20px;border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:10px;transition:all .15s;background:var(--surface)}
+.match-card:hover{box-shadow:var(--shadow-sm)}
+.match-team{flex:1;display:flex;align-items:center;gap:10px}
+.match-team.right{justify-content:flex-end;text-align:right}
+.team-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+.team-name{font-size:14px;font-weight:500;color:var(--text-primary)}
+.team-sub{font-size:11px;color:var(--text-secondary)}
+.match-center{width:100px;text-align:center;flex-shrink:0}
+.match-vs{font-size:14px;font-weight:600;color:var(--text-secondary)}
+.match-status{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.match-score{font-size:18px;font-weight:600}
+
+/* ─── BRACKET (cuadro de eliminación / fase final) ─── */
+.bracket-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.bracket-header h3{font-size:16px;font-weight:600;color:var(--text-primary)}
+.bracket-scroll{overflow-x:auto;padding-bottom:4px}
+.bracket-titles{display:flex;gap:0;align-items:center;margin-bottom:12px;width:max-content}
+.bracket-titles .bracket-col-title{flex:0 0 260px;min-width:260px}
+.bracket-titles .bracket-svg-spacer{flex:0 0 48px}
+.bracket-wrap{display:flex;gap:0;padding:0;align-items:stretch;width:max-content}
+.bracket-col{display:flex;flex-direction:column;min-width:260px;padding:0;position:relative;gap:16px;justify-content:space-around}
+.bracket-col-title{font-size:10px;font-weight:700;color:var(--text-secondary);letter-spacing:1px;text-align:center;text-transform:uppercase;flex-shrink:0;padding:6px 16px;background:#f5f6fa;border-radius:var(--radius-full);border:1px solid var(--border)}
+.bracket-node{border:1.5px solid var(--border);border-radius:16px;padding:0;background:var(--surface);transition:all .2s;position:relative;overflow:hidden}
+.bracket-node.finalizado{border-color:var(--border)}
+.bracket-node.pending{border-color:var(--border-dark);border-style:dashed}
+.bracket-node.tercer-puesto{border-color:#f6e05e}
+.bracket-team-row{display:flex;align-items:center;gap:12px;padding:14px 16px}
+.bracket-team-row.winner{background:#f0fdf4}
+.bracket-team-row+.bracket-team-row{border-top:1px solid var(--border)}
+.bracket-initial{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+.bracket-team-row.winner .bracket-initial{background:var(--green-bg);color:var(--green)}
+.bracket-team-row.loser .bracket-initial{background:#f0f1f5;color:var(--text-secondary)}
+.bracket-team-row:not(.winner):not(.loser) .bracket-initial{color:#fff}
+.bracket-tname-wrap{flex:1;min-width:0}
+.bracket-tname{font-size:14px;font-weight:600;color:var(--text-primary)}
+.bracket-tsub{font-size:11px;color:var(--text-secondary);font-weight:400}
+.bracket-score-wrap{display:flex;align-items:center;gap:4px;margin-left:auto;flex-shrink:0}
+.bracket-trophy{font-size:16px}
+.bracket-score{font-size:20px;font-weight:800;color:var(--text-primary)}
+.bracket-score.pending-score{font-size:18px;font-weight:600;color:var(--border-dark)}
+.bracket-status{font-size:11px;color:var(--text-secondary);text-align:center;padding:8px 16px;display:flex;align-items:center;justify-content:center;gap:5px;border-top:1px solid var(--border);background:#fafbfd}
+.bracket-status.done{color:var(--text-secondary)}
+.bracket-status.en-curso{color:var(--accent);font-weight:600;background:var(--orange-bg)}
+.bracket-svg-col{width:48px;flex-shrink:0;position:relative}
+
+/* ─── STANDINGS (tabla de posiciones por grupo) ─── */
+.standings-title{font-size:16px;font-weight:600;color:var(--text-primary);margin:20px 0 12px}
+.standings-table{width:100%;border-collapse:collapse;font-size:13px}
+.standings-table th{padding:10px 12px;text-align:left;font-weight:500;color:var(--text-secondary);font-size:11px;letter-spacing:.3px;border-bottom:2px solid var(--border)}
+.standings-table td{padding:10px 12px;border-bottom:1px solid var(--border)}
+.standings-table th:not(:first-child):not(:nth-child(2)),.standings-table td:not(:first-child):not(:nth-child(2)){text-align:center}
+/* Podio. El numero va en OSCURO, no en blanco: el oro y la plata son claros por
+   naturaleza y con texto blanco se quedaban en 2.4-3.0:1. Oscurecerlos hasta que
+   el blanco funcionara los convertia en marron oliva y gris sucio, dejaban de
+   leerse como medallas. Con texto oscuro los cuatro pasan AA (4.6-6.6:1) y cada
+   color se mantiene fiel. */
+.standings-pos{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--text-primary);background:var(--text-secondary)}
+/* Tonos apagados. Ojo al apagarlos: bajando solo la luminosidad, oro y ocre
+   convergian (distancia RGB 24) y plata y gris tambien (19) — cuatro medallas
+   que dejaban de distinguirse. Se separan por TONO: oro amarillo, ocre naranja,
+   plata azulada y gris neutro mas claro. Distancia minima resultante 47. */
+.standings-pos.pos1{background:#f1e7a4}   /* oro   11.58:1 */
+.standings-pos.pos2{background:#c9d6e6}   /* plata  9.87:1 */
+.standings-pos.pos3{background:#efbc95}   /* ocre   8.52:1 */
+.standings-pos.pos4{background:#eceef1}   /* gris  12.52:1 */
+.standings-team{display:flex;align-items:center;gap:8px}
+.standings-team-name{font-weight:500;color:var(--text-primary)}
+.standings-team-sub{font-size:11px;color:var(--text-secondary)}
+.standings-pts{font-weight:600;color:var(--text-primary)}
+
+/* ─── MEDALLERÍA (oro/plata/bronce + clasificación) ─── */
+.medal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
+.medal-card{text-align:center;padding:24px 16px;border:1px solid var(--border);border-radius:var(--radius-xl);background:var(--surface)}
+.medal-icon{font-size:40px;margin-bottom:8px}
+.medal-label{font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:4px}
+.medal-name{font-size:14px;font-weight:600;color:var(--text-primary)}
+.medal-city{font-size:11px;color:var(--text-secondary)}
+.medal-card.gold{border-color:#f6e05e;background:#fefce8}
+.medal-card.silver{border-color:#d1d5db;background:#f9fafb}
+.medal-card.bronze{border-color:#f59e0b;background:#fffbeb}
+
+/* ─── RANKING LIST (clasificación completa) ─── */
+.ranking-list{display:flex;flex-direction:column;gap:0}
+.ranking-row{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface);transition:all .2s cubic-bezier(.4,0,.2,1);position:relative}
+.ranking-row:last-child{border-bottom:none}
+.ranking-row:hover{background:#fafbfd}
+.ranking-row.gold{background:linear-gradient(90deg,#fefce8 0%,var(--surface) 60%)}
+.ranking-row.gold::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#eab308;border-radius:0 3px 3px 0}
+.ranking-row.silver{background:linear-gradient(90deg,#f8f9fa 0%,var(--surface) 60%)}
+.ranking-row.silver::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#9ca3af;border-radius:0 3px 3px 0}
+.ranking-row.bronze{background:linear-gradient(90deg,#fffbeb 0%,var(--surface) 60%)}
+.ranking-row.bronze::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#f59e0b;border-radius:0 3px 3px 0}
+.ranking-pos{width:28px;height:28px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.ranking-pos.p1{background:#eab308;color:#fff}
+.ranking-pos.p2{background:#e5e7eb;color:#4b5563}
+.ranking-pos.p3{background:#fde68a;color:#92400e}
+.ranking-pos.p4{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}
+.ranking-info{flex:1;min-width:0}
+.ranking-name{font-size:14px;font-weight:500;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ranking-city{font-size:11px;color:var(--text-secondary);font-weight:400;margin-top:1px}
+.ranking-mark{font-size:16px;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums;letter-spacing:-.3px}
+
+/* ─── CompRender header del bloque ─── */
+.cr-comp-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.cr-comp-emoji{font-size:28px;line-height:1;flex-shrink:0}
+.cr-comp-titles{min-width:0}
+.cr-comp-name{font-size:18px;font-weight:700;color:var(--text-primary)}
+.cr-comp-sub{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.cr-comp-sys{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--accent);background:var(--orange-bg);padding:4px 10px;border-radius:var(--radius-full);flex-shrink:0;margin-left:auto}
+.cr-group{margin-bottom:28px}
+.cr-group-name{font-size:15px;font-weight:700;color:var(--text-primary);margin:0 0 8px}
+.cr-roster{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.cr-roster-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 4px;border:1px solid var(--border);border-radius:var(--radius-full);background:var(--surface);font-size:12px;color:var(--text-primary)}
+.cr-roster-chip .team-avatar{width:24px;height:24px;font-size:10px}
+.cr-jornada-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-secondary);margin:14px 0 8px}
+.cr-bye-card{display:flex;align-items:center;gap:10px;padding:12px 18px;border:1px dashed var(--border-dark);border-radius:var(--radius-lg);margin-bottom:10px;background:#fafbfd}
+.cr-bye-card .team-avatar{width:32px;height:32px}
+.cr-bye-text{font-size:13px;color:var(--text-secondary)}
+.cr-bye-text strong{color:var(--text-primary);font-weight:600}
+.cr-final-block{margin-top:28px;padding-top:20px;border-top:1px solid var(--border)}
+.cr-final-title{font-size:16px;font-weight:700;color:var(--text-primary);margin:0 0 16px;display:flex;align-items:center;gap:8px}
+.cr-empty{font-size:13px;color:var(--text-secondary);padding:16px 0}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .bracket-scroll{overflow-x:auto}
+  .medal-grid{grid-template-columns:1fr}
+}
+
+/* ── tokens medallero ── */
+:root{--rep-gold:#b8860b;--rep-gold-fill:#f5b700;--rep-silver:#6b7280;--rep-silver-fill:#9ca3af;--rep-bronze:#92400e;--rep-bronze-fill:#c2703a}
+/* ── Standings en card con header gris (table-card canónico) ── */
+.cr-stand-card{border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.cr-stand-head{background:var(--bg-soft);padding:12px 16px;font-size:14px;font-weight:700;color:var(--text-primary);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.cr-stand-head .cr-stand-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.cr-stand-card .standings-table{width:100%;border-collapse:collapse;font-size:13px}
+.cr-stand-card .standings-table th{padding:10px 16px;text-align:left;font-weight:500;color:var(--text-secondary);font-size:11px;letter-spacing:.3px;border-bottom:1px solid var(--border)}
+.cr-stand-card .standings-table td{padding:10px 16px;border-bottom:1px solid var(--border)}
+.cr-stand-card .standings-table tr:last-child td{border-bottom:none}
+.cr-stand-card .standings-table th:not(:first-child):not(:nth-child(2)),.cr-stand-card .standings-table td:not(:first-child):not(:nth-child(2)){text-align:center}
+/* ── Podio isométrico (portado de naowee-eventos/reporteria) ── */
+.cr-podio-block{margin-top:8px}
+.cr-podio-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:6px}
+.rep-podio{display:flex;align-items:flex-end;justify-content:center;gap:22px;padding-top:18px}
+.rep-podio__item{display:flex;flex-direction:column;align-items:center;flex:1;max-width:210px}
+.rep-podio__item.p1{order:2}.rep-podio__item.p2{order:1}.rep-podio__item.p3{order:3}
+.rep-podio__crown{font-size:20px;line-height:1;margin-bottom:3px}
+.rep-podio__avatar{width:54px;height:54px;border-radius:var(--radius-full);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#fff;margin-bottom:8px;position:relative;border:3px solid var(--rep-silver-fill)}
+.rep-podio__item.p1 .rep-podio__avatar{width:66px;height:66px;font-size:22px;border-color:var(--rep-gold-fill)}
+.rep-podio__item.p3 .rep-podio__avatar{border-color:var(--rep-bronze-fill)}
+.rep-podio__name{font-size:13px;font-weight:700;text-align:center;color:var(--text-primary)}
+.rep-podio__item.p1 .rep-podio__name{font-size:14px}
+.rep-podio__org{font-size:11.5px;color:var(--text-secondary);text-align:center;margin-bottom:6px}
+.rep-podio__marca{font-size:15px;font-weight:800;text-align:center;color:var(--text-primary)}
+.rep-podio__item.p1 .rep-podio__marca{font-size:18px;color:#b8860b}
+.rep-podio__block{position:relative;width:100%;display:flex;align-items:center;justify-content:center;padding:16px 8px;margin-top:32px;box-shadow:0 16px 22px -10px rgba(38,40,68,.26)}
+.rep-podio__block::before{content:'';position:absolute;left:0;bottom:100%;width:100%;height:16px;transform:skewX(-45deg);transform-origin:bottom left}
+.rep-podio__block::after{content:'';position:absolute;top:0;left:100%;width:16px;height:100%;transform:skewY(-45deg);transform-origin:top left}
+.rep-podio__pos{position:relative;z-index:1;font-size:23px;font-weight:800;color:#fff;letter-spacing:.5px}
+.rep-podio__item.p1 .rep-podio__pos{font-size:28px}
+.p1 .rep-podio__block{background:linear-gradient(180deg,#ffc62e,#e0980a);min-height:118px}
+.p1 .rep-podio__block::before{background:linear-gradient(125deg,#ffe79a,#ffce4d)}
+.p1 .rep-podio__block::after{background:linear-gradient(180deg,#cf9408,#a3720a)}
+.p2 .rep-podio__block{background:linear-gradient(180deg,#cfd8e2,#9dacbd);min-height:86px}
+.p2 .rep-podio__block::before{background:linear-gradient(125deg,#f3f7fb,#dee5ed)}
+.p2 .rep-podio__block::after{background:linear-gradient(180deg,#95a5b6,#7c8c9d)}
+.p3 .rep-podio__block{background:linear-gradient(180deg,#d08a46,#a4621f);min-height:60px}
+.p3 .rep-podio__block::before{background:linear-gradient(125deg,#edb888,#dd9c66)}
+.p3 .rep-podio__block::after{background:linear-gradient(180deg,#a4641f,#834e16)}

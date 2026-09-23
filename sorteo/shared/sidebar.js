@@ -29,8 +29,10 @@ const LOGIN_URL = (() => {
    El demo switcher y el "Cambiar a" del header solo muestran ESTOS roles
    (no los de otros módulos: escenarios, documentación, deportista, etc.),
    agrupados por la lógica de uso del módulo. */
+/* Demo de Sorteo: el sorteo lo opera solo el Coordinador de eventos
+   (nacionales). */
 const DIGITACION_ROLE_GROUPS = [
-  { label: 'Operación', codes: ['EVENT_COORDINATOR', 'DIGITIZER', 'ADMIN'] },
+  { label: 'Operación', codes: ['EVENT_COORDINATOR'] },
 ];
 const DIGITACION_ROLE_CODES = DIGITACION_ROLE_GROUPS.flatMap((g) => g.codes);
 
@@ -45,7 +47,7 @@ const DIGITACION_ROLE_CODES = DIGITACION_ROLE_GROUPS.flatMap((g) => g.codes);
    correspondia. Aqui recordamos el ultimo rol visto en la sesion, para que la
    identidad no cambie a espaldas de quien navega. El default de arranque en
    frio sigue siendo ROOT (abrir una pagina suelta sin historial). */
-const ROLE_KEY = 'naowee-digitacion-role';
+const ROLE_KEY = 'naowee-sorteo-role';
 export function resolveRoleCode(fallback) {
   const deLaUrl = new URLSearchParams(window.location.search).get('role');
   if (deLaUrl) {
@@ -54,18 +56,12 @@ export function resolveRoleCode(fallback) {
   }
   let recordado = null;
   try { recordado = sessionStorage.getItem(ROLE_KEY); } catch (e) {}
-  return recordado || fallback || 'ROOT';
+  return recordado || fallback || 'EVENT_COORDINATOR';
 }
 
-const DIGITACION_HOME = {
-  ROOT: 'lista.html', ADMIN: 'lista.html',
-  /* El coordinador aterriza en su Inicio (dashboard), no en Competencias: al
-     cambiar de perfil se caia en lista.html y su panel de inicio quedaba
-     inalcanzable desde el switcher — habia que pulsar "Inicio" a mano. */
-  EVENT_COORDINATOR: 'dashboard.html', DIGITIZER: 'dashboard.html',
-};
+/* Demo de Sorteo independiente: cualquier rol aterriza en la ruleta. */
 function digitacionRoleHref(code) {
-  return `${DIGITACION_HOME[code] || 'lista.html'}?role=${code}`;
+  return `sorteo.html?role=${code}`;
 }
 
 /* Estado del módulo para que navigateToActive pueda re-renderizar
@@ -243,18 +239,11 @@ function bindSidebarEvents(rootEl) {
    perdía el rol al navegar → el coordinador terminaba como ROOT/Digitador
    o saltaba al shell host. Centralizado aquí: una sola fuente de verdad. */
 const DIGI_ROUTES = {
-  'eventos': 'eventos.html', 'eventos-lista': 'eventos.html', 'eventos-nuevo': 'eventos.html',
-  'competencias': 'lista.html', 'competencias-inicio': 'lista.html', 'competencias-lista': 'lista.html', 'competencias-nueva': 'stepper.html',
-  'sorteo': '../sorteo/sorteo.html',   // demo de Sorteo separada
-  'mi-digitacion': 'digitador.html',
-  'digitadores': 'digitadores.html', 'coordinadores': 'coordinadores.html',
-  'audit-logs': 'auditoria.html',
-  'resultados': 'eventos.html',   // placeholder hasta F3 (vista pública de resultados)
+  'inicio': 'sorteo.html',
+  'sorteo': 'sorteo.html',
 };
 export function resolveDigiRoute(activeId, roleCode) {
-  let page;
-  if (activeId === 'inicio') page = 'dashboard.html';   // Inicio = dashboard del rol (adapta por ?role=)
-  else page = DIGI_ROUTES[activeId];
+  const page = DIGI_ROUTES[activeId];
   if (!page) return null;                       // sin página en digitación → host shell
   return page + '?role=' + encodeURIComponent(roleCode);
 }

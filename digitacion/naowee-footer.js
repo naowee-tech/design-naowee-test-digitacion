@@ -27,7 +27,7 @@
 
   /* Roles de digitación (con persona demo, como en Eventos). */
   var ROLES = {
-    coordinador: { code:'coordinador', userName:'Laura Méndez',   label:'Coordinador de eventos', color:'#d74009', avatar:'LM', home:'sorteo.html' },
+    coordinador: { code:'coordinador', userName:'Laura Méndez',   label:'Coordinador de eventos', color:'#d74009', avatar:'LM', home:'../sorteo/sorteo.html' },
     digitador:   { code:'digitador',   userName:'Carlos Restrepo', label:'Digitador',              color:'#1f78d1', avatar:'CR', home:'digitador.html' },
     admin:       { code:'admin',       userName:'Andrea Salas',    label:'Administrador',          color:'#1f8923', avatar:'AS', home:'coordinadores.html' }
   };

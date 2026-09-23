@@ -137,7 +137,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-primary);font
   const baseName = (ruta) => (ruta.split('/').pop() || '').replace(/\.html$/, '');
   const currentFile = baseName(window.location.pathname) || 'auditoria';
   const LEGACY_MAP = {
-    'inicio': 'dashboard.html', 'sorteo': 'sorteo.html',
+    'inicio': 'dashboard.html', 'sorteo': '../sorteo/sorteo.html',
     'eventos': 'eventos.html', 'eventos-lista': 'eventos.html',
     'competencias': 'lista.html', 'competencias-lista': 'lista.html', 'competencias-nueva': 'stepper.html',
     'digitadores': 'digitadores.html', 'coordinadores': 'coordinadores.html',

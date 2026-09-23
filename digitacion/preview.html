@@ -615,7 +615,7 @@
   const baseName = (ruta) => (ruta.split('/').pop() || '').replace(/\.html$/, '');
   const currentFile = baseName(window.location.pathname) || 'preview';
   const LEGACY_MAP = {
-    'inicio': 'dashboard.html', 'sorteo': 'sorteo.html',
+    'inicio': 'dashboard.html', 'sorteo': '../sorteo/sorteo.html',
     'eventos': 'eventos.html', 'eventos-lista': 'eventos.html',
     'competencias': 'lista.html', 'competencias-lista': 'lista.html',
     'competencias-nueva': 'stepper.html',

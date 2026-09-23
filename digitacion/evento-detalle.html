@@ -6,7 +6,7 @@
 <title>Naowee – Detalle de Evento</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="design-system.css"/>
-<script src="sorteo-store.js"></script>
+<script src="../sorteo/sorteo-store.js"></script>
 <style>
 :root {
   --naranja:#FF7500; --azul:#002B5B;
@@ -1150,7 +1150,7 @@ function renderResultados(){
     return '<div class="res-card'+(anu?' res-card--anu':'')+'"><div class="res-card-emoji">'+(c.emoji||'🏆')+'</div>'
       +'<div class="res-card-body"><div class="res-card-head"><span class="res-card-title">'+_resEsc(c.nombre||'Sorteo')+'</span>'+estado+'</div>'
       +'<div class="res-card-sub">'+_resEsc(sub)+'</div><div class="res-card-meta">'+_resEsc(meta)+'</div></div>'
-      +'<a class="naowee-btn naowee-btn--mute naowee-btn--small" href="sorteo-publico.html?id='+encodeURIComponent(r.id)+'" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3.5H3.5A1.5 1.5 0 002 5v7.5A1.5 1.5 0 003.5 14H11a1.5 1.5 0 001.5-1.5V10M9.5 2.5H13.5V6.5M13 3L7.5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Ver público</a></div>';
+      +'<a class="naowee-btn naowee-btn--mute naowee-btn--small" href="../sorteo/sorteo-publico.html?id='+encodeURIComponent(r.id)+'" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3.5H3.5A1.5 1.5 0 002 5v7.5A1.5 1.5 0 003.5 14H11a1.5 1.5 0 001.5-1.5V10M9.5 2.5H13.5V6.5M13 3L7.5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Ver público</a></div>';
   }).join('')+'</div>';
 }
 

@@ -1,0 +1,71 @@
+/* Naowee footer pill de versionamiento — Digitación.
+   Pareja CSS de shared/naowee-footer.js. Patrón IVC (DESIGN-PATTERNS §3.8). */
+
+.naowee-floating-footer {
+  position: fixed;
+  bottom: 14px;
+  right: 20px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 13px 6px 9px;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e7e9f3);
+  border-radius: var(--radius-full, 9999px);
+  box-shadow: var(--shadow-sm, 0 1px 4px rgba(0, 0, 0, .08));
+  font-family: var(--font-family, 'Inter', sans-serif);
+  /* Anima solo transform/opacity (compositor-friendly). */
+  transition: transform .28s var(--easing-smoothout, cubic-bezier(.32, .72, 0, 1)),
+              opacity .2s ease;
+}
+
+.naowee-floating-footer__logo {
+  width: auto;
+  height: 19px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.naowee-floating-footer__copy {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary, #646587);
+  white-space: nowrap;
+}
+
+.naowee-floating-footer__ver {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent, #d74009);
+  text-decoration: none;
+  padding-left: 10px;
+  border-left: 1px solid var(--border, #e7e9f3);
+  white-space: nowrap;
+}
+.naowee-floating-footer__ver:hover { text-decoration: underline; }
+
+/* Scroll-hide: baja fuera de vista (solo transform + opacity). */
+.naowee-floating-footer.is-hidden {
+  transform: translateY(140%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Mobile: separar de los bordes + ocultar el copyright largo. */
+@media (max-width: 640px) {
+  .naowee-floating-footer {
+    bottom: 8px;
+    right: 8px;
+    padding: 6px 12px 6px 8px;
+  }
+  .naowee-floating-footer__copy { display: none; }
+}
+
+/* Embebido: el host provee su propio chrome — ocultar el pill. */
+html[data-embed="1"] .naowee-floating-footer { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .naowee-floating-footer { transition: opacity .2s ease; }
+  .naowee-floating-footer.is-hidden { transform: none; }
+}

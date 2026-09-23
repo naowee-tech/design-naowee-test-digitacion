@@ -1,0 +1,78 @@
+:root {
+  /* Brand colors */
+  --naranja: #FF7500;
+  --azul: #002B5B;
+  --accent: #d74009;
+
+  /* Text */
+  --text-primary: #282834;
+  --text-secondary: #646587;
+  --text-muted: #9ca0b8;
+
+  /* Surfaces */
+  --surface: #ffffff;
+  --bg: #ffffff;
+  --bg-soft: #f5f6fa;
+
+  /* Borders */
+  --border: #e7e9f3;
+  --border-dark: #d0d4e6;
+
+  /* Accent backgrounds (for active states) */
+  --accent-bg: #fff3e6;
+  --accent-bg-warm: #ffe4cf;
+
+  /* Section label */
+  --section-label-color: #9ca0b8;
+
+  /* Sidebar dimensions */
+  --sidebar-w: 274px;
+  --sidebar-w-collapsed: 72px;
+  --header-h: 88px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+
+  /* Easing — Apple-style smooth-out */
+  --easing-smoothout: cubic-bezier(0.32, 0.72, 0, 1);
+  --easing-bounce-soft: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Durations */
+  --duration-fast: 140ms;
+  --duration-normal: 200ms;
+  --duration-slow: 360ms;
+
+  /* Typography */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,154 @@
+/* ═══════════════════════════════════════════════════════════════
+   NAOWEE DS — componentes canónicos forward-porteados
+   ───────────────────────────────────────────────────────────────
+   Copiados VERBATIM del DS oficial publicado
+   (naowee-design-system/dist/design-system.css, jun-2026) porque el
+   design-system.css de este repo quedó desactualizado y NO los trae.
+   NO modificar aquí: si el repo actualiza su design-system.css a una
+   versión que ya los incluya, borrar este archivo.
+
+   Componentes: .naowee-table-card · .naowee-table--in-card · .naowee-empty-state
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Table card ── */
+.naowee-table-card{
+  background: var(--naowee-color-fill-primary);
+  border: var(--naowee-border-width-small) solid var(--naowee-color-border-default);
+  border-radius: var(--naowee-border-radius-default-large, 16px);
+  padding: var(--naowee-spacing-padding-small, 20px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--naowee-spacing-gap-xsmall, 18px);
+}
+/* Tabs slot — divider full-width compensa el padding del card */
+.naowee-table-card .naowee-tabs{
+  margin: 0 calc(var(--naowee-spacing-padding-small, 20px) * -1);
+  padding: 0 var(--naowee-spacing-padding-small, 20px);
+  background: transparent;
+}
+/* Toolbar (search + filters + pagination en una sola row) */
+.naowee-table-card__toolbar{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--naowee-spacing-gap-xsmall, 12px);
+  flex-wrap: wrap;
+}
+.naowee-table-card__toolbar-left{
+  display: flex;
+  gap: var(--naowee-spacing-gap-xsmall, 12px);
+  align-items: center;
+  flex-wrap: wrap;
+}
+/* Tabla con estilos para vivir DENTRO del card */
+.naowee-table-card__table-wrap{
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.naowee-table-card__table-wrap::-webkit-scrollbar{ display: none; }
+
+.naowee-table--in-card{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: var(--naowee-font-family);
+}
+.naowee-table--in-card thead th{
+  font-size: var(--naowee-font-size-11, 11px);
+  font-weight: var(--naowee-font-weight-semibold, 600);
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  color: var(--naowee-color-text-secondary);
+  padding: 12px 18px;
+  text-align: left;
+  background: var(--naowee-color-gray-100, #f4f5f9);
+  border: none;
+  white-space: nowrap;
+}
+.naowee-table--in-card thead th:first-child{
+  border-top-left-radius: var(--naowee-border-radius-default, 12px);
+  border-bottom-left-radius: var(--naowee-border-radius-default, 12px);
+}
+.naowee-table--in-card thead th:last-child{
+  border-top-right-radius: var(--naowee-border-radius-default, 12px);
+  border-bottom-right-radius: var(--naowee-border-radius-default, 12px);
+}
+.naowee-table--in-card tbody td{
+  padding: 16px 18px;
+  font-size: var(--naowee-font-size-13, 13px);
+  vertical-align: middle;
+  color: var(--naowee-color-text-primary);
+  border-bottom: var(--naowee-border-width-small) solid var(--naowee-color-border-default);
+}
+.naowee-table--in-card tbody tr{
+  transition: background var(--naowee-transition-default);
+}
+.naowee-table--in-card tbody tr:hover{
+  background: #fafbfd;
+}
+.naowee-table--in-card tbody tr:last-child td{ border-bottom: none; }
+.naowee-table--in-card .naowee-table__cell-name{
+  font-weight: var(--naowee-font-weight-medium, 500);
+  color: var(--naowee-color-text-primary);
+}
+.naowee-table--in-card .naowee-table__cell-muted{
+  color: var(--naowee-color-text-secondary);
+  font-size: var(--naowee-font-size-12, 12.5px);
+}
+/* Pagination overrides para vivir en el toolbar del card */
+.naowee-table-card .naowee-pagination--small{
+  gap: 12px;
+}
+.naowee-table-card .naowee-pagination--small .naowee-pagination__input{
+  width: 32px;
+  padding: 4px 0;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+.naowee-table-card .naowee-pagination__input::-webkit-outer-spin-button,
+.naowee-table-card .naowee-pagination__input::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ── Empty state ── */
+.naowee-empty-state{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--naowee-spacing-gap-pico, 6px);
+  padding: 60px 24px;
+  text-align: center;
+  color: var(--naowee-color-text-secondary);
+}
+.naowee-empty-state__icon{
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
+  color: var(--naowee-color-text-disabled, #b5b9d4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.naowee-empty-state__icon svg{ width: 100%; height: 100%; }
+.naowee-empty-state__title{
+  font-family: var(--naowee-font-family);
+  font-size: var(--naowee-font-size-16, 16px);
+  font-weight: var(--naowee-font-weight-bold, 700);
+  color: var(--naowee-color-text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+.naowee-empty-state__description{
+  font-family: var(--naowee-font-family);
+  font-size: var(--naowee-font-size-13, 13px);
+  font-weight: var(--naowee-font-weight-regular, 400);
+  color: var(--naowee-color-text-secondary);
+  margin: 0;
+  max-width: 320px;
+  line-height: 1.5;
+}
+.naowee-empty-state__action{ margin-top: 16px; }
