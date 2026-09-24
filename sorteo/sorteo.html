@@ -1279,7 +1279,7 @@ function refreshStep1(){
   _dupRec = ok ? _sorteoExistente() : null;
   _renderDupWarn(_dupRec);
   if(ok && !_dupRec) _loadParticipants();   /* la prueba define el pool de la fase origen */
-  var cfg=document.getElementById('cfgConjunto'); if(cfg) cfg.classList.toggle('hidden',!!_dupRec);   /* con sorteo existente no hay nada que configurar */
+  var cfg=document.getElementById('cfgConjunto'); if(cfg) cfg.classList.toggle('hidden',!W.deporteKey||!!_dupRec);   /* sin deporte, o con sorteo existente, no hay nada que configurar */
   if(ok&&!_dupRec&&!_cfgQuiet){ _cfgQuiet=true; recalcCfg(); _cfgQuiet=false; }
   if(W.step===1) document.getElementById('btnNext').disabled=!ok||!!_dupRec||W.cfgOk===false;
 }
