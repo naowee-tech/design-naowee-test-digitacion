@@ -969,7 +969,7 @@ body.sorteo-has-footer .page{padding-bottom:96px}
                 </ul>
               </span>
             </span>
-            <button type="button" class="naowee-btn naowee-btn--quiet naowee-btn--small" id="btnClasifRestore" onclick="clasifRestore()" hidden title="Deshace los cambios manuales y vuelve a poner los clasificados según los resultados de digitación">Restaurar clasificados</button>
+            <button type="button" class="naowee-btn naowee-btn--quiet naowee-btn--small" id="btnClasifRestore" onclick="clasifRestore()" hidden title="Vuelve a poner las instituciones clasificadas según los resultados de digitación. Los grupos fijados se conservan.">Restaurar clasificados</button>
           </span>
         </div>
         <div id="clasifList" class="clasif-list clasif-list--rows"></div>
@@ -1768,8 +1768,9 @@ function _loadParticipants(){
 }
 /* Deja las N filas como dicen los resultados (o vacías si no hay). */
 function clasifRestore(silent){
-  var need=Math.max(0,+W.nEquipos||0);
-  _clasificados=[]; for(var i=0;i<need;i++){ var src=_pool[i]&&_pool[i].pos?_pool[i]:null; _clasificados.push(src?{nombre:src.nombre,delegacion:src.delegacion,pos:src.pos,on:true,clasificado:true,grupoFijo:null}:{nombre:'',delegacion:'',pos:null,on:false,clasificado:false,grupoFijo:null}); }
+  var need=Math.max(0,+W.nEquipos||0), prev=_clasificados||[];
+  /* Solo repone las instituciones; el grupo fijo de cada fila se conserva. */
+  _clasificados=[]; for(var i=0;i<need;i++){ var src=_pool[i]&&_pool[i].pos?_pool[i]:null, gf=(prev[i]&&prev[i].grupoFijo!=null)?prev[i].grupoFijo:null; _clasificados.push(src?{nombre:src.nombre,delegacion:src.delegacion,pos:src.pos,on:true,clasificado:true,grupoFijo:gf}:{nombre:'',delegacion:'',pos:null,on:false,clasificado:false,grupoFijo:null}); }
   if(!silent) renderClasifList();
 }
 function _selected(){ return _clasificados.filter(function(c){return c.on&&c.nombre;}); }
@@ -1852,7 +1853,7 @@ function _clasifSync(){
   var rb=document.getElementById('btnClasifRestore'); if(rb) rb.hidden=!_clasifChanged();
 }
 /* ¿Difiere de lo que dicen los resultados? (nombres o grupos fijos) */
-function _clasifChanged(){ return _clasificados.some(function(c,i){ var d=_pool[i]&&_pool[i].pos?_pool[i].nombre:''; return (c.nombre||'')!==d||c.grupoFijo!=null; }); }
+function _clasifChanged(){ return _clasificados.some(function(c,i){ var d=_pool[i]&&_pool[i].pos?_pool[i].nombre:''; return (c.nombre||'')!==d; }); }
 function validateClasif(){ var names=_selected().map(function(c){return c.nombre;}); _reglasHTML(); return names.length===(+W.nEquipos||0)&&names.length>=2&&new Set(names).size===names.length&&W.reglasOk!==false; }
 
 /* ── Paso 4 · Sortear / resultado / cierre ── */
