@@ -1672,7 +1672,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeConfi
 
 <!-- Shell compartido: mismo sidebar/header/demo-switcher que lista.html (activeId 'sorteo') -->
 <script type="module">
-  import { mountSidebar, mountHeader, mountDemoRoleSwitcher, resolveRoleCode } from './shared/sidebar.js';
+  import { mountSidebar, mountHeader, mountDemoRoleSwitcher, resolveRoleCode } from './shared/sidebar.js?v=3.1';
   const roleCode = resolveRoleCode('ACCESS_MANAGER');
   /* Basename SIN extension: si el servidor usa URLs limpias (/sorteo en vez de
      /sorteo.html) la comparacion contra LEGACY_MAP fallaba y onActiveChange

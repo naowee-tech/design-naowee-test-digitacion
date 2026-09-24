@@ -8,7 +8,7 @@
  * - Header con profile-switcher (user-chip "Phil" estilo: avatar+dot+nombre+rol+chevron)
  * - Dropdown del profile-switcher con la lista de los roles disponibles
  */
-import { ROLES, getMenuForRole, getIcon, findParentOfChild } from './menu-data.js';
+import { ROLES, getMenuForRole, getIcon, findParentOfChild } from './menu-data.js?v=3.1';
 
 const COLLAPSED_KEY = 'naowee-sidebar-collapsed';
 

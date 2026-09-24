@@ -255,10 +255,9 @@ export const MENU_BY_ROLE = {
 };
 
 /* ── Demo de Sorteo · chrome de suite-web-v2 ────────────────────────────
-   El sidebar reproduce el menú real del Access Manager en la suite. Solo un
-   ítem tiene página en esta demo: "Sorteos", hijo de "Listado de eventos"
-   (el sorteo cuelga del evento, igual que Gestión de usuarios). El resto se
-   pinta inerte (sin `route`) para que el dev vea dónde cae. */
+   El sidebar muestra solo la rama que importa: "Listado de eventos" con sus
+   dos hijos gateados por permiso. "Sorteos" es la única página de esta demo;
+   "Gestión de usuarios" queda inerte como referencia del patrón. */
 const EVENT_CODE = 'jin-2026';
 const SUITE_ITEMS = {
   analitica:      { id: 'analitica',        label: 'Analítica',                icon: 'chart' },
@@ -267,12 +266,7 @@ const SUITE_ITEMS = {
   eventos:        { id: 'events',           label: 'Listado de eventos',       icon: 'calendar',
                     children: [
                       { id: 'event-users',          label: 'Gestión de usuarios' },
-                      { id: 'event-draws',          label: 'Sorteos', route: `/home/events/${EVENT_CODE}/draws` },
-                      { id: 'event-departments',    label: 'Departamentos' },
-                      { id: 'event-municipalities', label: 'Municipios' },
-                      { id: 'event-institutions',   label: 'Instituciones' },
-                      { id: 'event-athletes',       label: 'Deportistas' },
-                      { id: 'event-support',        label: 'Personal de apoyo' }
+                      { id: 'event-draws',          label: 'Sorteos', route: `/home/events/${EVENT_CODE}/draws` }
                     ] },
   docEventos:     { id: 'docs-events',      label: 'Documentación',            icon: 'doc',   children: [ { id: 'docs-events-aprobacion', label: 'Aprobación' } ] },
   bloqueoProm:    { id: 'bloqueo-prom',     label: 'Bloqueo de promociones',   icon: 'shield' },
@@ -289,13 +283,11 @@ const SUITE_ITEMS = {
   entregaAcred:   { id: 'entrega-acred',    label: 'Entrega de acreditaciones',icon: 'idCard' },
   auditoria:      { id: 'auditoria',        label: 'Auditoría',                icon: 'audit' },
 };
+/* Solo lo que importa para el sorteo: la sección del evento con "Listado de
+   eventos" y sus dos hijos gateados por permiso (Gestión de usuarios como
+   referencia del patrón, Sorteos como la página de esta demo). */
 const SUITE_MENU = [
-  { section: 'DASHBOARD',        items: [SUITE_ITEMS.analitica] },
-  { section: 'GESTIÓN',          items: [SUITE_ITEMS.gestUsuarios, SUITE_ITEMS.documentacion] },
-  { section: 'EVENTO DEPORTIVO', items: [SUITE_ITEMS.eventos, SUITE_ITEMS.docEventos, SUITE_ITEMS.bloqueoProm, SUITE_ITEMS.gestAccesos, SUITE_ITEMS.cupos, SUITE_ITEMS.miDoc, SUITE_ITEMS.personalAcred, SUITE_ITEMS.digitacion] },
-  { section: 'ESCENARIOS',       items: [SUITE_ITEMS.mapa, SUITE_ITEMS.escenarios, SUITE_ITEMS.usuariosEsc] },
-  { section: 'ADMINISTRACIÓN',   items: [SUITE_ITEMS.administracion] },
-  { section: 'ACREDITACIONES',   items: [SUITE_ITEMS.parametrizacion, SUITE_ITEMS.entregaAcred, SUITE_ITEMS.auditoria] },
+  { section: 'EVENTO DEPORTIVO', items: [SUITE_ITEMS.eventos] },
 ];
 export function getMenuForRole(roleCode) {
   return SUITE_MENU;
