@@ -692,6 +692,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-primary);font
 .clasif-combo-opt .opt-meta{color:var(--text-muted);font-weight:400;font-size:12px;margin-left:6px}
 .clasif-combo-search{position:sticky;top:0;background:var(--surface);padding:6px;border-bottom:1px solid var(--border)}
 .clasif-combo-search input{width:100%;height:32px;border:1px solid var(--border-dark);border-radius:8px;padding:0 10px;font:inherit;font-size:13px}
+/* SOLO DEMO · nota para devs al pasar el mouse (calcada de la demo de Incentivos) */
+.wz-devnote{position:relative;display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 4px;border-radius:999px;border:1px dashed #d9a441;background:#fff8e6;font-size:12px;font-weight:600;color:#8a5a00;cursor:help}
+.wz-devnote:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wz-devnote__pop{position:absolute;right:0;top:calc(100% + 8px);z-index:1200;width:440px;max-width:80vw;max-height:60vh;overflow:auto;padding:14px 16px;border-radius:12px;background:#282834;color:#fff;font-size:12.5px;font-weight:400;line-height:1.45;box-shadow:0 12px 32px rgba(40,40,52,.28);opacity:0;visibility:hidden;transition:opacity .15s;text-align:left}
+.wz-devnote:hover .wz-devnote__pop,.wz-devnote:focus .wz-devnote__pop,.wz-devnote:focus-within .wz-devnote__pop{opacity:1;visibility:visible}
+.wz-devnote__head{display:block;font-weight:700;margin-bottom:8px}
+.wz-devnote__head em{font-weight:400;opacity:.7}
+.wz-devnote__pop ul{margin:0;padding-left:16px}
+.wz-devnote__pop li+li{margin-top:3px}
+.clasif-row .clasif-grupo{order:0;margin-left:4px}
 /* SOLO DEMO · nota para desarrollo (mismo tono que Incentivos) */
 .dev-note{border:1px dashed #d9a441;background:#fff8e6;border-radius:var(--radius-md);padding:12px 14px;font-size:12.5px;color:#5b4a1e}
 .dev-note__head{display:flex;align-items:center;gap:8px;margin-bottom:6px;color:#8a5a00}
@@ -939,29 +949,26 @@ body.sorteo-has-footer .page{padding-bottom:96px}
         <div id="clasifBanner" style="padding:0 28px"></div>
         <div class="part-toolbar">
           <span class="part-toolbar__count" id="clasifCount"></span>
-          <span class="part-toolbar__actions"><button type="button" class="naowee-btn naowee-btn--quiet naowee-btn--small" onclick="clasifRestore()">Volver a los resultados</button></span>
+          <span class="part-toolbar__actions">
+            <span class="wz-devnote" tabindex="0" role="button" aria-label="Nota para devs"><span class="naowee-badge naowee-badge--caution naowee-badge--small">Solo demo</span>Validaciones para devs
+              <span class="wz-devnote__pop" role="tooltip">
+                <span class="wz-devnote__head">Participantes y grupo fijo <em>· nota para devs, no es parte del producto</em></span>
+                <ul>
+                  <li>Se muestran exactamente <b>N filas</b>, con N = «N.º de equipos clasificados» del paso anterior. No se añaden ni quitan filas aquí; N se cambia en Prueba.</li>
+                  <li>Cada fila viene precargada con el <b>clasificado de la fase origen</b> según el <b>orden de resultados de digitación</b> (1.º, 2.º, …) para ese deporte, categoría y sexo. Sin resultados: filas vacías, se eligen a mano.</li>
+                  <li>Cualquier fila se cambia por <b>cualquier institución inscrita en la fase origen</b> para esa prueba. Sin texto libre.</li>
+                  <li>El desplegable trae una <b>primera página</b>; el <b>buscador</b> consulta al back por texto y trae cualquiera <b>siempre que esté inscrita en la fase origen</b>. Nunca busca fuera de la fase.</li>
+                  <li>Una institución solo puede estar <b>una vez</b>: al elegirla en una fila queda deshabilitada en las demás.</li>
+                  <li><b>Grupo fijo</b> (— A B …): cada fila puede fijarse a un grupo. Pueden ir varias al mismo grupo, hasta la capacidad del grupo (N ÷ grupos, redondeando arriba en los primeros). Si se excede, bloquea. Las filas con «—» salen al azar.</li>
+                  <li>El número de la fila es el orden de resultados; no define el grupo.</li>
+                </ul>
+              </span>
+            </span>
+            <button type="button" class="naowee-btn naowee-btn--quiet naowee-btn--small" onclick="clasifRestore()">Volver a los resultados</button>
+          </span>
         </div>
         <div id="clasifList" class="clasif-list clasif-list--rows"></div>
         <div id="clasifDerived"></div>
-        <!-- SOLO DEMO · nota para desarrollo sobre la lógica de participantes -->
-        <div class="dev-note" style="margin:0 28px 6px">
-          <div class="dev-note__head"><span class="naowee-badge naowee-badge--caution naowee-badge--small">Solo demo</span><b>Nota para desarrollo · participantes</b></div>
-          <ul>
-            <li>Se muestran exactamente <b>N filas</b>, con N = «N.º de equipos clasificados» del paso anterior. No se pueden añadir ni quitar filas aquí; N se cambia en Prueba.</li>
-            <li>Cada fila viene precargada con el <b>clasificado de la fase origen</b> según el <b>orden de resultados de digitación</b> (1.º, 2.º, …) para ese deporte, categoría y sexo. Si la fase origen no tiene resultados, las filas quedan vacías y se eligen a mano.</li>
-            <li>Cualquier fila se puede cambiar por <b>cualquier institución inscrita en la fase origen</b> para esa misma prueba. No se permite texto libre.</li>
-            <li>El desplegable trae solo una <b>primera página</b> de inscritas. El <b>buscador</b> consulta al back por texto y trae cualquier institución <b>siempre que esté inscrita en la fase origen</b> para esa prueba; nunca busca fuera de la fase.</li>
-            <li>Una institución solo puede estar <b>una vez</b>: al elegirla en una fila queda deshabilitada en las opciones de las demás.</li>
-            <li>El número de la fila es solo el orden de resultados; no define el grupo. Los grupos los reparte el sorteo, salvo los líderes fijados abajo.</li>
-          </ul>
-        </div>
-        <div class="wz-body" style="padding-top:8px">
-          <div class="wz-field">
-            <label>Líder de cada grupo (opcional)</label>
-            <div class="wz-panel-hint" style="margin:0 0 10px">El líder es el único equipo que queda fijo en su grupo; los demás salen al azar.</div>
-            <div class="leaders" id="leadersBox"></div>
-          </div>
-        </div>
         <div class="wz-nav clasif-foot">
           <button class="naowee-btn naowee-btn--mute" onclick="goStep(1)">Atrás</button>
           <button class="naowee-btn naowee-btn--loud" id="btnClasifNext" onclick="goStep(3)">Sortear</button>
@@ -1768,17 +1775,36 @@ function renderClasifList(){
   var el=document.getElementById('clasifList'); if(!el)return;
   var origin=_phase(PROMOTION.fromCode), hasRes=!!(origin&&origin.hasResults);
   _loadParticipants();
-  var t=document.getElementById('clasifTitle'); if(t) t.textContent=_cfgPl(_clasificados.length,'clasificado','clasificados')+' de '+PROMOTION.from+' para '+[W.deporteLabel,W.categoria,W.sexo].filter(Boolean).join(' ')+'. '+(hasRes?'Vienen en el orden de los resultados de digitación; cualquiera se puede cambiar por otra institución inscrita en '+PROMOTION.from+'.':'La fase origen aún no tiene resultados: elige cada clasificado entre las inscritas en '+PROMOTION.from+'.');
+  var t=document.getElementById('clasifTitle'); if(t) t.textContent=_cfgPl(_clasificados.length,'clasificado','clasificados')+' de '+PROMOTION.from+' para '+[W.deporteLabel,W.categoria,W.sexo].filter(Boolean).join(' ')+'. '+(hasRes?'Vienen los clasificados según los resultados de digitación; cualquiera se puede cambiar por otra institución inscrita en '+PROMOTION.from+'.':'La fase origen aún no tiene resultados: elige cada clasificado entre las inscritas en '+PROMOTION.from+'.');
   var b=document.getElementById('clasifBanner'); if(b) b.innerHTML=_originBannerHTML();
   if(!_pool.length){ el.innerHTML='<div class="naowee-empty-state"><span class="naowee-empty-state__icon">'+_ICO_PEMPTY+'</span><h3 class="naowee-empty-state__title">No hay instituciones inscritas en '+tEsc(PROMOTION.from)+' para esta prueba</h3><p class="naowee-empty-state__description">Revisa las inscripciones de la fase antes de sortear.</p></div>'; _clasifSync(); return; }
   el.innerHTML=_clasificados.map(function(c,i){
     var nm=(c.nombre||'').replace(/"/g,'&quot;'), item=c.nombre?_poolItem(c.nombre):null;
-    var meta=item?(item.pos?'<span class="naowee-badge naowee-badge--positive naowee-badge--quiet naowee-badge--small">'+_ord(item.pos)+' en '+tEsc(PROMOTION.from)+'</span>':'<span class="naowee-badge naowee-badge--neutral naowee-badge--quiet naowee-badge--small">Sin resultado</span>')+'<span>'+tEsc(item?item.delegacion:'')+'</span>':'';
     return '<div class="clasif-row'+(c.nombre?'':' is-empty')+'"><span class="clasif-pos">'+(i+1)+'</span>'
       +'<div class="clasif-combo clasif-tf"><div class="naowee-textfield naowee-textfield--small"><div class="naowee-textfield__input-wrap"><input class="naowee-textfield__input clasif-combo-inp" readonly value="'+nm+'" placeholder="Elige una institución inscrita en '+tEsc(PROMOTION.from)+'…" onclick="clasifShow('+i+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();clasifShow('+i+')}"><button type="button" class="clasif-combo-chev" onclick="clasifShow('+i+');event.stopPropagation()" tabindex="-1" aria-label="Cambiar institución"><svg viewBox="0 0 16 16" width="14" height="14" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div><div class="clasif-combo-menu" id="clasifMenu'+i+'"></div></div>'
-      +'<span class="clasif-row__meta">'+meta+'</span>'
+      +_grupoPillsHTML(i)
     +'</div>'; }).join('');
   _clasifSync();
+}
+/* Grupo fijo por fila (— libre · A · B …). Varias filas pueden fijarse al mismo grupo. */
+function _clasifNGrupos(){ return Math.max(1,+W.nGrupos||1); }
+function _grupoPillsHTML(i){ var ng=_clasifNGrupos(); if(ng<2) return ''; var c=_clasificados[i]; var cur=(c&&c.grupoFijo); if(cur!=null&&(cur|0)>=ng) cur=null; var dis=!(c&&c.nombre);
+  var pills='<button type="button" class="clasif-gp clasif-gp--none'+((cur==null)?' is-active':'')+'" onclick="setGrupoFijo('+i+',null)" title="Sin grupo fijo (al azar)" aria-label="Sin grupo fijo">—</button>';
+  for(var g=0;g<ng;g++){ var L=String.fromCharCode(65+g); pills+='<button type="button" class="clasif-gp'+(((cur|0)===g&&cur!=null)?' is-active':'')+'" '+(dis?'disabled ':'')+'onclick="setGrupoFijo('+i+','+g+')" title="Fijar al Grupo '+L+'" aria-label="Grupo '+L+'">'+L+'</button>'; }
+  return '<div class="clasif-grupo" role="group" aria-label="Grupo fijo">'+pills+'</div>'; }
+function setGrupoFijo(i,g){ var c=_clasificados[i]; if(!c||!c.nombre)return; c.grupoFijo=(g==null?null:(g|0));
+  var rows=document.querySelectorAll('#clasifList .clasif-row'), row=rows[i], wrap=row&&row.querySelector('.clasif-grupo');
+  if(wrap){ var tmp=document.createElement('div'); tmp.innerHTML=_grupoPillsHTML(i); wrap.parentNode.replaceChild(tmp.firstElementChild,wrap); _clasifSync(); return; }
+  renderClasifList(); }
+/* Reglas del sorteo: qué filas quedaron fijas a cada grupo + capacidad. */
+function _reglasHTML(){
+  var g=_clasifNGrupos(), n=_selCount(), base=Math.floor(n/g), resto=n%g, byG={}, pinned=new Array(g).fill(0), any=false, alerts='';
+  _clasificados.forEach(function(c){ if(c.nombre&&c.grupoFijo!=null&&c.grupoFijo<g){ pinned[c.grupoFijo]++; (byG[c.grupoFijo]=byG[c.grupoFijo]||[]).push(c.nombre); any=true; } });
+  for(var gi=0;gi<g;gi++){ var cap=base+(gi<resto?1:0); if(pinned[gi]>cap) alerts+=_cdMsg('caution','Regla imposible en Grupo '+String.fromCharCode(65+gi),'Fijaste '+pinned[gi]+' equipos al Grupo '+String.fromCharCode(65+gi)+' pero solo caben '+cap+'. Quita una regla o cambia el número de grupos en Prueba.'); }
+  W.reglasOk=!alerts;
+  if(!any&&!alerts) return '';
+  var rr=''; for(var k=0;k<g;k++){ if(byG[k]&&byG[k].length){ rr+='<div class="clasif-rule-row"><span class="clasif-gbadge" style="background:'+_GRP_COLORS[k%_GRP_COLORS.length]+'">'+String.fromCharCode(65+k)+'</span><div class="clasif-rule-chips">'+byG[k].map(function(nm){return '<span class="clasif-rule-chip">'+tEsc(nm)+'</span>';}).join('')+'</div></div>'; } }
+  return (any?'<div class="clasif-rules"><span class="clasif-rules__head">'+_ICO_LOCK+'Reglas del sorteo</span>'+rr+'</div>':'')+(alerts?'<div style="padding:0 28px 10px">'+alerts+'</div>':'');
 }
 /* Combo: lista del pool; las ya usadas en otra fila salen deshabilitadas. */
 function _normTxt(v){ return String(v||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
@@ -1788,7 +1814,7 @@ function clasifMenuHtml(i,q){
   var opts=cur?_pool.filter(function(it){ return _normTxt(it.nombre).indexOf(cur)>=0; }):_pool.slice(0,_CLASIF_PAGE);
   var resto=(!cur&&_pool.length>_CLASIF_PAGE)?'<div class="clasif-combo-empty">'+(_pool.length-_CLASIF_PAGE)+' más inscritas en '+tEsc(PROMOTION.from)+' · escribe para buscarlas</div>':'';
   if(!opts.length) return '<div class="clasif-combo-empty">Ninguna inscrita en '+tEsc(PROMOTION.from)+' para esta prueba coincide con «'+tEsc(q)+'»</div>';
-  return resto+opts.map(function(it){ var taken=used[it.nombre]; return '<div class="clasif-combo-opt'+(taken?' is-taken':'')+'" '+(taken?'title="Ya está en la fila '+taken+'"':'onmousedown="clasifPick('+i+',\''+it.nombre.replace(/'/g,"\\'")+'\',event)"')+'>'+tEsc(it.nombre)+'<span class="opt-meta">'+(it.pos?_ord(it.pos)+' · ':'')+tEsc(it.delegacion)+(taken?' · fila '+taken:'')+'</span></div>'; }).join('');
+  return resto+opts.map(function(it){ var taken=used[it.nombre]; return '<div class="clasif-combo-opt'+(taken?' is-taken':'')+'" '+(taken?'title="Ya está en la fila '+taken+'"':'onmousedown="clasifPick('+i+',\''+it.nombre.replace(/'/g,"\\'")+'\',event)"')+'>'+tEsc(it.nombre)+'<span class="opt-meta">Regional '+tEsc(it.delegacion)+(taken?' · ya en la fila '+taken:'')+'</span></div>'; }).join('');
 }
 function _clasifMenuEl(i){ return document.getElementById('clasifMenu'+i); }
 function clasifRenderMenu(i,q){ var menu=_clasifMenuEl(i); if(!menu)return; var box=menu.closest('.clasif-combo'); var inp=box.querySelector('.clasif-combo-inp');
@@ -1811,25 +1837,11 @@ function clasifPick(i,name,ev){ if(ev)ev.preventDefault(); var it=_poolItem(name
 document.addEventListener('mousedown',function(e){ if(!e.target.closest||!e.target.closest('.clasif-combo')) clasifCloseAll(); });
 function _clasifSync(){
   var n=_selCount(), need=+W.nEquipos||0, faltan=need-n, cnt=document.getElementById('clasifCount'); if(cnt) cnt.innerHTML='<b>'+n+'</b> de '+need+' clasificados definidos · '+_pool.length+' inscritas en '+tEsc(PROMOTION.from);
-  var d=document.getElementById('clasifDerived'); if(d) d.innerHTML=(_pool.length&&faltan>0)?'<div style="padding:0 28px 10px">'+_cdMsg('caution','Faltan '+_cfgPl(faltan,'clasificado','clasificados'),'Elige una institución en cada fila vacía. Si N no es el correcto, vuelve a Prueba y cambia el N.º de equipos clasificados.')+'</div>':'';
-  var b=document.getElementById('btnClasifNext'); if(b) b.disabled=(faltan!==0||n<2);
-  renderLeaders();
+  var reglas=_reglasHTML();
+  var d=document.getElementById('clasifDerived'); if(d) d.innerHTML=((_pool.length&&faltan>0)?'<div style="padding:0 28px 10px">'+_cdMsg('caution','Faltan '+_cfgPl(faltan,'clasificado','clasificados'),'Elige una institución en cada fila vacía. Si N no es el correcto, vuelve a Prueba y cambia el N.º de equipos clasificados.')+'</div>':'')+reglas;
+  var b=document.getElementById('btnClasifNext'); if(b) b.disabled=(faltan!==0||n<2||W.reglasOk===false);
 }
-function validateClasif(){ var names=_selected().map(function(c){return c.nombre;}); return names.length===(+W.nEquipos||0)&&names.length>=2&&new Set(names).size===names.length; }
-
-/* ── Paso 3 · Líderes: un selector por grupo; un equipo no lidera dos grupos. ── */
-function renderLeaders(){
-  var box=document.getElementById('leadersBox'); if(!box)return;
-  var g=Math.max(1,+W.nGrupos||1), sel=_selected();
-  sel.forEach(function(c){ if(c.grupoFijo!=null&&c.grupoFijo>=g) c.grupoFijo=null; });
-  var h=''; for(var gi=0;gi<g;gi++){ var L=String.fromCharCode(65+gi), cur=sel.filter(function(c){return c.grupoFijo===gi;})[0];
-    h+='<label class="leader"><span class="leader__head"><span class="clasif-gbadge" style="background:'+_GRP_COLORS[gi%_GRP_COLORS.length]+'">'+L+'</span>Grupo '+L+'</span>'
-      +'<select onchange="setLeader('+gi+',this.value)"><option value="">Sin líder (al azar)</option>'
-      +sel.map(function(c){ var taken=c.grupoFijo!=null&&c.grupoFijo!==gi; return '<option value="'+tEsc(c.nombre)+'"'+(cur&&cur.nombre===c.nombre?' selected':'')+(taken?' disabled':'')+'>'+tEsc(c.nombre)+(taken?' · líder del Grupo '+String.fromCharCode(65+c.grupoFijo):'')+'</option>'; }).join('')
-      +'</select></label>'; }
-  box.innerHTML=h;
-}
-function setLeader(gi,name){ _clasificados.forEach(function(c){ if(c.grupoFijo===gi) c.grupoFijo=null; }); if(name){ var c=_clasificados.filter(function(x){return x.on&&x.nombre===name;})[0]; if(c) c.grupoFijo=gi; } renderLeaders(); }
+function validateClasif(){ var names=_selected().map(function(c){return c.nombre;}); _reglasHTML(); return names.length===(+W.nEquipos||0)&&names.length>=2&&new Set(names).size===names.length&&W.reglasOk!==false; }
 
 /* ── Paso 4 · Sortear / resultado / cierre ── */
 function buildSorteo(){ var parts=_selected().map(function(c){ return { nombre:c.nombre, delegacion:c.delegacion, grupoFijo:(c.grupoFijo==null?null:c.grupoFijo) }; }); _sorteo={ prueba:{deporteLabel:W.deporteLabel||'Deporte',emoji:W.emoji||'🏆',categoria:W.categoria||'General',sexo:W.sexo||'Mixto',tipo:'conjunto'}, config:{nGrupos:Math.max(1,+W.nGrupos||2)}, participantes:parts }; return _sorteo; }
