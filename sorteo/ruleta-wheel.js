@@ -6,7 +6,7 @@
    API:
      RuletaWheel.mount(containerEl, items)
         items: [{label:'Bogotá', color:'#2c5f9b'}, ...]
-     RuletaWheel.spin()      -> Promise<number>  (índice ganador, o -1 si no quedan)
+     RuletaWheel.spin(i?)    -> Promise<number>  (índice ganador; con i aterriza en ese sector; -1 si no quedan)
      RuletaWheel.remaining() -> number           (sectores no usados)
      RuletaWheel.total()     -> number           (total de sectores)
      RuletaWheel.reset()     -> void             (limpia usados y re-renderiza)
@@ -330,11 +330,14 @@
     if (remaining() === 0 && state.rootEl) state.rootEl.classList.add('is-empty');
   }
 
-  function spin() {
+  /* spin(forcedIndex?) — sin argumento elige un sector libre al azar; con un
+     índice libre aterriza en ese sector (el resultado viene decidido de afuera
+     y la ruleta solo lo revela). */
+  function spin(forcedIndex) {
     return new Promise(function (resolve) {
       if (state.spinning) { resolve(-1); return; }
 
-      var winner = pickRandomUnused();
+      var winner = (typeof forcedIndex === 'number' && forcedIndex >= 0 && forcedIndex < state.used.length && !state.used[forcedIndex]) ? forcedIndex : pickRandomUnused();
       if (winner < 0) { resolve(-1); return; }
 
       var target = computeTargetRotation(state.rotation, winner, state.items.length);
