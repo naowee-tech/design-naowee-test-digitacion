@@ -1589,13 +1589,11 @@ function openEventHome(){
   showStage('eventHomeStage'); document.body.dataset.screen='evento'; document.body.dataset.route='/home/events/'+EVENT.code;
   setCrumbsRaw([{label:'Inicio'},{label:'Eventos',go:openEvents},EVENT.name]);
   var el=document.getElementById('eventHomeBody'); if(!el)return;
-  var nDraws=0, nOpen=0; PROMOTIONS.forEach(function(pr){ nDraws+=_drawsOf(pr.code).length; if(!pr.ended)nOpen++; });
   var nSports=EVENT.teamSports.length, nTests=EVENT.teamSports.reduce(function(a,sp){ return a+((sp.tests&&sp.tests.length)||0); },0);
   function card(icon,title,sub,onclick){ return '<button type="button" class="promo-card'+(onclick?'':' is-quiet')+'" '+(onclick?'onclick="'+onclick+'"':'aria-disabled="true" title="Solo demo"')+'><span class="promo-card__icon" aria-hidden="true">'+icon+'</span><span class="promo-card__text"><span class="promo-card__title">'+title+'</span><span class="promo-card__meta"><span>'+sub+'</span></span></span><span class="promo-card__arrow">'+_ICO_CHEV_L+'</span></button>'; }
   el.innerHTML='<div class="promo-grid">'
     +card(_ICO_PHASES,'Fases',EVENT.phases.length+' fases configuradas')
     +card(_ICO_CUP,'Catálogo deportivo',nSports+' deportes de conjunto'+(nTests?' · '+nTests+' pruebas':''))
-    +card(_ICO_SHUFFLE,'Sorteos',_cfgPl(nDraws,'sorteo','sorteos')+' · '+_cfgPl(nOpen,'promoción abierta','promociones abiertas'),'openPromos()')
     +card(_ICO_USERS,'Accesos','Gestiona los usuarios del evento')
   +'</div>';
 }
