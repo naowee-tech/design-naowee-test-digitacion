@@ -702,6 +702,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-primary);font
 .wz-devnote__pop ul{margin:0;padding-left:16px}
 .wz-devnote__pop li+li{margin-top:3px}
 .clasif-row .clasif-grupo{order:0;margin-left:4px}
+.clasif-head{display:flex;align-items:center;gap:10px;padding:0 0 2px;font-size:11.5px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--text-secondary)}
+.clasif-head__pos{width:24px}
+.clasif-head__name{flex:1;min-width:0}
+.clasif-head__grp{display:inline-flex;align-items:center;gap:5px;margin-left:4px;cursor:help}
+.clasif-head__grp svg{width:13px;height:13px;color:var(--text-muted)}
 /* SOLO DEMO · nota para desarrollo (mismo tono que Incentivos) */
 .dev-note{border:1px dashed #d9a441;background:#fff8e6;border-radius:var(--radius-md);padding:12px 14px;font-size:12.5px;color:#5b4a1e}
 .dev-note__head{display:flex;align-items:center;gap:8px;margin-bottom:6px;color:#8a5a00}
@@ -964,7 +969,7 @@ body.sorteo-has-footer .page{padding-bottom:96px}
                 </ul>
               </span>
             </span>
-            <button type="button" class="naowee-btn naowee-btn--quiet naowee-btn--small" onclick="clasifRestore()">Volver a los resultados</button>
+            <button type="button" class="naowee-btn naowee-btn--quiet naowee-btn--small" id="btnClasifRestore" onclick="clasifRestore()" hidden title="Deshace los cambios manuales y vuelve a poner los clasificados según los resultados de digitación">Restaurar clasificados</button>
           </span>
         </div>
         <div id="clasifList" class="clasif-list clasif-list--rows"></div>
@@ -1778,7 +1783,11 @@ function renderClasifList(){
   var t=document.getElementById('clasifTitle'); if(t) t.textContent=_cfgPl(_clasificados.length,'clasificado','clasificados')+' de '+PROMOTION.from+' para '+[W.deporteLabel,W.categoria,W.sexo].filter(Boolean).join(' ')+'. '+(hasRes?'Vienen los clasificados según los resultados de digitación; cualquiera se puede cambiar por otra institución inscrita en '+PROMOTION.from+'.':'La fase origen aún no tiene resultados: elige cada clasificado entre las inscritas en '+PROMOTION.from+'.');
   var b=document.getElementById('clasifBanner'); if(b) b.innerHTML=_originBannerHTML();
   if(!_pool.length){ el.innerHTML='<div class="naowee-empty-state"><span class="naowee-empty-state__icon">'+_ICO_PEMPTY+'</span><h3 class="naowee-empty-state__title">No hay instituciones inscritas en '+tEsc(PROMOTION.from)+' para esta prueba</h3><p class="naowee-empty-state__description">Revisa las inscripciones de la fase antes de sortear.</p></div>'; _clasifSync(); return; }
-  el.innerHTML=_clasificados.map(function(c,i){
+  var ng=_clasifNGrupos();
+  var head='<div class="clasif-head"><span class="clasif-head__pos">#</span><span class="clasif-head__name">Institución clasificada</span>'
+    +(ng>1?'<span class="clasif-head__grp" title="Fija la institución a un grupo antes de sortear (p. ej. el campeón del año pasado al Grupo A). Con «—» sale al azar. Puedes fijar varias al mismo grupo mientras quepan.">Grupo fijo <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 7.2v4M8 5.2v.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>':'')
+    +'</div>';
+  el.innerHTML=head+_clasificados.map(function(c,i){
     var nm=(c.nombre||'').replace(/"/g,'&quot;'), item=c.nombre?_poolItem(c.nombre):null;
     return '<div class="clasif-row'+(c.nombre?'':' is-empty')+'"><span class="clasif-pos">'+(i+1)+'</span>'
       +'<div class="clasif-combo clasif-tf"><div class="naowee-textfield naowee-textfield--small"><div class="naowee-textfield__input-wrap"><input class="naowee-textfield__input clasif-combo-inp" readonly value="'+nm+'" placeholder="Elige una institución inscrita en '+tEsc(PROMOTION.from)+'…" onclick="clasifShow('+i+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();clasifShow('+i+')}"><button type="button" class="clasif-combo-chev" onclick="clasifShow('+i+');event.stopPropagation()" tabindex="-1" aria-label="Cambiar institución"><svg viewBox="0 0 16 16" width="14" height="14" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div><div class="clasif-combo-menu" id="clasifMenu'+i+'"></div></div>'
@@ -1840,7 +1849,10 @@ function _clasifSync(){
   var reglas=_reglasHTML();
   var d=document.getElementById('clasifDerived'); if(d) d.innerHTML=((_pool.length&&faltan>0)?'<div style="padding:0 28px 10px">'+_cdMsg('caution','Faltan '+_cfgPl(faltan,'clasificado','clasificados'),'Elige una institución en cada fila vacía. Si N no es el correcto, vuelve a Prueba y cambia el N.º de equipos clasificados.')+'</div>':'')+reglas;
   var b=document.getElementById('btnClasifNext'); if(b) b.disabled=(faltan!==0||n<2||W.reglasOk===false);
+  var rb=document.getElementById('btnClasifRestore'); if(rb) rb.hidden=!_clasifChanged();
 }
+/* ¿Difiere de lo que dicen los resultados? (nombres o grupos fijos) */
+function _clasifChanged(){ return _clasificados.some(function(c,i){ var d=_pool[i]&&_pool[i].pos?_pool[i].nombre:''; return (c.nombre||'')!==d||c.grupoFijo!=null; }); }
 function validateClasif(){ var names=_selected().map(function(c){return c.nombre;}); _reglasHTML(); return names.length===(+W.nEquipos||0)&&names.length>=2&&new Set(names).size===names.length&&W.reglasOk!==false; }
 
 /* ── Paso 4 · Sortear / resultado / cierre ── */
