@@ -683,6 +683,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-primary);font
 .promo-card.is-off .promo-card__step{background:#e9ebf3;color:var(--text-muted)}
 .promo-card.is-off .promo-card__title{color:var(--text-secondary)}
 .promo-card.is-off .promo-card__arrow{display:none}
+/* Sistema de competencia (Prueba) */
+.sis-seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:560px}
+.sis-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:12px 14px;border:1.5px solid var(--border-dark);border-radius:var(--radius-lg);background:var(--surface);cursor:pointer;font:inherit}
+.sis-opt:hover{border-color:var(--accent);background:#fff8f4}
+.sis-opt.sel{border-color:var(--accent);background:var(--orange-bg,#fff3e6)}
+.sis-opt__t{display:block;font-size:13.5px;font-weight:700;color:var(--text-primary)}
+.sis-opt__d{display:block;font-size:12.5px;color:var(--text-secondary);line-height:1.35;margin-top:2px}
+.wz-check{display:inline-flex;align-items:center;gap:8px;height:44px;font-size:13.5px;color:var(--text-primary);cursor:pointer}
+.wz-check input{width:18px;height:18px;accent-color:var(--accent)}
+.wz-ro{height:44px;display:flex;align-items:center;font-size:14px;font-weight:600;color:var(--text-primary)}
 /* Modo de sorteo: dos tarjetas al entrar al paso Sorteo */
 .modo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:760px}
 .modo-card{display:flex;gap:14px;align-items:flex-start;text-align:left;padding:18px 18px 16px;border:1.5px solid var(--border);border-radius:var(--radius-lg);background:var(--surface);cursor:pointer;font:inherit;transition:border-color .15s,box-shadow .15s}
@@ -890,7 +900,7 @@ body.sorteo-has-footer .page{padding-bottom:96px}
       <div class="wz-body">
         <!-- PASO 1 -->
         <div class="wz-panel active" id="panel1">
-          <div class="wz-panel-title">Selecciona la prueba <span class="naowee-badge naowee-badge--neutral naowee-badge--quiet naowee-badge--small" style="vertical-align:middle;margin-left:6px">Deportes de conjunto</span></div>
+          <div class="wz-panel-title" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">Selecciona la prueba <span class="naowee-badge naowee-badge--neutral naowee-badge--quiet naowee-badge--small">Deportes de conjunto</span><span data-devnote-sistema style="margin-left:auto"></span></div>
           <div class="wz-panel-hint">Deporte de conjunto, categoría y rama. Solo los deportes de conjunto del evento.</div>
           <div class="wz-field" id="fDeporte">
             <label>Deporte</label>
@@ -938,7 +948,14 @@ body.sorteo-has-footer .page{padding-bottom:96px}
           <!-- RN-SORTEO-UNICO: aviso de prueba ya sorteada (accionable 1.1) -->
           <div id="dupWarn"></div>
           <div id="cfgConjunto" class="wz-field hidden" style="margin-top:18px">
-            <div class="wz-row wz-row--narrow">
+            <div class="wz-field">
+              <label>Sistema de competencia</label>
+              <div class="sis-seg" id="sisSeg">
+                <button type="button" class="sis-opt sel" data-sis="grupos" onclick="setSistema('grupos')"><span><span class="sis-opt__t">Fase de grupos</span><span class="sis-opt__d">Grupos con todos contra todos. El sorteo reparte los equipos en los grupos y arma las jornadas.</span></span></button>
+                <button type="button" class="sis-opt" data-sis="elim" onclick="setSistema('elim')"><span><span class="sis-opt__t">Rondas de eliminación directa</span><span class="sis-opt__d">Llaves. El sorteo arma solo los cruces de la primera ronda; el resto lo llena Digitación.</span></span></button>
+              </div>
+            </div>
+            <div class="wz-row wz-row--narrow" style="margin-top:16px">
               <div class="wz-field">
                 <label>N.º de equipos clasificados</label>
                 <div class="naowee-input-stepper"><div class="naowee-input-stepper__content"><div class="naowee-input-stepper__input">
@@ -947,13 +964,37 @@ body.sorteo-has-footer .page{padding-bottom:96px}
                   <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inEquipos',1,2,32)"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
                 </div></div></div>
               </div>
-              <div class="wz-field">
+              <div class="wz-field" data-sis="grupos">
                 <label>N.º de grupos</label>
                 <div class="naowee-input-stepper"><div class="naowee-input-stepper__content"><div class="naowee-input-stepper__input">
                   <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inGrupos',-1)"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
                   <div class="naowee-input-stepper__value"><input type="number" class="naowee-input-stepper__value-input" id="inGrupos" value="2" min="1" max="8" oninput="W.nGrupos=+this.value||1;recalcCfg()" onblur="cfgClampInput(this)"><span class="naowee-input-stepper__value-comp">grupos</span></div>
                   <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inGrupos',1)"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
                 </div></div></div>
+              </div>
+              <div class="wz-field" data-sis="elim" hidden>
+                <label>Ronda inicial</label>
+                <div class="wz-ro" id="roRonda">—</div>
+              </div>
+            </div>
+            <div class="wz-row wz-row--narrow" data-sis="grupos" style="margin-top:12px">
+              <div class="wz-field">
+                <label>Clasifican por grupo</label>
+                <div class="naowee-input-stepper"><div class="naowee-input-stepper__content"><div class="naowee-input-stepper__input">
+                  <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inClasif',-1,1,4)"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+                  <div class="naowee-input-stepper__value"><input type="number" class="naowee-input-stepper__value-input" id="inClasif" value="2" min="1" max="4" oninput="W.clasifPorGrupo=+this.value||1;recalcCfg()" onblur="cfgClampInput(this)"><span class="naowee-input-stepper__value-comp">por grupo</span></div>
+                  <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inClasif',1,1,4)"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+                </div></div></div>
+              </div>
+              <div class="wz-field">
+                <label>Vueltas</label>
+                <label class="wz-check"><input type="checkbox" id="ckIdaVuelta" onchange="W.idaVuelta=this.checked;recalcCfg()"> Ida y vuelta</label>
+              </div>
+            </div>
+            <div class="wz-row wz-row--narrow" data-sis="elim" hidden style="margin-top:12px">
+              <div class="wz-field">
+                <label>Tercer puesto</label>
+                <label class="wz-check"><input type="checkbox" id="ckTercer" checked onchange="W.tercerPuesto=this.checked;recalcCfg()"> Jugar partido por el tercer puesto</label>
               </div>
             </div>
             <div id="repartoMsg" class="wz-cfgmsg"></div>
@@ -1142,14 +1183,14 @@ body.sorteo-has-footer .page{padding-bottom:96px}
 </div>
 
 <script src="shared.js"></script>
-<script src="sorteo-engine.js?v=3.1"></script>
+<script src="sorteo-engine.js?v=3.3"></script>
 <script src="ruleta-wheel.js"></script>
 <script src="sorteo-store.js"></script>
 <script src="competition-render.js?v=2.1.1"></script>
 <script src="shared/naowee-footer.js" defer></script>
 <script>
 /* ── Wizard ── */
-const W = { step:1, tipo:'conjunto', deporteKey:'', deporteLabel:'', emoji:'', categoria:'', sexo:'', nEquipos:8, nGrupos:2, sistema:'' };
+const W = { step:1, tipo:'conjunto', deporteKey:'', deporteLabel:'', emoji:'', categoria:'', sexo:'', nEquipos:8, nGrupos:2, sistema:'', sistemaKey:'grupos', clasifPorGrupo:2, idaVuelta:false, tercerPuesto:true };
 /* Deportes de conjunto del evento (catálogo deportivo de Juegos Intercolegiados Nacionales 2026). Solo estos se sortean. */
 var EVENT_TEAM_SPORTS=['Baloncesto','Fútbol','Fútbol Sala','Voleibol','Balonmano','Béisbol','Rugby Sevens'];
 var _TICON={ info:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M7 7h2v4H7z" fill="#fff"/><circle cx="8" cy="5" r="1" fill="#fff"/></svg>', caution:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M7 5h2v4H7z" fill="#fff"/><circle cx="8" cy="11" r="1" fill="#fff"/></svg>', ok:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 8l1.6 1.6L10.5 6.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' };
@@ -1260,8 +1301,18 @@ function _cfgMsg(id,tipo,titulo,texto){
     +'<span class="naowee-message__title" id="'+(id==='repartoMsg'?'repartoTxt':'llaveTxt')+'">'+titulo+'</span></div>'
     +(texto?'<p class="naowee-message__text">'+texto+'</p>':'')+'</div>';
 }
+function setSistema(k){ W.sistemaKey=k; document.querySelectorAll('#sisSeg .sis-opt').forEach(function(b){ b.classList.toggle('sel',b.dataset.sis===k); }); document.querySelectorAll('#cfgConjunto [data-sis]:not(.sis-opt)').forEach(function(el){ el.hidden=(el.dataset.sis!==k); }); recalcCfg(); }
+function _rondaLabel(n){ return SorteoEngine.rondaInicial(n); }
 function recalcCfg(){
-  if(W.tipo==='conjunto'){ W.sistema='Fase de grupos · todos contra todos';
+  if(W.sistemaKey==='elim'){
+    const n=+W.nEquipos||0; W.sistema='Eliminación directa';
+    const ro=document.getElementById('roRonda'); if(ro) ro.textContent=(n>=2&&n<=16)?_rondaLabel(n)+' · '+SorteoEngine.bracketUnits(n)+' cruces':'—';
+    const ck=document.getElementById('ckTercer'); if(ck){ ck.disabled=n<4; if(n<4){ ck.checked=false; W.tercerPuesto=false; } }
+    if(n<2||n>16){ W.cfgOk=false; _cfgMsg('repartoMsg','negative','Entre 2 y 16 equipos','Las rondas de eliminación directa arrancan como máximo en octavos de final (16 equipos).'); }
+    else { W.cfgOk=true; const byes=SorteoEngine.bracketSize(n)-n; if(byes) _cfgMsg('repartoMsg','caution','Habrá '+_cfgPl(byes,'cruce','cruces')+' con un solo equipo','Con '+n+' equipos la llave es de '+SorteoEngine.bracketSize(n)+': '+_cfgPl(byes,'equipo pasa','equipos pasan')+' directo a la siguiente ronda.'); else _cfgMsg('repartoMsg','informative','',''); }
+    _cfgSyncNext(); return;
+  }
+  if(W.tipo==='conjunto'){ W.sistema='Fase de grupos · todos contra todos'+(W.idaVuelta?' · ida y vuelta':'');
     const n=+W.nEquipos||0, g=W.nGrupos||1;
     const maxG=_cfgMaxGrupos(n), ig=document.getElementById('inGrupos'); if(ig) ig.max=maxG;
     if(!n||!g){ W.cfgOk=false; _cfgMsg('repartoMsg','informative','Define equipos y grupos','Ajusta los dos valores y aquí verás cómo queda el reparto.'); }
@@ -1274,6 +1325,9 @@ function recalcCfg(){
         W.cfgOk=false;
         _cfgMsg('repartoMsg','negative',`Con ${g} grupos no todos jugarían`,
           `${_cfgPl(solos,'grupo quedaría','grupos quedarían')} con menos de 2 equipos, así que esos equipos no tendrían rival. Con ${n} equipos el máximo es <b>${_cfgPl(maxG,'grupo','grupos')}</b>.`);
+      } else if((+W.clasifPorGrupo||1)>Math.min(...sizes)){
+        W.cfgOk=false;
+        _cfgMsg('repartoMsg','negative','Clasifican más de los que hay',`Con ${rep} no pueden clasificar ${W.clasifPorGrupo} por grupo. Baja «Clasifican por grupo» o el número de grupos.`);
       } else {
         W.cfgOk=true;
         const fechas=Math.max(...sizes.map(_cfgFechas));
@@ -1373,7 +1427,7 @@ function _cdMsg(type,title,text){ var ico=type==='caution'?_TICON.caution:_TICON
 var _ICO_LOCK='<svg viewBox="0 0 16 16" fill="none"><rect x="3.5" y="7" width="9" height="6" rx="1.2" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2" stroke="currentColor" stroke-width="1.4"/></svg>';
 var _GRP_COLORS=['#1f78d1','#1f8923','#7c3aed','#d74009','#0891b2','#be185d','#ca8a04','#0d9488'];
 function _sumItem(ico,lbl,val,cls){ return '<div class="clasif-sum-item'+(cls?' '+cls:'')+'"><span class="clasif-sum-item__ico">'+ico+'</span><div class="clasif-sum-item__txt"><span class="clasif-sum-item__lbl">'+lbl+'</span><span class="clasif-sum-item__val">'+val+'</span></div></div>'; }
-function startRuleta(){ buildSorteo(); _assign=SorteoEngine.asignarGrupos(_sorteo.participantes,_sorteo.config.nGrupos,{shuffle:true}); _sorteo.manualGroups=_assign; _ruletaDone=false; _mountDevnotes(); showStage('ruletaStage'); document.getElementById('ruletaSub').textContent='Asignando participantes a los grupos…'; document.getElementById('ruletaNav').style.display='none'; document.getElementById('btnSkip').style.display=''; renderRuletaGrupos(_assign,[]); buildDrawSeq(); runRuletaAnim(0); }
+function startRuleta(){ buildSorteo(); _assign=SorteoEngine.asignarGrupos(_sorteo.participantes,_nUnits(),{shuffle:true}); _sorteo.manualGroups=_assign; _ruletaDone=false; _mountDevnotes(); showStage('ruletaStage'); document.getElementById('ruletaSub').textContent='Asignando participantes a los grupos…'; document.getElementById('ruletaNav').style.display='none'; document.getElementById('btnSkip').style.display=''; renderRuletaGrupos(_assign,[]); buildDrawSeq(); runRuletaAnim(0); }
 /* Paso 3: primero el modo. El resultado se calcula UNA vez (simula la respuesta
    del back) y los dos modos solo lo muestran. */
 var DEVNOTE_SORTEO='<span class="wz-devnote" tabindex="0" role="button" aria-label="Nota para devs"><span class="naowee-badge naowee-badge--caution naowee-badge--small">Solo demo</span>Validaciones para devs'
@@ -1396,8 +1450,8 @@ var DEVNOTE_SORTEO='<span class="wz-devnote" tabindex="0" role="button" aria-lab
 var DEVNOTE_JORNADAS='<span class="wz-devnote" tabindex="0" role="button" aria-label="Nota para devs"><span class="naowee-badge naowee-badge--caution naowee-badge--small">Solo demo</span>Validaciones para devs'
  +'<span class="wz-devnote__pop" role="tooltip"><span class="wz-devnote__head">Enfrentamientos y jornadas <em>· nota para devs, no es parte del producto</em></span>'
  +'<div class="wz-devnote__sec"><div class="wz-devnote__sec-title">Qué genera el sorteo</div><ul>'
- +'<li>Solo la <b>fase de grupos</b>: los grupos y sus enfrentamientos, todos contra todos dentro de cada grupo. Sin fecha, hora, escenario ni marcador.</li>'
- +'<li><b>No genera fase final</b> ni llaves. Cómo avanza la competencia después lo definen los resultados que se digitan, fuera del sorteo.</li></ul></div>'
+ +'<li>Solo la <b>primera parte del sistema de competencia</b>: en fase de grupos, los grupos y sus jornadas; en eliminación directa, los cruces de la primera ronda y el cuadro con slots vacíos. Sin fecha, hora, escenario ni marcador.</li>'
+ +'<li><b>No evoluciona</b> el sistema ni genera el podio. Quién avanza a la siguiente ronda o al siguiente sistema lo definen los resultados que se digitan, fuera del sorteo.</li></ul></div>'
  +'<div class="wz-devnote__sec"><div class="wz-devnote__sec-title">Cómo se arman las jornadas (back)</div><ul>'
  +'<li>Round robin por el <b>método del círculo</b>: con K equipos en el grupo hay K−1 jornadas y cada par se enfrenta exactamente una vez. Si K es impar se añade un «descansa» ficticio: K jornadas y en cada una un equipo libra.</li>'
  +'<li>Se fija el equipo 1 y los demás rotan una posición por jornada; en cada jornada se emparejan el i-ésimo con el (K−i)-ésimo. El orden de los equipos dentro del grupo es el del sorteo, así que las jornadas también quedan sorteadas.</li>'
@@ -1405,12 +1459,28 @@ var DEVNOTE_JORNADAS='<span class="wz-devnote" tabindex="0" role="button" aria-l
  +'<div class="wz-devnote__sec"><div class="wz-devnote__sec-title">Qué hace el front</div><ul>'
  +'<li>Muestra los grupos y los partidos por jornada que devuelve el back. No calcula nada.</li>'
  +'<li>Programación (fecha, hora, escenario) y resultados se hacen en Digitación; aquí los partidos siempre se ven pendientes.</li></ul></div></span></span>';
-function _mountDevnotes(){ document.querySelectorAll('[data-devnote-sorteo]').forEach(function(el){ if(!el.firstChild) el.innerHTML=DEVNOTE_SORTEO; }); document.querySelectorAll('[data-devnote-jornadas]').forEach(function(el){ if(!el.firstChild) el.innerHTML=DEVNOTE_JORNADAS; }); }
+var DEVNOTE_SISTEMA='<span class="wz-devnote" tabindex="0" role="button" aria-label="Nota para devs"><span class="naowee-badge naowee-badge--caution naowee-badge--small">Solo demo</span>Validaciones para devs'
+ +'<span class="wz-devnote__pop" role="tooltip"><span class="wz-devnote__head">Sistemas de competencia en el sorteo <em>· nota para devs, no es parte del producto</em></span>'
+ +'<div class="wz-devnote__sec"><div class="wz-devnote__sec-title">Regla general</div><ul>'
+ +'<li>El sorteo arma solo la <b>primera parte del sistema de competencia</b> de la prueba. La evolución (quién avanza, siguiente sistema, podio) es de Digitación.</li>'
+ +'<li>Solo se reciben participantes en el <b>primer</b> sistema. Si la prueba tiene un sistema siguiente, sus clasificados pasan solos: el n.º de clasificados del anterior es el n.º de participantes del siguiente.</li>'
+ +'<li>Estados de la competencia (Digitación): configurada → en curso (primer enfrentamiento digitado) → cerrada (todos finalizados). Al cerrar, si hay sistema siguiente, se le añaden los clasificados.</li>'
+ +'<li>Para deportes de conjunto se ofrecen dos sistemas: <b>Fase de grupos</b> y <b>Rondas de eliminación directa</b>.</li></ul></div>'
+ +'<div class="wz-devnote__sec"><div class="wz-devnote__sec-title">Fase de grupos</div><ul>'
+ +'<li>Parámetros: n.º de equipos, n.º de grupos, clasifican por grupo (1–4), ida y vuelta. Los puntos por partido se configuran en el sistema de competencia, no aquí.</li>'
+ +'<li>Validación: clasifican por grupo × grupos debe ser el n.º de participantes del sistema siguiente. Clasifican por grupo no puede superar el tamaño del grupo más pequeño.</li>'
+ +'<li>El sorteo reparte los equipos en los grupos (respetando fijos) y genera las jornadas todos contra todos (×2 si ida y vuelta).</li></ul></div>'
+ +'<div class="wz-devnote__sec"><div class="wz-devnote__sec-title">Rondas de eliminación directa</div><ul>'
+ +'<li>La ronda inicial sale del n.º de equipos: 2 → final; 3–4 → semifinal; 5–8 → cuartos; 9–16 → octavos. Máximo 16.</li>'
+ +'<li>Tercer puesto: booleano, solo con ≥ 4 equipos (hacen falta dos semifinales). Genera el partido entre los perdedores de las semifinales.</li>'
+ +'<li>El sorteo arma <b>solo los cruces de la primera ronda</b>. Se generan todos los enfrentamientos del cuadro con sus slots vacíos y el puntero de avance (cruces 1 y 2 → slot 1 de la siguiente ronda, 3 y 4 → slot 2, …). Con llave incompleta, el equipo sin rival pasa directo.</li>'
+ +'<li>No admite grupo fijo. No puede tener un sistema después: define al ganador.</li></ul></div></span></span>';
+function _mountDevnotes(){ document.querySelectorAll('[data-devnote-sistema]').forEach(function(el){ if(!el.firstChild) el.innerHTML=DEVNOTE_SISTEMA; }); document.querySelectorAll('[data-devnote-sorteo]').forEach(function(el){ if(!el.firstChild) el.innerHTML=DEVNOTE_SORTEO; }); document.querySelectorAll('[data-devnote-jornadas]').forEach(function(el){ if(!el.firstChild) el.innerHTML=DEVNOTE_JORNADAS; }); }
 function startSorteoStep(){ _mountDevnotes(); _renderSteppers(3); showStage('modoStage'); document.body.dataset.screen='crear'; }
 function setModo(m){ W.modo=m; if(m==='manual') startManual(); else startRuleta(); }
 var _manualGroups=[],_manualSizes=[],_manualSeq=[],_manualFree=[],_manualIdx=0,_manualSpin=false,_manualAssign=null;
 function startManual(){
-  buildSorteo(); var n=_sorteo.config.nGrupos;
+  buildSorteo(); var n=_nUnits();
   _manualAssign=SorteoEngine.asignarGrupos(_sorteo.participantes,n,{shuffle:true}); _sorteo.manualGroups=_manualAssign;   /* «respuesta del back» */
   _manualSizes=_manualAssign.map(function(g){return g.length;});
   var fixed=new Set(_sorteo.participantes.filter(function(p){return SorteoEngine.fixedGroupIndex(p,n)>=0;}).map(function(p){return p.nombre;}));
@@ -1427,7 +1497,7 @@ function startManual(){
   if(window.RuletaWheel&&items.length) RuletaWheel.mount(document.getElementById('manualWheel'),items);
   renderManualGrupos(); updateManualProgress();
 }
-function renderManualGrupos(){ var el=document.getElementById('manualGrupos'); if(!el)return; el.innerHTML=_manualGroups.map(function(teams,gi){ var L=String.fromCharCode(65+gi), cap=_manualSizes[gi]||teams.length, slots=''; for(var i=0;i<cap;i++){ var t=teams[i]; slots+=t?'<div class="rg-slot filled"><span class="rg-ava" style="background:'+teamColorLocal(t)+'">'+teamInitLocal(t)+'</span><span class="rg-name">'+tEsc(t)+'</span></div>':'<div class="rg-slot"><span class="rg-name" style="color:var(--text-muted)">—</span></div>'; } return '<div class="rg-card"><div class="rg-head"><span class="rg-dot"></span>Grupo '+L+'<span style="margin-left:auto;font-size:12px;font-weight:600;color:var(--text-secondary)">'+teams.length+'/'+cap+'</span></div><div class="rg-body">'+slots+'</div></div>'; }).join(''); }
+function renderManualGrupos(){ var el=document.getElementById('manualGrupos'); if(!el)return; el.innerHTML=_manualGroups.map(function(teams,gi){ var L=String.fromCharCode(65+gi), cap=_manualSizes[gi]||teams.length, slots=''; for(var i=0;i<cap;i++){ var t=teams[i]; slots+=t?'<div class="rg-slot filled"><span class="rg-ava" style="background:'+teamColorLocal(t)+'">'+teamInitLocal(t)+'</span><span class="rg-name">'+tEsc(t)+'</span></div>':'<div class="rg-slot"><span class="rg-name" style="color:var(--text-muted)">—</span></div>'; } return '<div class="rg-card"><div class="rg-head"><span class="rg-dot"></span>'+_unitLabel(gi)+'<span style="margin-left:auto;font-size:12px;font-weight:600;color:var(--text-secondary)">'+teams.length+'/'+cap+'</span></div><div class="rg-body">'+slots+'</div></div>'; }).join(''); }
 function updateManualProgress(){ var total=_sorteo.participantes.length, done=_manualGroups.reduce(function(a,g){return a+g.length;},0), p=document.getElementById('manualProgress'); if(p) p.textContent=done+' / '+total+' equipos sorteados'; }
 async function girarManual(){ if(_manualSpin||_manualIdx>=_manualSeq.length)return; _manualSpin=true; var bg=document.getElementById('btnGirar'); bg.disabled=true; bg.textContent='Girando…';
   var next=_manualSeq[_manualIdx], idx=-1; try{ idx=await RuletaWheel.spin(_manualFree.indexOf(next.name)); }catch(e){} _manualSpin=false; bg.disabled=false; bg.textContent='Girar la ruleta';
@@ -1435,16 +1505,16 @@ async function girarManual(){ if(_manualSpin||_manualIdx>=_manualSeq.length)retu
   if(_manualIdx>=_manualSeq.length){ bg.style.display='none'; document.getElementById('btnManualNext').disabled=false; document.getElementById('manualSub').textContent='Sorteo completo. Continúa para ver los enfrentamientos.'; }
 }
 function buildDrawSeq(){ _drawSeq=[]; const maxLen=Math.max(0,..._assign.map(g=>g.length)); for(let pos=0;pos<maxLen;pos++)for(let g=0;g<_assign.length;g++){ if(_assign[g][pos]!=null)_drawSeq.push({name:_assign[g][pos],g,pos}); } }
-function renderRuletaGrupos(assign,filled){ const set=new Set(filled); const el=document.getElementById('ruletaGrupos'); el.innerHTML=assign.map((teams,gi)=>{ const L=String.fromCharCode(65+gi); const slots=teams.map(t=>{ const on=set.has(t); return `<div class="rg-slot${on?' filled':''}">`+(on?`<span class="rg-ava" style="background:${teamColorLocal(t)}">${teamInitLocal(t)}</span><span class="rg-name">${t}</span>`:`<span class="rg-name" style="color:var(--text-muted)">—</span>`)+`</div>`; }).join(''); return `<div class="rg-card"><div class="rg-head"><span class="rg-dot"></span>Grupo ${L}<span style="margin-left:auto;font-size:12px;font-weight:600;color:var(--text-secondary)">${teams.length} eq</span></div><div class="rg-body">${slots}</div></div>`; }).join(''); }
+function renderRuletaGrupos(assign,filled){ const set=new Set(filled); const el=document.getElementById('ruletaGrupos'); el.innerHTML=assign.map((teams,gi)=>{ const L=String.fromCharCode(65+gi); const slots=teams.map(t=>{ const on=set.has(t); return `<div class="rg-slot${on?' filled':''}">`+(on?`<span class="rg-ava" style="background:${teamColorLocal(t)}">${teamInitLocal(t)}</span><span class="rg-name">${t}</span>`:`<span class="rg-name" style="color:var(--text-muted)">—</span>`)+`</div>`; }).join(''); return `<div class="rg-card"><div class="rg-head"><span class="rg-dot"></span>${_unitLabel(gi)}<span style="margin-left:auto;font-size:12px;font-weight:600;color:var(--text-secondary)">${teams.length} eq</span></div><div class="rg-body">${slots}</div></div>`; }).join(''); }
 function placeOne(item){ const card=document.querySelectorAll('#ruletaGrupos .rg-card')[item.g]; if(!card)return; const slot=card.querySelectorAll('.rg-slot')[item.pos]; if(!slot)return; slot.classList.add('filled'); slot.innerHTML=`<span class="rg-ava" style="background:${teamColorLocal(item.name)}">${teamInitLocal(item.name)}</span><span class="rg-name">${item.name}</span>`; }
 function rcarCard(name){ const nm=name||''; return '<div class="rcar-card"><span class="rcar-ava" style="background:'+teamColorLocal(nm)+'">'+teamInitLocal(nm)+'</span><span class="rcar-name">'+nm+'</span></div>'; }
 function buildCarouselTrack(winnerName){ const track=document.getElementById('rcarTrack'); if(!track)return 0; const winIdx=22,tail=5,cards=[]; for(let k=0;k<winIdx;k++)cards.push(_NAMES[Math.floor(Math.random()*_NAMES.length)]); cards.push(winnerName); for(let k=0;k<tail;k++)cards.push(_NAMES[Math.floor(Math.random()*_NAMES.length)]); track.innerHTML=cards.map(nm=>rcarCard(nm)).join(''); return winIdx; }
 function _rcarCenter(K){ const vp=document.querySelector('.rcar-viewport'),track=document.getElementById('rcarTrack'); if(!vp||!track||!track.children.length)return 0; const c=track.children,cw=c[0].offsetWidth,st=c.length>1?(c[1].offsetLeft-c[0].offsetLeft):cw; return vp.clientWidth/2-(K*st+cw/2); }
 function runRuletaAnim(i){ if(i>=_drawSeq.length){ finishRuleta(); return; } const item=_drawSeq[i]; const winIdx=buildCarouselTrack(item.name); const track=document.getElementById('rcarTrack'); let reduce=false; try{reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){} if(!track){ placeOne(item); _ruletaTimers.push(setTimeout(()=>runRuletaAnim(i+1),120)); return; } if(reduce){ track.style.transition='none'; track.style.transform='translateX('+_rcarCenter(winIdx)+'px)'; const w=track.children[winIdx]; if(w)w.classList.add('is-winner'); placeOne(item); _ruletaTimers.push(setTimeout(()=>runRuletaAnim(i+1),150)); return; } const startK=2+Math.floor(Math.random()*3); track.style.transition='none'; track.style.transform='translateX('+_rcarCenter(startK)+'px)'; void track.offsetWidth; track.style.transition='transform 1150ms cubic-bezier(.12,.78,.28,1)'; track.style.transform='translateX('+_rcarCenter(winIdx)+'px)'; _ruletaTimers.push(setTimeout(()=>{ const w=track.children[winIdx]; if(w)w.classList.add('is-winner'); placeOne(item); _ruletaTimers.push(setTimeout(()=>runRuletaAnim(i+1),300)); },1210)); }
 function skipRuleta(){ _ruletaTimers.forEach(t=>{clearTimeout(t);clearInterval(t);}); _ruletaTimers=[]; const all=[]; _assign.forEach(g=>g.forEach(t=>all.push(t))); renderRuletaGrupos(_assign,all); finishRuleta(); }
-function finishRuleta(){ if(_ruletaDone)return; _ruletaDone=true; document.getElementById('ruletaSub').textContent='Grupos conformados. Continúa para ver los enfrentamientos.'; document.getElementById('btnSkip').style.display='none'; document.getElementById('ruletaNav').style.display=''; }
+function finishRuleta(){ if(_ruletaDone)return; _ruletaDone=true; document.getElementById('ruletaSub').textContent=_isElim()?'Cruces de la primera ronda definidos. Continúa para ver la llave.':'Grupos conformados. Continúa para ver los enfrentamientos.'; document.getElementById('btnSkip').style.display='none'; document.getElementById('ruletaNav').style.display=''; }
 const _PV_TABS=[
-  {id:'grupos',label:'Grupos y enfrentamientos',icon:'<svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 6.5h12M5 1.5v3M11 1.5v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',render:function(c){return (window.CompRender&&CompRender.renderGrupos)?CompRender.renderGrupos(c):'';}},
+  {id:'grupos',label:'Enfrentamientos',icon:'<svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 6.5h12M5 1.5v3M11 1.5v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',render:function(c){ if(!window.CompRender) return ''; return c.sisCls==='elim'?CompRender.renderBracket(c):CompRender.renderGrupos(c); }},
 ];
 let _pvComp=null,_pvTab='grupos',_activeTabs=_PV_TABS;
 function _tabsFor(comp){ return _PV_TABS; }
@@ -1587,7 +1657,7 @@ function _progRowHTML(r){
     +'<td data-label="Prueba" class="naowee-table__cell-name"><div class="prog-comp"><span class="prog-comp__emoji">'+((r.prueba&&r.prueba.emoji)||c.emoji||'🏆')+'</span><span class="prog-comp__txt"><span class="naowee-table__cell-primary">'+tEsc(c.nombre||'Sorteo')+'</span>'+(sub?'<span class="naowee-table__cell-sub">'+tEsc(sub)+'</span>':'')+'</span></div></td>'
     +'<td data-label="Deporte" class="naowee-table__cell-muted">'+tEsc((r.prueba&&r.prueba.deporteLabel)||'—')+'</td>'
     +'<td data-label="Equipos" class="naowee-table__cell-muted">'+ne+'</td>'
-    +'<td data-label="Grupos" class="naowee-table__cell-muted">'+ng+'</td>'
+    +'<td data-label="Sistema" class="naowee-table__cell-muted">'+((c.sisCls==='elim')?('Llaves · '+tEsc((c.sistema||'').replace(/^Eliminación directa · desde /,''))):(ng+' grupos'))+'</td>'
     +'<td data-label="Estado">'+_estadoBadge(r)+'</td>'
     +'<td class="prog-actioncell" style="text-align:right"><button class="naowee-btn naowee-btn--mute naowee-btn--small" onclick="editProg(\''+r.id+'\')">Ver resultado</button></td>'
   +'</tr>';
@@ -1597,7 +1667,7 @@ function renderProgRows(){
   var all=_progAll(), filtered=_progFilter(all), total=filtered.length;
   var pages=Math.max(1,Math.ceil(total/_PROG_PAGE_SIZE)); if(_progPage>pages)_progPage=pages;
   if(!total){ mount.innerHTML='<div class="naowee-empty-state"><span class="naowee-empty-state__icon">'+_ICO_PEMPTY+'</span><h3 class="naowee-empty-state__title">Sin resultados</h3><p class="naowee-empty-state__description">Ningún sorteo coincide con la búsqueda.</p><div class="naowee-empty-state__action"><button class="naowee-btn naowee-btn--mute naowee-btn--small" onclick="progClearFilters()">Limpiar filtros</button></div></div>'; }
-  else { var start=(_progPage-1)*_PROG_PAGE_SIZE, rows=filtered.slice(start,start+_PROG_PAGE_SIZE); mount.innerHTML='<div class="naowee-table-card__table-wrap"><table class="naowee-table--in-card"><thead><tr><th>Prueba</th><th>Deporte</th><th>Equipos</th><th>Grupos</th><th>Estado</th><th></th></tr></thead><tbody>'+rows.map(_progRowHTML).join('')+'</tbody></table></div>'; }
+  else { var start=(_progPage-1)*_PROG_PAGE_SIZE, rows=filtered.slice(start,start+_PROG_PAGE_SIZE); mount.innerHTML='<div class="naowee-table-card__table-wrap"><table class="naowee-table--in-card"><thead><tr><th>Prueba</th><th>Deporte</th><th>Equipos</th><th>Sistema</th><th>Estado</th><th></th></tr></thead><tbody>'+rows.map(_progRowHTML).join('')+'</tbody></table></div>'; }
   _progRenderPager(total,pages);
   var f=_progFilters, any=!!(f.q||f.deporte), b=document.getElementById('btnProgClear'); if(b)b.disabled=!any;
 }
@@ -1610,7 +1680,7 @@ function _progRenderPager(total,pages){
 function editProg(id){ var rec=_getProgRec(id); if(!rec||!rec.comp)return; _mountDevnotes(); showStage('progEditStage'); _progEditId=id; _pvComp=rec.comp; _progPanelId='progEditBody';
   document.body.dataset.screen='detalle'; document.body.dataset.route='/home/events/'+EVENT.code+'/draws/'+PROMOTION.code+'/'+id; setCrumbs([{label:_promoLabel(),go:openProgEdit},rec.comp.nombre||'Sorteo']);
   var t=document.getElementById('progEditTitle'),sub=document.getElementById('progEditSub'); if(t)t.textContent=(rec.comp.nombre||'Sorteo');
-  if(sub){ var ng=(rec.comp.grupos||[]).length; sub.textContent=_promoLabel()+' · '+ng+' grupos · '+(rec.estado==='CERRADO'?('Cerrado el '+new Date(rec.cerradoTs||rec.ts).toLocaleDateString('es-CO',{day:'numeric',month:'short',year:'numeric'})+(rec.cerradoPor?(' por '+rec.cerradoPor):'')):'Abierto: todavía se puede resortear.'); }
+  if(sub){ var ng=(rec.comp.grupos||[]).length; sub.textContent=_promoLabel()+' · '+(rec.comp.sisCls==='elim'?(rec.comp.sistema||'Eliminación directa'):(ng+' grupos'))+' · '+(rec.estado==='CERRADO'?('Cerrado el '+new Date(rec.cerradoTs||rec.ts).toLocaleDateString('es-CO',{day:'numeric',month:'short',year:'numeric'})+(rec.cerradoPor?(' por '+rec.cerradoPor):'')):'Abierto: todavía se puede resortear.'); }
   var cs=document.getElementById('btnCrearSorteo'); if(cs)cs.style.display='none'; var ba=document.getElementById('btnProgBackArrow'); if(ba)ba.style.display=''; var c=document.getElementById('progEditCenefa'); if(c)c.innerHTML='';
   /* Acciones por estado: Abierto → Resortear / Cerrar sorteo; Cerrado → Ver vista pública / Copiar enlace. */
   var da=document.getElementById('detailActions'); if(da){ da.innerHTML=(rec.estado==='CERRADO')
@@ -1623,11 +1693,11 @@ function editProg(id){ var rec=_getProgRec(id); if(!rec||!rec.comp)return; _moun
   try{document.querySelector('.page').scrollTo(0,0);}catch(e){} }
 function progEditBack(){ openProgEdit(); }
 function _attachTeamMeta(comp,sorteo){ if(!comp||comp.teamMeta)return; try{ var parts=(sorteo&&sorteo.participantes)||[], reg=(sorteo&&sorteo.region)||comp.region||'', map={}, any=false; parts.forEach(function(p){ if(p&&typeof p==='object'&&p.nombre){ var meta=_teamMetaStr(p.nombre,p.delegacion,reg); if(meta){ map[p.nombre]=meta; any=true; } } }); if(any)comp.teamMeta=map; }catch(e){} }
-function showPreview(comp){ _mountDevnotes(); _pvComp=comp||SorteoEngine.toComp(_sorteo); _sorteo.resultado=_pvComp; _attachTeamMeta(_pvComp,_sorteo); _progPanelId='previewPanel'; _pvMount={tabs:'previewTabs',panel:'previewPanel'}; showStage('previewStage'); document.body.dataset.screen='crear'; setCrumbs([{label:_promoLabel(),go:openProgEdit},'Crear sorteo']);
+function showPreview(comp){ _mountDevnotes(); _pvComp=comp||_compFromSorteo(); _sorteo.resultado=_pvComp; _attachTeamMeta(_pvComp,_sorteo); _progPanelId='previewPanel'; _pvMount={tabs:'previewTabs',panel:'previewPanel'}; showStage('previewStage'); document.body.dataset.screen='crear'; setCrumbs([{label:_promoLabel(),go:openProgEdit},'Crear sorteo']);
   const b=document.getElementById('btnConfirmSorteo'); if(b){b.disabled=false;b.textContent='Cerrar sorteo';} var _pc=document.getElementById('previewCenefa'); if(_pc)_pc.innerHTML='';
   var _rs=document.getElementById('btnResortear'); if(_rs)_rs.style.display='';
   _activeTabs=_tabsFor(_pvComp); _pvTab='grupos';
-  var ph=document.getElementById('previewHead'); if(ph){ var pr=_sorteo.prueba||{}; ph.innerHTML='<div class="pv-head"><span class="pv-emoji">'+(pr.emoji||'🏆')+'</span><div><div class="pv-title">'+tEsc([pr.deporteLabel,pr.categoria,pr.sexo].filter(Boolean).join(' · '))+'</div><div class="pv-sub">'+tEsc(_promoLabel())+' · '+(_pvComp.grupos||[]).length+' grupos · '+tEsc(_pvComp.sistema||'')+'</div></div></div>'; }
+  var ph=document.getElementById('previewHead'); if(ph){ var pr=_sorteo.prueba||{}; ph.innerHTML='<div class="pv-head"><span class="pv-emoji">'+(pr.emoji||'🏆')+'</span><div><div class="pv-title">'+tEsc([pr.deporteLabel,pr.categoria,pr.sexo].filter(Boolean).join(' · '))+'</div><div class="pv-sub">'+tEsc(_promoLabel())+' · '+(_pvComp.sisCls==='elim'?tEsc(_pvComp.sistema||''):((_pvComp.grupos||[]).length+' grupos · '+tEsc(_pvComp.sistema||'')))+'</div></div></div>'; }
   renderPvTabs(); }
 /* Punto de montaje de las tabs: el mismo juego sirve para el resultado recién
    sorteado (previewStage) y para un sorteo abierto desde la lista. */
@@ -1863,7 +1933,7 @@ function _stepperHTML(n,withIds){
   return h+'</div>';
 }
 function _renderSteppers(n){ var a=document.getElementById('wzStepper'); if(a)a.innerHTML=_stepperHTML(n,true); var b=document.getElementById('clasifSteps'); if(b)b.innerHTML=_stepperHTML(n,false); }
-function openCrearSorteo(){
+function openCrearSorteo(){ _mountDevnotes();
   _editingId=null; showStage('wizardStage'); document.body.dataset.screen='crear'; document.body.dataset.route='/home/events/'+EVENT.code+'/draws/'+PROMOTION.code+'/new';
   setCrumbs([{label:_promoLabel(),go:openProgEdit},'Crear sorteo']);
   var sub='Sorteo para deportes de conjunto';
@@ -1878,7 +1948,7 @@ function goStep(n){ n=Math.max(1,Math.min(3,n)); W.step=n; _renderSteppers(n);
   document.getElementById('panel1').classList.add('active');
   document.getElementById('btnBack').classList.add('is-hidden');
   document.getElementById('btnNext').textContent='Siguiente';
-  var ie=document.getElementById('inEquipos'); if(ie)ie.value=W.nEquipos||8; var ig=document.getElementById('inGrupos'); if(ig)ig.value=W.nGrupos||2;
+  var ie=document.getElementById('inEquipos'); if(ie)ie.value=W.nEquipos||8; var ig=document.getElementById('inGrupos'); if(ig)ig.value=W.nGrupos||2; var ic=document.getElementById('inClasif'); if(ic)ic.value=W.clasifPorGrupo||2; var cv=document.getElementById('ckIdaVuelta'); if(cv)cv.checked=!!W.idaVuelta; var ct=document.getElementById('ckTercer'); if(ct)ct.checked=W.tercerPuesto!==false; setSistema(W.sistemaKey||'grupos');
   refreshStep1();
 }
 function next(){ goStep(W.step+1); }
@@ -1936,7 +2006,7 @@ function renderClasifList(){
   _clasifSync();
 }
 /* Grupo fijo por fila (— libre · A · B …). Varias filas pueden fijarse al mismo grupo. */
-function _clasifNGrupos(){ return Math.max(1,+W.nGrupos||1); }
+function _clasifNGrupos(){ return W.sistemaKey==='elim'?1:Math.max(1,+W.nGrupos||1); }
 function _grupoPillsHTML(i){ var ng=_clasifNGrupos(); if(ng<2) return ''; var c=_clasificados[i]; var cur=(c&&c.grupoFijo); if(cur!=null&&(cur|0)>=ng) cur=null; var dis=!(c&&c.nombre);
   var pills='<button type="button" class="clasif-gp clasif-gp--none'+((cur==null)?' is-active':'')+'" onclick="setGrupoFijo('+i+',null)" title="Sin grupo fijo (al azar)" aria-label="Sin grupo fijo">—</button>';
   for(var g=0;g<ng;g++){ var L=String.fromCharCode(65+g); pills+='<button type="button" class="clasif-gp'+(((cur|0)===g&&cur!=null)?' is-active':'')+'" '+(dis?'disabled ':'')+'onclick="setGrupoFijo('+i+','+g+')" title="Fijar al Grupo '+L+'" aria-label="Grupo '+L+'">'+L+'</button>'; }
@@ -1996,12 +2066,17 @@ function _clasifChanged(){ return _clasificados.some(function(c,i){ var d=_pool[
 function validateClasif(){ var names=_selected().map(function(c){return c.nombre;}); _reglasHTML(); return names.length===(+W.nEquipos||0)&&names.length>=2&&new Set(names).size===names.length&&W.reglasOk!==false; }
 
 /* ── Paso 4 · Sortear / resultado / cierre ── */
-function buildSorteo(){ var parts=_selected().map(function(c){ return { nombre:c.nombre, delegacion:c.delegacion, grupoFijo:(c.grupoFijo==null?null:c.grupoFijo) }; }); _sorteo={ prueba:{deporteLabel:W.deporteLabel||'Deporte',emoji:W.emoji||'🏆',categoria:W.categoria||'General',sexo:W.sexo||'Mixto',tipo:'conjunto'}, config:{nGrupos:Math.max(1,+W.nGrupos||2)}, participantes:parts }; return _sorteo; }
+function buildSorteo(){ var elim=W.sistemaKey==='elim'; var parts=_selected().map(function(c){ return { nombre:c.nombre, delegacion:c.delegacion, grupoFijo:(elim||c.grupoFijo==null)?null:c.grupoFijo }; }); _sorteo={ prueba:{deporteLabel:W.deporteLabel||'Deporte',emoji:W.emoji||'🏆',categoria:W.categoria||'General',sexo:W.sexo||'Mixto',tipo:'conjunto'}, config:{sistema:W.sistemaKey||'grupos',nGrupos:Math.max(1,+W.nGrupos||2),clasifPorGrupo:+W.clasifPorGrupo||1,idaVuelta:!!W.idaVuelta,tercerPuesto:W.tercerPuesto!==false}, participantes:parts }; return _sorteo; }
+/* Unidades que reparte el sorteo: grupos (fase de grupos) o cruces de 1.ª ronda (llaves). */
+function _isElim(){ return !!(_sorteo&&_sorteo.config&&_sorteo.config.sistema==='elim'); }
+function _nUnits(){ return _isElim()?SorteoEngine.bracketUnits(_sorteo.participantes.length):_sorteo.config.nGrupos; }
+function _unitLabel(gi){ return _isElim()?('Cruce '+(gi+1)):('Grupo '+String.fromCharCode(65+gi)); }
+function _compFromSorteo(){ return _isElim()?SorteoEngine.toCompElim(_sorteo):SorteoEngine.toComp(_sorteo); }
 function continueSorteo(){ if(!validateClasif())return; goStep(3); }
 function reSortear(){ startSorteoStep(); }
 var _closeAfter=null, _editingId=null;
 /* Reconstruye el estado del asistente desde un registro guardado (para resortear desde el detalle). */
-function _sorteoFromRec(rec){ var pr=rec.prueba||{}; W.tipo='conjunto'; W.deporteLabel=pr.deporteLabel||''; W.emoji=pr.emoji||'🏆'; W.categoria=pr.categoria||''; W.sexo=pr.sexo||''; W.nGrupos=(rec.config&&rec.config.nGrupos)||(rec.comp&&rec.comp.grupos?rec.comp.grupos.length:2);
+function _sorteoFromRec(rec){ var pr=rec.prueba||{}; var cfg=rec.config||{}; W.sistemaKey=cfg.sistema||((rec.comp&&rec.comp.sisCls==='elim')?'elim':'grupos'); W.clasifPorGrupo=cfg.clasifPorGrupo||2; W.idaVuelta=!!cfg.idaVuelta; W.tercerPuesto=cfg.tercerPuesto!==false; W.tipo='conjunto'; W.deporteLabel=pr.deporteLabel||''; W.emoji=pr.emoji||'🏆'; W.categoria=pr.categoria||''; W.sexo=pr.sexo||''; W.nGrupos=(rec.config&&rec.config.nGrupos)||(rec.comp&&rec.comp.grupos?rec.comp.grupos.length:2);
   var parts=(rec.participantes&&rec.participantes.length)?rec.participantes.slice():[]; if(!parts.length&&rec.comp){ (rec.comp.grupos||[]).forEach(function(g){ (g.equipos||[]).forEach(function(t){ parts.push({nombre:(typeof t==='string'?t:(t&&t.nombre)||''),delegacion:'',clasificado:true,grupoFijo:null}); }); }); }
   _partKey=PROMOTION.code+'|'+W.deporteLabel+'|'+W.categoria+'|'+W.sexo;
   _clasificados=parts.map(function(p){ return {nombre:p.nombre,delegacion:p.delegacion||'',on:true,clasificado:!!p.clasificado,grupoFijo:(p.grupoFijo==null?null:p.grupoFijo)}; });

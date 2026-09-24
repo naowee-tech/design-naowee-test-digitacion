@@ -179,7 +179,14 @@
       const grupo = {
         nombre: 'Grupo ' + String.fromCharCode(65 + i),
         equipos: teams.slice(),
-        partidos: roundRobin(teams).map((p, j) => ({ ...p, id: i * 100 + j })),
+        /* Ida y vuelta: se repite el calendario con locales y visitantes
+           invertidos, en jornadas a continuación de las de ida. */
+        partidos: (function () {
+          const ida = roundRobin(teams);
+          const rounds = ida.reduce((m, p) => Math.max(m, p.jornada), 0);
+          const vuelta = cfg.idaVuelta ? ida.map((p) => ({ ...p, jornada: p.jornada + rounds, t1: p.t2, t2: p.t1 })) : [];
+          return ida.concat(vuelta).map((p, j) => ({ ...p, id: i * 100 + j }));
+        })(),
       };
       grupo.tabla = recalcStandings(grupo);
       return grupo;
@@ -193,7 +200,7 @@
 
     return {
       sisCls: 'grupos',
-      sistema: 'Fase de grupos · todos contra todos',
+      sistema: 'Fase de grupos · todos contra todos' + (cfg.idaVuelta ? ' · ida y vuelta' : ''),
       nombre: [pr.deporteLabel, pr.categoria, pr.sexo].filter(Boolean).join(' '),
       deporte: pr.deporteLabel || '',
       emoji: pr.emoji || '🏆',
@@ -363,5 +370,64 @@
     };
   }
 
-  global.SorteoEngine = { BYE, asignarGrupos, fixedGroupIndex, roundRobin, recalcStandings, faseFinal, toComp, seedOrder, buildBracketFromSeeds, advanceWinner, toCompBracket };
+  /** Tamaño de llave (potencia de 2) para N participantes y número de cruces de 1.ª ronda. */
+  function bracketSize(n) { let size = 2; while (size < n) size *= 2; return size; }
+  function bracketUnits(n) { return bracketSize(n) / 2; }
+  function rondaInicial(n) { const r = _roundNames(Math.round(Math.log2(bracketSize(n)))); return r[0] + (r[0] === 'Final' ? '' : ' de final'); }
+
+  /** Cuadro de eliminación directa a partir de las PAREJAS de 1.ª ronda ya
+   *  sorteadas (pairs = [[t1, t2|null], …], una por cruce). El sorteo solo
+   *  define esta ronda; las siguientes quedan con slots vacíos y las llena
+   *  Digitación con los ganadores (punteros `next`). Un cruce con un solo
+   *  equipo es BYE: avanza solo. opts.tercerPuesto (solo con >= 4 equipos). */
+  function bracketFromPairs(pairs, opts) {
+    opts = opts || {};
+    const size = pairs.length * 2;
+    const mainRounds = Math.round(Math.log2(size));
+    const rnames = _roundNames(mainRounds);
+    const nTeams = pairs.reduce((a, p) => a + p.filter(Boolean).length, 0);
+    const tercer = opts.tercerPuesto !== false && nTeams >= 4 && mainRounds >= 2;
+    const rounds = [];
+    for (let r = 0; r < mainRounds; r++) {
+      const cnt = size / Math.pow(2, r + 1);
+      const matches = [];
+      for (let m = 0; m < cnt; m++) matches.push({ id: 'R' + r + 'M' + m, t1: null, t2: null, s1: null, s2: null, status: 'pending' });
+      rounds.push({ round: rnames[r], matches });
+    }
+    for (let r = 0; r < mainRounds - 1; r++) {
+      rounds[r].matches.forEach((mt, m) => { mt.next = { id: rounds[r + 1].matches[Math.floor(m / 2)].id, slot: m % 2 === 0 ? 1 : 2 }; });
+    }
+    rounds[0].matches.forEach((mt, m) => { const p = pairs[m] || []; mt.t1 = p[0] || null; mt.t2 = p[1] || null; });
+    let tercerRound = null;
+    if (tercer) {
+      tercerRound = { round: 'Tercer puesto', matches: [{ id: 'R3P', t1: null, t2: null, s1: null, s2: null, status: 'pending', medal: 'bronce' }] };
+      rounds[mainRounds - 2].matches.forEach((mt, m) => { mt.loserNext = { id: 'R3P', slot: m % 2 === 0 ? 1 : 2 }; });
+    }
+    rounds[mainRounds - 1].matches[0].medal = 'oro';
+    const bracket = rounds.slice(); if (tercerRound) bracket.push(tercerRound);
+    rounds[0].matches.forEach((mt) => {
+      const hasT1 = !!mt.t1, hasT2 = !!mt.t2; if (hasT1 === hasT2) return;
+      const winName = hasT1 ? mt.t1 : mt.t2; mt.status = 'bye'; mt.winner = hasT1 ? 1 : 2;
+      if (mt.next) { const nm = _findMatch(bracket, mt.next.id); if (nm) { if (mt.next.slot === 1) nm.t1 = winName; else nm.t2 = winName; } }
+    });
+    return bracket;
+  }
+
+  /** comp de eliminación directa desde el sorteo: sorteo.manualGroups trae los
+   *  cruces de 1.ª ronda (grupos de ≤ 2) tal como los devolvió el back. */
+  function toCompElim(sorteo) {
+    const pr = sorteo.prueba || {}, cfg = sorteo.config || {};
+    const parts = (sorteo.participantes || []).map((p) => (typeof p === 'string' ? p : (p && p.nombre) || '')).filter(Boolean);
+    const pairs = (sorteo.manualGroups && sorteo.manualGroups.length) ? sorteo.manualGroups : asignarGrupos(parts, bracketUnits(parts.length), { shuffle: true });
+    const bracket = bracketFromPairs(pairs, { tercerPuesto: cfg.tercerPuesto !== false });
+    return {
+      sisCls: 'elim',
+      sistema: 'Eliminación directa · desde ' + rondaInicial(parts.length).toLowerCase(),
+      nombre: [pr.deporteLabel, pr.categoria, pr.sexo].filter(Boolean).join(' '),
+      deporte: pr.deporteLabel || '', emoji: pr.emoji || '🏆', categoria: pr.categoria || '', genero: pr.sexo || '',
+      grupos: [], bracket, medal: false, jornadasCount: 0,
+    };
+  }
+
+  global.SorteoEngine = { BYE, asignarGrupos, fixedGroupIndex, roundRobin, recalcStandings, faseFinal, toComp, seedOrder, buildBracketFromSeeds, advanceWinner, toCompBracket, bracketSize, bracketUnits, rondaInicial, bracketFromPairs, toCompElim };
 })(typeof window !== 'undefined' ? window : globalThis);
