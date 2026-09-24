@@ -867,20 +867,18 @@ body.sorteo-has-footer .page{padding-bottom:96px}
           </div>
           <!-- RN-SORTEO-UNICO: aviso de prueba ya sorteada (accionable 1.1) -->
           <div id="dupWarn"></div>
-        </div>
-
-        <!-- PASO 3 · Grupos y líderes -->
-        <div class="wz-panel" id="panel2">
-          <div class="wz-panel-title">Grupos y líderes</div>
-          <div class="wz-panel-hint">Fase de grupos, todos contra todos. El número de grupos lo limita la cantidad de participantes. El líder es el único equipo que queda fijo en su grupo; los demás salen al azar.</div>
-          <div id="cfgConjunto">
+          <div id="cfgConjunto" style="margin-top:18px">
             <div class="wz-row wz-row--narrow">
               <div class="wz-field">
-                <label>Participantes</label>
-                <div class="wz-inherit__row"><b id="cfgEquiposTxt">—</b><button type="button" class="naowee-btn naowee-btn--link naowee-btn--small" onclick="goStep(2)">Cambiar</button></div>
+                <label>N.º de equipos clasificados</label>
+                <div class="naowee-input-stepper"><div class="naowee-input-stepper__content"><div class="naowee-input-stepper__input">
+                  <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inEquipos',-1,2,32)"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+                  <div class="naowee-input-stepper__value"><input type="number" class="naowee-input-stepper__value-input" id="inEquipos" value="8" min="2" max="32" oninput="W.nEquipos=+this.value||0;recalcCfg()" onblur="cfgClampInput(this)"><span class="naowee-input-stepper__value-comp">equipos</span></div>
+                  <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inEquipos',1,2,32)"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+                </div></div></div>
               </div>
               <div class="wz-field">
-                <label>Número de grupos</label>
+                <label>N.º de grupos</label>
                 <div class="naowee-input-stepper"><div class="naowee-input-stepper__content"><div class="naowee-input-stepper__input">
                   <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inGrupos',-1)"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
                   <div class="naowee-input-stepper__value"><input type="number" class="naowee-input-stepper__value-input" id="inGrupos" value="2" min="1" max="8" oninput="W.nGrupos=+this.value||1;recalcCfg()" onblur="cfgClampInput(this)"><span class="naowee-input-stepper__value-comp">grupos</span></div>
@@ -889,12 +887,9 @@ body.sorteo-has-footer .page{padding-bottom:96px}
               </div>
             </div>
             <div id="repartoMsg" class="wz-cfgmsg"></div>
-            <div class="wz-field" style="margin-top:18px">
-              <label>Líder de cada grupo (opcional)</label>
-              <div class="leaders" id="leadersBox"></div>
-            </div>
           </div>
         </div>
+
       </div>
 
       <div class="wz-nav">
@@ -904,7 +899,7 @@ body.sorteo-has-footer .page{padding-bottom:96px}
     </div>
     </div><!-- /wizardStage -->
 
-    <!-- ═══ S3 · PASO 2 · PARTICIPANTES ═══ -->
+    <!-- ═══ S3 · PASO 3 · PARTICIPANTES ═══ -->
     <div id="clasifStage" class="stage" style="display:none">
       <div class="sorteo-head">
         <div>
@@ -926,9 +921,16 @@ body.sorteo-has-footer .page{padding-bottom:96px}
         </div>
         <div id="clasifList" class="clasif-list"></div>
         <div id="clasifDerived"></div>
+        <div class="wz-body" style="padding-top:8px">
+          <div class="wz-field">
+            <label>Líder de cada grupo (opcional)</label>
+            <div class="wz-panel-hint" style="margin:0 0 10px">El líder es el único equipo que queda fijo en su grupo; los demás salen al azar.</div>
+            <div class="leaders" id="leadersBox"></div>
+          </div>
+        </div>
         <div class="wz-nav clasif-foot">
           <button class="naowee-btn naowee-btn--mute" onclick="goStep(1)">Atrás</button>
-          <button class="naowee-btn naowee-btn--loud" id="btnClasifNext" onclick="goStep(3)">Siguiente</button>
+          <button class="naowee-btn naowee-btn--loud" id="btnClasifNext" onclick="goStep(3)">Sortear</button>
         </div>
       </div>
     </div>
@@ -1095,8 +1097,10 @@ function refreshStep1(){
   _dupRec = ok ? _sorteoExistente() : null;
   _renderDupWarn(_dupRec);
   if(ok && !_dupRec) _loadParticipants();   /* la prueba define el pool de la fase origen */
-  if(W.step===1) document.getElementById('btnNext').disabled=!ok||!!_dupRec;
+  if(ok&&!_dupRec&&!_cfgQuiet){ _cfgQuiet=true; recalcCfg(); _cfgQuiet=false; }
+  if(W.step===1) document.getElementById('btnNext').disabled=!ok||!!_dupRec||W.cfgOk===false;
 }
+var _cfgQuiet=false;
 function stepAdjust(id,delta,min,max){ const el=document.getElementById(id);
   /* Sin min/max explicitos toma los del input, que recalcCfg ajusta segun
      el contexto (el tope de grupos depende de cuantos equipos haya). */
@@ -1114,6 +1118,7 @@ function _cfgFechas(s){ return s<2?0:(s%2?s:s-1); }
 function _cfgPl(n,sing,plur){ return n===1?('1 '+sing):(n+' '+plur); }
 function _cfgMsg(id,tipo,titulo,texto){
   const el=document.getElementById(id); if(!el)return;
+  if(tipo==='informative'){ el.innerHTML=''; return; }   /* solo avisos: el reparto correcto no se anuncia */
   const ico=(tipo==='negative'||tipo==='caution')?_TICON.caution:_TICON.info;
   el.innerHTML='<div class="naowee-message naowee-message--'+tipo+'" style="width:100%">'
     +'<div class="naowee-message__header"><span class="naowee-message__icon">'+ico+'</span>'
@@ -1122,9 +1127,8 @@ function _cfgMsg(id,tipo,titulo,texto){
 }
 function recalcCfg(){
   if(W.tipo==='conjunto'){ W.sistema='Fase de grupos · todos contra todos';
-    const n=_selCount(), g=W.nGrupos||1; W.nEquipos=n;
+    const n=+W.nEquipos||0, g=W.nGrupos||1;
     const maxG=_cfgMaxGrupos(n), ig=document.getElementById('inGrupos'); if(ig) ig.max=maxG;
-    const et=document.getElementById('cfgEquiposTxt'); if(et) et.textContent=_cfgPl(n,'institución seleccionada','instituciones seleccionadas');
     if(!n||!g){ W.cfgOk=false; _cfgMsg('repartoMsg','informative','Define equipos y grupos','Ajusta los dos valores y aquí verás cómo queda el reparto.'); }
     else {
       const sizes=_cfgSizes(n,g), resto=n%g, base=Math.floor(n/g);
@@ -1145,7 +1149,6 @@ function recalcCfg(){
       }
     }
   }
-  renderLeaders();
   _cfgSyncNext();
 }
 /* Ajuste al SOLTAR el campo, no en cada tecla: mientras escribes puedes quedar
@@ -1642,7 +1645,7 @@ function _originBannerHTML(){
 }
 
 /* ── S3 · Asistente de 4 pasos ── */
-var STEPS=['Prueba','Participantes','Grupos y líderes','Sorteo'];
+var STEPS=['Prueba','Participantes','Sorteo'];
 function _stepperHTML(n,withIds){
   var h='<div class="naowee-stepper naowee-stepper--pulse">';
   STEPS.forEach(function(lbl,i){ var k=i+1, done=k<n, act=k===n;
@@ -1660,20 +1663,19 @@ function openCrearSorteo(){
   selTipo('conjunto');   /* el catálogo depende de la promoción */
   goStep(1);
 }
-function goStep(n){ n=Math.max(1,Math.min(4,n)); W.step=n; _renderSteppers(n);
+function goStep(n){ n=Math.max(1,Math.min(3,n)); W.step=n; _renderSteppers(n);
   if(n===2){ showStage('clasifStage'); document.body.dataset.screen='crear'; renderClasifList(); return; }
-  if(n===4){ startRuleta(); return; }
+  if(n===3){ startRuleta(); return; }
   showStage('wizardStage');
-  document.getElementById('panel1').classList.toggle('active',n===1);
-  document.getElementById('panel2').classList.toggle('active',n===3);
-  document.getElementById('btnBack').classList.toggle('is-hidden',n===1);
-  var next=document.getElementById('btnNext');
-  if(n===1){ next.textContent='Siguiente'; refreshStep1(); }
-  else { next.textContent='Sortear'; var ig=document.getElementById('inGrupos'); if(ig)ig.value=W.nGrupos; recalcCfg(); }
+  document.getElementById('panel1').classList.add('active');
+  document.getElementById('btnBack').classList.add('is-hidden');
+  document.getElementById('btnNext').textContent='Siguiente';
+  var ie=document.getElementById('inEquipos'); if(ie)ie.value=W.nEquipos||8; var ig=document.getElementById('inGrupos'); if(ig)ig.value=W.nGrupos||2;
+  refreshStep1();
 }
-function next(){ if(W.step===1){ goStep(2); return; } if(W.step===3){ goStep(4); return; } goStep(W.step+1); }
-function backToWizard(){ _ruletaTimers.forEach(function(t){clearTimeout(t);clearInterval(t);}); _ruletaTimers=[]; goStep(3); }
-function _cfgSyncNext(){ if(W.step!==3)return; var b=document.getElementById('btnNext'); if(b) b.disabled=(W.cfgOk===false||_selCount()<2); }
+function next(){ goStep(W.step+1); }
+function backToWizard(){ _ruletaTimers.forEach(function(t){clearTimeout(t);clearInterval(t);}); _ruletaTimers=[]; goStep(2); }
+function _cfgSyncNext(){ if(W.step!==1)return; refreshStep1(); }
 
 /* ── Paso 2 · Participantes: todas las instituciones inscritas en la fase
    origen para la prueba; las clasificadas vienen marcadas. ── */
@@ -1681,10 +1683,9 @@ var _partKey='';
 function _loadParticipants(){
   var key=PROMOTION.code+'|'+W.deporteLabel+'|'+W.categoria+'|'+W.sexo; if(key===_partKey) return; _partKey=key;
   var seed=0; for(var i=0;i<key.length;i++) seed=(seed*31+key.charCodeAt(i))>>>0;
-  var n=12+(seed%13);                                      /* 12–24 instituciones */
-  var origin=_phase(PROMOTION.fromCode), marked=(origin&&origin.hasResults)?8:0;
+  var n=Math.min(12+(seed%13),_INST_POOL.length);         /* 12–24 instituciones, sin repetir */
+  var origin=_phase(PROMOTION.fromCode), marked=(origin&&origin.hasResults)?Math.min(+W.nEquipos||8,n):0;
   _clasificados=[]; for(var k=0;k<n;k++){ var p=_INST_POOL[(k+seed)%_INST_POOL.length]; _clasificados.push({ nombre:p.n, delegacion:p.r, on:k<marked, clasificado:k<marked, grupoFijo:null }); }
-  W.nGrupos=2;
 }
 function _selected(){ return _clasificados.filter(function(c){return c.on;}); }
 function _selCount(){ return _selected().length; }
@@ -1692,7 +1693,8 @@ var _ICO_TICK='<svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l2.8 2.8L12
 function renderClasifList(){
   var el=document.getElementById('clasifList'); if(!el)return;
   var origin=_phase(PROMOTION.fromCode);
-  var t=document.getElementById('clasifTitle'); if(t) t.textContent='Instituciones inscritas en '+PROMOTION.from+' para '+[W.deporteLabel,W.categoria,W.sexo].filter(Boolean).join(' ')+'. '+(origin&&origin.hasResults?'Las clasificadas vienen marcadas; puedes cambiar cualquiera.':'Marca las que participan en el sorteo.');
+  _loadParticipants();
+  var t=document.getElementById('clasifTitle'); if(t) t.textContent='Instituciones inscritas en '+PROMOTION.from+' para '+[W.deporteLabel,W.categoria,W.sexo].filter(Boolean).join(' ')+'. Elige las '+_cfgPl(+W.nEquipos||0,'clasificada','clasificadas')+' que configuraste. '+(origin&&origin.hasResults?'Las clasificadas vienen marcadas; puedes cambiar cualquiera.':'Marca las que participan en el sorteo.');
   var b=document.getElementById('clasifBanner'); if(b) b.innerHTML=_originBannerHTML();
   if(!_clasificados.length){ el.innerHTML='<div class="naowee-empty-state"><span class="naowee-empty-state__icon">'+_ICO_PEMPTY+'</span><h3 class="naowee-empty-state__title">No hay instituciones inscritas en '+tEsc(PROMOTION.from)+' para esta prueba</h3><p class="naowee-empty-state__description">Revisa las inscripciones de la fase antes de sortear.</p></div>'; }
   else el.innerHTML=_clasificados.map(function(c,i){
@@ -1706,11 +1708,12 @@ function renderClasifList(){
 function clasifToggle(i){ var c=_clasificados[i]; if(!c)return; c.on=!c.on; if(!c.on)c.grupoFijo=null; var row=document.querySelectorAll('#clasifList .part-row')[i]; if(row){ row.classList.toggle('is-on',c.on); row.setAttribute('aria-checked',c.on?'true':'false'); row.querySelector('.part-row__cb').innerHTML=c.on?_ICO_TICK:''; } _clasifSync(); }
 function clasifSelectAll(on){ _clasificados.forEach(function(c){ c.on=!!on; if(!on)c.grupoFijo=null; }); renderClasifList(); }
 function _clasifSync(){
-  var n=_selCount(), tot=_clasificados.length, cnt=document.getElementById('clasifCount'); if(cnt) cnt.innerHTML='<b>'+n+'</b> seleccionadas de '+tot;
-  var d=document.getElementById('clasifDerived'); if(d) d.innerHTML=(tot&&n<2)?'<div style="padding:0 16px 14px">'+_cdMsg('caution','Selecciona al menos 2 instituciones','Un sorteo necesita como mínimo dos participantes para formar un grupo.')+'</div>':'';
-  var b=document.getElementById('btnClasifNext'); if(b) b.disabled=n<2;
+  var n=_selCount(), tot=_clasificados.length, need=+W.nEquipos||0, cnt=document.getElementById('clasifCount'); if(cnt) cnt.innerHTML='<b>'+n+'</b> de '+need+' seleccionadas · '+tot+' inscritas';
+  var d=document.getElementById('clasifDerived'); if(d) d.innerHTML=(tot&&n!==need)?'<div style="padding:0 16px 14px">'+_cdMsg('caution',(n<need?'Faltan '+_cfgPl(need-n,'institución','instituciones'):'Sobran '+_cfgPl(n-need,'institución','instituciones')),'Configuraste '+_cfgPl(need,'equipo clasificado','equipos clasificados')+'. Ajusta la selección o vuelve a Configuración.')+'</div>':'';
+  var b=document.getElementById('btnClasifNext'); if(b) b.disabled=(n!==need||n<2);
+  renderLeaders();
 }
-function validateClasif(){ return _selCount()>=2; }
+function validateClasif(){ return _selCount()===(+W.nEquipos||0)&&_selCount()>=2; }
 
 /* ── Paso 3 · Líderes: un selector por grupo; un equipo no lidera dos grupos. ── */
 function renderLeaders(){
@@ -1728,7 +1731,7 @@ function setLeader(gi,name){ _clasificados.forEach(function(c){ if(c.grupoFijo==
 
 /* ── Paso 4 · Sortear / resultado / cierre ── */
 function buildSorteo(){ var parts=_selected().map(function(c){ return { nombre:c.nombre, delegacion:c.delegacion, grupoFijo:(c.grupoFijo==null?null:c.grupoFijo) }; }); _sorteo={ prueba:{deporteLabel:W.deporteLabel||'Deporte',emoji:W.emoji||'🏆',categoria:W.categoria||'General',sexo:W.sexo||'Mixto',tipo:'conjunto'}, config:{nGrupos:Math.max(1,+W.nGrupos||2)}, participantes:parts }; return _sorteo; }
-function continueSorteo(){ if(!validateClasif())return; goStep(4); }
+function continueSorteo(){ if(!validateClasif())return; goStep(3); }
 function reSortear(){ startRuleta(); }
 var _closeAfter=null, _editingId=null;
 /* Reconstruye el estado del asistente desde un registro guardado (para resortear desde el detalle). */
