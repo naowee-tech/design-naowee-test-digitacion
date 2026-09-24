@@ -52,6 +52,9 @@
 .bracket-tname-wrap{flex:1;min-width:0}
 .bracket-tname{font-size:14px;font-weight:600;color:var(--text-primary)}
 .bracket-tsub{font-size:11px;color:var(--text-secondary);font-weight:400}
+.bracket-tsub--bye{color:#8a5a00}
+.bracket-node.bye{border-style:dashed;opacity:.9}
+.bracket-team-row--bye .bracket-tname{font-style:italic}
 .bracket-score-wrap{display:flex;align-items:center;gap:4px;margin-left:auto;flex-shrink:0}
 .bracket-trophy{font-size:16px}
 .bracket-score{font-size:20px;font-weight:800;color:var(--text-primary)}

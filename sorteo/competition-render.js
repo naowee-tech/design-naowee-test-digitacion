@@ -171,7 +171,10 @@
     var isFinal = rn === 'FINAL';
     function _winEmoji(won){ return isTercer ? '🥉' : (isFinal && !won ? '🥈' : '🏆'); }
 
-    var h = '<div class="bracket-node '+cls+' '+tercerCls+'">';
+    var isBye = m.status==='bye';
+    var byes = (comp && comp._byes) || {};
+    function _viaBye(name){ var b = byes[name]; return (!isBye && b && b.to===roundName) ? '<div class="bracket-tsub bracket-tsub--bye">Sin rival en '+esc(b.from.toLowerCase())+'</div>' : ''; }
+    var h = '<div class="bracket-node '+cls+' '+tercerCls+(isBye?' bye':'')+'">';
 
     /* Team 1 */
     if(m.t1){
@@ -180,7 +183,7 @@
       var t1Emoji = isDone && isFinal ? (t1Won ? '🏆' : '🥈') : (t1Won ? _winEmoji(true) : '');
       h += '<div class="bracket-team-row '+rowCls1+'">'
         + '<div class="bracket-initial" '+(!isDone?'style="background:'+c1+';color:#fff"':'')+'>'+esc(teamInit(m.t1))+'</div>'
-        + '<div class="bracket-tname-wrap"><div class="bracket-tname">'+esc(m.t1)+'</div>'+_subLine('bracket-tsub',comp,m.t1)+'</div>'
+        + '<div class="bracket-tname-wrap"><div class="bracket-tname">'+esc(m.t1)+'</div>'+_subLine('bracket-tsub',comp,m.t1)+_viaBye(m.t1)+'</div>'
         + '<div class="bracket-score-wrap">'
         + (t1Emoji?'<span class="bracket-trophy">'+t1Emoji+'</span>':'')
         + '<span class="bracket-score '+(m.s1==null?'pending-score':'')+'">'+(m.s1!=null?esc(m.s1):'-')+'</span>'
@@ -194,11 +197,16 @@
       var t2Emoji = isDone && isFinal ? (t2Won ? '🏆' : '🥈') : (t2Won ? _winEmoji(true) : '');
       h += '<div class="bracket-team-row '+rowCls2+'">'
         + '<div class="bracket-initial" '+(!isDone?'style="background:'+c2+';color:#fff"':'')+'>'+esc(teamInit(m.t2))+'</div>'
-        + '<div class="bracket-tname-wrap"><div class="bracket-tname">'+esc(m.t2)+'</div>'+_subLine('bracket-tsub',comp,m.t2)+'</div>'
+        + '<div class="bracket-tname-wrap"><div class="bracket-tname">'+esc(m.t2)+'</div>'+_subLine('bracket-tsub',comp,m.t2)+_viaBye(m.t2)+'</div>'
         + '<div class="bracket-score-wrap">'
         + (t2Emoji?'<span class="bracket-trophy">'+t2Emoji+'</span>':'')
         + '<span class="bracket-score '+(m.s2==null?'pending-score':'')+'">'+(m.s2!=null?esc(m.s2):'-')+'</span>'
         + '</div></div>';
+    } else if(isBye){
+      h += '<div class="bracket-team-row bracket-team-row--bye">'
+        + '<div class="bracket-initial" style="background:#e8e9ee;color:var(--text-secondary)">—</div>'
+        + '<div class="bracket-tname-wrap"><div class="bracket-tname" style="color:var(--text-secondary)">Sin rival</div><div class="bracket-tsub">Pasa directo a '+esc((m._byeTo||'la siguiente ronda').toLowerCase())+'</div></div>'
+        + '</div>';
     } else if(!m.t2 && m.status==='pending'){
       h += '<div class="bracket-team-row">'
         + '<div class="bracket-initial" style="background:#e8e9ee;color:var(--text-secondary)">?</div>'
@@ -214,6 +222,8 @@
       h += '<div class="bracket-status en-curso">En curso</div>';
     } else if(m.status==='pending'){
       h += '<div class="bracket-status">Pendiente</div>';
+    } else if(isBye){
+      h += '<div class="bracket-status">No se juega</div>';
     }
 
     h += '</div>';
@@ -245,6 +255,18 @@
     });
     if(tercerRound) html += '<div class="bracket-svg-spacer"></div><div class="bracket-col-title">Tercer puesto</div>';
     html += '</div>';
+
+    /* Equipos sin rival en una ronda (BYE): pasan directo a la siguiente.
+       Se marca en el cruce vacío ("Pasa directo a …") y en la ronda siguiente
+       ("sin rival en …"), para que se entienda por qué ya están ahí. */
+    var byes = {};
+    mainRounds.forEach(function(round,ri){
+      var next = mainRounds[ri+1] ? mainRounds[ri+1].round : null;
+      (round.matches||[]).forEach(function(m){
+        if(m.status==='bye'){ var w = m.t1||m.t2; if(w) byes[w] = { from: round.round, to: next }; m._byeTo = next; }
+      });
+    });
+    comp = Object.assign({}, comp, { _byes: byes });
 
     /* Nodos */
     html += '<div class="bracket-wrap">';
