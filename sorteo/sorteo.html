@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="design-system.css"/>
 <link rel="stylesheet" href="naowee-ds-components.css"/>
-<link rel="stylesheet" href="competition-render.css"/>
+<link rel="stylesheet" href="competition-render.css?v=3.1"/>
 <link rel="stylesheet" href="ruleta-wheel.css"/>
 <style>
 :root {
@@ -684,15 +684,40 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-primary);font
 .promo-card.is-off .promo-card__title{color:var(--text-secondary)}
 .promo-card.is-off .promo-card__arrow{display:none}
 /* Sistema de competencia (Prueba) */
-.sis-seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:560px}
-.sis-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:12px 14px;border:1.5px solid var(--border-dark);border-radius:var(--radius-lg);background:var(--surface);cursor:pointer;font:inherit}
-.sis-opt:hover{border-color:var(--accent);background:#fff8f4}
-.sis-opt.sel{border-color:var(--accent);background:var(--orange-bg,#fff3e6)}
+/* Sistema de competencia (Prueba) · cuadrícula compacta */
+.sis-seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid var(--border-dark);border-radius:var(--radius-lg);overflow:hidden;max-width:620px}
+.sis-opt{display:block;text-align:left;padding:10px 14px;border:0;background:var(--surface);cursor:pointer;font:inherit;position:relative}
+.sis-opt+.sis-opt{border-left:1px solid var(--border-dark)}
+.sis-opt:hover{background:#fff8f4}
+.sis-opt.sel{background:var(--orange-bg,#fff3e6)}
+.sis-opt.sel::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--accent)}
+.sis-opt:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .sis-opt__t{display:block;font-size:13.5px;font-weight:700;color:var(--text-primary)}
-.sis-opt__d{display:block;font-size:12.5px;color:var(--text-secondary);line-height:1.35;margin-top:2px}
-.wz-check{display:inline-flex;align-items:center;gap:8px;height:44px;font-size:13.5px;color:var(--text-primary);cursor:pointer}
-.wz-check input{width:18px;height:18px;accent-color:var(--accent)}
-.wz-ro{height:44px;display:flex;align-items:center;font-size:14px;font-weight:600;color:var(--text-primary)}
+.sis-opt.sel .sis-opt__t{color:var(--accent)}
+.sis-opt__d{display:block;font-size:12px;color:var(--text-secondary);line-height:1.3;margin-top:2px}
+/* Parámetros: una fila de columnas compactas alineadas por la línea base */
+.cfg-grid{display:flex;flex-wrap:wrap;gap:14px 18px;align-items:flex-start;margin-top:14px}
+.cfg-grid .wz-field{margin:0;display:flex;flex-direction:column}
+.cfg-grid .wz-field>label{margin-bottom:6px;white-space:nowrap;height:15px}
+.cfg-grid .naowee-input-stepper{width:auto}
+.cfg-grid .naowee-input-stepper__input{border-radius:var(--radius-md)}
+.cfg-grid .naowee-input-stepper__btn{width:28px;height:28px}
+.cfg-grid .naowee-input-stepper__value{min-width:0;padding:0 4px}
+.cfg-grid .naowee-input-stepper__value-input{width:28px;text-align:right}
+.cfg-grid .naowee-input-stepper__value-comp{font-size:12.5px;padding:0 6px 0 3px}
+.cfg-grid .wz-check{height:36px;white-space:nowrap;font-size:13px}
+.cfg-grid .wz-check input{width:16px;height:16px;margin:0}
+.cfg-grid .wz-check.is-off{color:var(--text-muted);cursor:not-allowed}
+.cfg-grid .wz-check small{font-weight:400;color:var(--text-muted);font-size:11.5px}
+.cfg-grid .wz-field.is-err .naowee-input-stepper__input{border-color:#b42318;box-shadow:0 0 0 2px rgba(180,35,24,.12)}
+.cfg-err{display:none;font-size:11.5px;color:#b42318;font-weight:600;margin-top:5px;max-width:190px;line-height:1.3}
+.cfg-grid .wz-field.is-err .cfg-err{display:block}
+/* Resumen de una línea: piezas en negrita; avisos no bloqueantes en ámbar */
+.cfg-sum{margin-top:12px;font-size:13px;color:var(--text-secondary);line-height:1.5;min-height:20px}
+.cfg-sum b{color:var(--text-primary);font-weight:600}
+.cfg-sum__sep{color:var(--text-muted);margin:0 6px}
+.cfg-sum__note{color:#8a5a00}
+#cfgConjunto [hidden]{display:none !important}
 /* Modo de sorteo: dos tarjetas al entrar al paso Sorteo */
 .modo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:760px}
 .modo-card{display:flex;gap:14px;align-items:flex-start;text-align:left;padding:18px 18px 16px;border:1.5px solid var(--border);border-radius:var(--radius-lg);background:var(--surface);cursor:pointer;font:inherit;transition:border-color .15s,box-shadow .15s}
@@ -948,56 +973,37 @@ body.sorteo-has-footer .page{padding-bottom:96px}
           <!-- RN-SORTEO-UNICO: aviso de prueba ya sorteada (accionable 1.1) -->
           <div id="dupWarn"></div>
           <div id="cfgConjunto" class="wz-field hidden" style="margin-top:18px">
-            <div class="wz-field">
-              <label>Sistema de competencia</label>
-              <div class="sis-seg" id="sisSeg">
-                <button type="button" class="sis-opt sel" data-sis="grupos" onclick="setSistema('grupos')"><span><span class="sis-opt__t">Fase de grupos</span><span class="sis-opt__d">Grupos con todos contra todos. El sorteo reparte los equipos en los grupos y arma las jornadas.</span></span></button>
-                <button type="button" class="sis-opt" data-sis="elim" onclick="setSistema('elim')"><span><span class="sis-opt__t">Rondas de eliminación directa</span><span class="sis-opt__d">Llaves. El sorteo arma solo los cruces de la primera ronda; el resto lo llena Digitación.</span></span></button>
-              </div>
+            <label>Sistema de competencia</label>
+            <div class="sis-seg" id="sisSeg" role="radiogroup" aria-label="Sistema de competencia">
+              <button type="button" class="sis-opt sel" data-sis="grupos" role="radio" aria-checked="true" onclick="setSistema('grupos')"><span class="sis-opt__t">Fase de grupos</span><span class="sis-opt__d">Grupos, todos contra todos. El sorteo arma los grupos y sus jornadas.</span></button>
+              <button type="button" class="sis-opt" data-sis="elim" role="radio" aria-checked="false" onclick="setSistema('elim')"><span class="sis-opt__t">Eliminación directa</span><span class="sis-opt__d">Llaves. El sorteo arma solo los cruces de la primera ronda.</span></button>
             </div>
-            <div class="wz-row wz-row--narrow" style="margin-top:16px">
-              <div class="wz-field">
-                <label>N.º de equipos clasificados</label>
-                <div class="naowee-input-stepper"><div class="naowee-input-stepper__content"><div class="naowee-input-stepper__input">
-                  <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inEquipos',-1,2,32)"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-                  <div class="naowee-input-stepper__value"><input type="number" class="naowee-input-stepper__value-input" id="inEquipos" value="8" min="2" max="32" oninput="W.nEquipos=+this.value||0;recalcCfg()" onblur="cfgClampInput(this)"><span class="naowee-input-stepper__value-comp">equipos</span></div>
-                  <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inEquipos',1,2,32)"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-                </div></div></div>
+            <div class="cfg-grid">
+              <div class="wz-field" id="fEquipos">
+                <label for="inEquipos">Equipos clasificados</label>
+                <div class="naowee-input-stepper"><div class="naowee-input-stepper__content"><div class="naowee-input-stepper__input"><button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inEquipos',-1,2,32)" aria-label="Menos"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><div class="naowee-input-stepper__value"><input type="number" class="naowee-input-stepper__value-input" id="inEquipos" value="8" min="2" max="32" oninput="W.nEquipos=+this.value||0;recalcCfg()" onblur="cfgClampInput(this)"><span class="naowee-input-stepper__value-comp">equipos</span></div><button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inEquipos',1,2,32)" aria-label="Más"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button></div></div></div>
+                <span class="cfg-err" id="errEquipos"></span>
+              </div>
+              <div class="wz-field" id="fGrupos" data-sis="grupos">
+                <label for="inGrupos">Grupos</label>
+                <div class="naowee-input-stepper"><div class="naowee-input-stepper__content"><div class="naowee-input-stepper__input"><button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inGrupos',-1)" aria-label="Menos"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><div class="naowee-input-stepper__value"><input type="number" class="naowee-input-stepper__value-input" id="inGrupos" value="2" min="1" max="8" oninput="W.nGrupos=+this.value||1;recalcCfg()" onblur="cfgClampInput(this)"><span class="naowee-input-stepper__value-comp">grupos</span></div><button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inGrupos',1)" aria-label="Más"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button></div></div></div>
+                <span class="cfg-err" id="errGrupos"></span>
+              </div>
+              <div class="wz-field" id="fClasif" data-sis="grupos">
+                <label for="inClasif">Clasifican por grupo</label>
+                <div class="naowee-input-stepper"><div class="naowee-input-stepper__content"><div class="naowee-input-stepper__input"><button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inClasif',-1,1,4)" aria-label="Menos"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><div class="naowee-input-stepper__value"><input type="number" class="naowee-input-stepper__value-input" id="inClasif" value="2" min="1" max="4" oninput="W.clasifPorGrupo=+this.value||1;recalcCfg()" onblur="cfgClampInput(this)"><span class="naowee-input-stepper__value-comp">por grupo</span></div><button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inClasif',1,1,4)" aria-label="Más"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button></div></div></div>
+                <span class="cfg-err" id="errClasif"></span>
               </div>
               <div class="wz-field" data-sis="grupos">
-                <label>N.º de grupos</label>
-                <div class="naowee-input-stepper"><div class="naowee-input-stepper__content"><div class="naowee-input-stepper__input">
-                  <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inGrupos',-1)"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-                  <div class="naowee-input-stepper__value"><input type="number" class="naowee-input-stepper__value-input" id="inGrupos" value="2" min="1" max="8" oninput="W.nGrupos=+this.value||1;recalcCfg()" onblur="cfgClampInput(this)"><span class="naowee-input-stepper__value-comp">grupos</span></div>
-                  <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inGrupos',1)"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-                </div></div></div>
-              </div>
-              <div class="wz-field" data-sis="elim" hidden>
-                <label>Ronda inicial</label>
-                <div class="wz-ro" id="roRonda">—</div>
-              </div>
-            </div>
-            <div class="wz-row wz-row--narrow" data-sis="grupos" style="margin-top:12px">
-              <div class="wz-field">
-                <label>Clasifican por grupo</label>
-                <div class="naowee-input-stepper"><div class="naowee-input-stepper__content"><div class="naowee-input-stepper__input">
-                  <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inClasif',-1,1,4)"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-                  <div class="naowee-input-stepper__value"><input type="number" class="naowee-input-stepper__value-input" id="inClasif" value="2" min="1" max="4" oninput="W.clasifPorGrupo=+this.value||1;recalcCfg()" onblur="cfgClampInput(this)"><span class="naowee-input-stepper__value-comp">por grupo</span></div>
-                  <button type="button" class="naowee-input-stepper__btn" onclick="stepAdjust('inClasif',1,1,4)"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-                </div></div></div>
-              </div>
-              <div class="wz-field">
-                <label>Vueltas</label>
+                <label for="ckIdaVuelta">Vueltas</label>
                 <label class="wz-check"><input type="checkbox" id="ckIdaVuelta" onchange="W.idaVuelta=this.checked;recalcCfg()"> Ida y vuelta</label>
               </div>
-            </div>
-            <div class="wz-row wz-row--narrow" data-sis="elim" hidden style="margin-top:12px">
-              <div class="wz-field">
-                <label>Tercer puesto</label>
-                <label class="wz-check"><input type="checkbox" id="ckTercer" checked onchange="W.tercerPuesto=this.checked;recalcCfg()"> Jugar partido por el tercer puesto</label>
+              <div class="wz-field" data-sis="elim" hidden>
+                <label for="ckTercer">Tercer puesto</label>
+                <label class="wz-check" id="lblTercer"><input type="checkbox" id="ckTercer" checked onchange="W.tercerPuesto=this.checked;recalcCfg()"> Partido por el tercer puesto <small id="tercerHint"></small></label>
               </div>
             </div>
-            <div id="repartoMsg" class="wz-cfgmsg"></div>
+            <div id="repartoMsg" class="cfg-sum" aria-live="polite"></div>
           </div>
         </div>
 
@@ -1183,10 +1189,10 @@ body.sorteo-has-footer .page{padding-bottom:96px}
 </div>
 
 <script src="shared.js"></script>
-<script src="sorteo-engine.js?v=3.3"></script>
+<script src="sorteo-engine.js?v=3.4"></script>
 <script src="ruleta-wheel.js"></script>
 <script src="sorteo-store.js"></script>
-<script src="competition-render.js?v=2.1.1"></script>
+<script src="competition-render.js?v=3.1"></script>
 <script src="shared/naowee-footer.js" defer></script>
 <script>
 /* ── Wizard ── */
@@ -1301,43 +1307,56 @@ function _cfgMsg(id,tipo,titulo,texto){
     +'<span class="naowee-message__title" id="'+(id==='repartoMsg'?'repartoTxt':'llaveTxt')+'">'+titulo+'</span></div>'
     +(texto?'<p class="naowee-message__text">'+texto+'</p>':'')+'</div>';
 }
-function setSistema(k){ W.sistemaKey=k; document.querySelectorAll('#sisSeg .sis-opt').forEach(function(b){ b.classList.toggle('sel',b.dataset.sis===k); }); document.querySelectorAll('#cfgConjunto [data-sis]:not(.sis-opt)').forEach(function(el){ el.hidden=(el.dataset.sis!==k); }); recalcCfg(); }
+function setSistema(k){ W.sistemaKey=k; document.querySelectorAll('#sisSeg .sis-opt').forEach(function(b){ var on=b.dataset.sis===k; b.classList.toggle('sel',on); b.setAttribute('aria-checked',on?'true':'false'); }); document.querySelectorAll('#cfgConjunto [data-sis]:not(.sis-opt)').forEach(function(el){ el.hidden=(el.dataset.sis!==k); }); recalcCfg(); }
 function _rondaLabel(n){ return SorteoEngine.rondaInicial(n); }
+/* Resumen de una línea bajo los campos (siempre visible mientras haya datos).
+   parts = piezas en negrita; note = aviso NO bloqueante (ámbar, al final). */
+function _cfgSummary(parts,note){
+  const el=document.getElementById('repartoMsg'); if(!el)return;
+  el.innerHTML=parts.map(function(x){return '<b>'+x+'</b>';}).join('<span class="cfg-sum__sep">·</span>')+(note?'<span class="cfg-sum__sep">·</span><span class="cfg-sum__note">'+note+'</span>':'');
+}
+/* Error inline junto al campo que lo causa: texto rojo + borde rojo en el stepper. */
+function _cfgFieldErr(field,msg){ const f=document.getElementById(field); if(!f)return; f.classList.toggle('is-err',!!msg); const e=f.querySelector('.cfg-err'); if(e) e.textContent=msg||''; }
+/* ── Lógica de mensajes del paso Prueba (la misma que debe aplicar el front del
+   producto; el back la vuelve a validar). Un ERROR va junto al campo y deshabilita
+   «Siguiente» (W.cfgOk=false); un AVISO va en el resumen y no bloquea.
+   FASE DE GRUPOS
+     · N < 2                         → ERROR en Equipos «Mínimo 2 equipos»
+     · grupos > ⌊N/2⌋                → ERROR en Grupos «Con N equipos, máximo X»
+     · clasifican por grupo > tamaño del grupo más pequeño → ERROR en Clasifican
+     · algún grupo con n.º impar     → AVISO «en los grupos impares un equipo descansa por jornada»
+     · resumen SIEMPRE: reparto («2 grupos de 4») · jornadas (×2 si ida y vuelta) · «clasifican K por grupo»
+   ELIMINACIÓN DIRECTA
+     · N < 2                         → ERROR en Equipos «Mínimo 2 equipos»
+     · N > 16                        → ERROR en Equipos «Máximo 16 (octavos de final)»
+     · ronda inicial: 2 → Final · 3–4 → Semifinal · 5–8 → Cuartos · 9–16 → Octavos
+     · cupos = potencia de 2 ≥ N; byes = cupos − N
+     · byes > 0                      → AVISO «K equipos pasan directo a <siguiente ronda>»
+     · N < 4                         → tercer puesto deshabilitado, «requiere 4 equipos»
+     · resumen SIEMPRE: ronda inicial · cupos · N equipos [· aviso de byes] */
+function _nextRound(n){ return SorteoEngine.rondaInicial(SorteoEngine.bracketSize(n)/2).toLowerCase(); }
 function recalcCfg(){
+  const n=+W.nEquipos||0;
   if(W.sistemaKey==='elim'){
-    const n=+W.nEquipos||0; W.sistema='Eliminación directa';
-    const ro=document.getElementById('roRonda'); if(ro) ro.textContent=(n>=2&&n<=16)?_rondaLabel(n)+' · '+SorteoEngine.bracketUnits(n)+' cruces':'—';
-    const ck=document.getElementById('ckTercer'); if(ck){ ck.disabled=n<4; if(n<4){ ck.checked=false; W.tercerPuesto=false; } }
-    if(n<2||n>16){ W.cfgOk=false; _cfgMsg('repartoMsg','negative','Entre 2 y 16 equipos','Las rondas de eliminación directa arrancan como máximo en octavos de final (16 equipos).'); }
-    else { W.cfgOk=true; const byes=SorteoEngine.bracketSize(n)-n; if(byes) _cfgMsg('repartoMsg','caution','Habrá '+_cfgPl(byes,'cruce','cruces')+' con un solo equipo','Con '+n+' equipos la llave es de '+SorteoEngine.bracketSize(n)+': '+_cfgPl(byes,'equipo pasa','equipos pasan')+' directo a la siguiente ronda.'); else _cfgMsg('repartoMsg','informative','',''); }
+    W.sistema='Eliminación directa';
+    const ck=document.getElementById('ckTercer'), lb=document.getElementById('lblTercer'), th=document.getElementById('tercerHint');
+    if(ck){ ck.disabled=n<4; if(n<4){ ck.checked=false; W.tercerPuesto=false; } else { ck.checked=W.tercerPuesto!==false; } }
+    if(lb) lb.classList.toggle('is-off',n<4); if(th) th.textContent=n<4?'(requiere 4 equipos)':'';
+    _cfgFieldErr('fGrupos',''); _cfgFieldErr('fClasif','');
+    if(n<2){ W.cfgOk=false; _cfgFieldErr('fEquipos','Mínimo 2 equipos'); _cfgSummary(['Eliminación directa']); }
+    else if(n>16){ W.cfgOk=false; _cfgFieldErr('fEquipos','Máximo 16 (octavos de final)'); _cfgSummary(['Eliminación directa']); }
+    else { W.cfgOk=true; _cfgFieldErr('fEquipos',''); const size=SorteoEngine.bracketSize(n), byes=size-n; _cfgSummary([_rondaLabel(n), size+' cupos', _cfgPl(n,'equipo','equipos')], byes?(_cfgPl(byes,'equipo pasa','equipos pasan')+' directo a '+_nextRound(n)):''); }
     _cfgSyncNext(); return;
   }
-  if(W.tipo==='conjunto'){ W.sistema='Fase de grupos · todos contra todos'+(W.idaVuelta?' · ida y vuelta':'');
-    const n=+W.nEquipos||0, g=W.nGrupos||1;
-    const maxG=_cfgMaxGrupos(n), ig=document.getElementById('inGrupos'); if(ig) ig.max=maxG;
-    if(!n||!g){ W.cfgOk=false; _cfgMsg('repartoMsg','informative','Define equipos y grupos','Ajusta los dos valores y aquí verás cómo queda el reparto.'); }
-    else {
-      const sizes=_cfgSizes(n,g), resto=n%g, base=Math.floor(n/g);
-      const rep=resto===0?`${_cfgPl(g,'grupo','grupos')} de ${_cfgPl(base,'equipo','equipos')}`:`${_cfgPl(resto,'grupo','grupos')} de ${base+1} y ${g-resto} de ${base}`;
-      const solos=sizes.filter(s=>s<2).length;          // grupos que no alcanzan a jugar
-      const impares=sizes.filter(s=>s%2===1).length;    // grupos con descanso por fecha
-      if(solos){
-        W.cfgOk=false;
-        _cfgMsg('repartoMsg','negative',`Con ${g} grupos no todos jugarían`,
-          `${_cfgPl(solos,'grupo quedaría','grupos quedarían')} con menos de 2 equipos, así que esos equipos no tendrían rival. Con ${n} equipos el máximo es <b>${_cfgPl(maxG,'grupo','grupos')}</b>.`);
-      } else if((+W.clasifPorGrupo||1)>Math.min(...sizes)){
-        W.cfgOk=false;
-        _cfgMsg('repartoMsg','negative','Clasifican más de los que hay',`Con ${rep} no pueden clasificar ${W.clasifPorGrupo} por grupo. Baja «Clasifican por grupo» o el número de grupos.`);
-      } else {
-        W.cfgOk=true;
-        const fechas=Math.max(...sizes.map(_cfgFechas));
-        _cfgMsg('repartoMsg','informative',`Reparto: ${rep}`,
-          impares
-            ? `${_cfgPl(impares,'grupo queda','grupos quedan')} con un número impar de equipos: en cada fecha uno <b>descansa</b> —pasa sin jugar— y enfrenta al resto en las demás. Se juega${fechas===1?'':'n'} ${_cfgPl(fechas,'fecha','fechas')}.`
-            : `Todos los grupos juegan todos contra todos en ${_cfgPl(fechas,'fecha','fechas')}, sin descansos.`);
-      }
-    }
-  }
+  W.sistema='Fase de grupos · todos contra todos'+(W.idaVuelta?' · ida y vuelta':'');
+  const g=Math.max(1,+W.nGrupos||1), maxG=_cfgMaxGrupos(n), k=+W.clasifPorGrupo||1, ig=document.getElementById('inGrupos'); if(ig) ig.max=maxG;
+  const sizes=_cfgSizes(Math.max(n,0),g), resto=n%g, base=Math.floor(n/g), minS=Math.min.apply(null,sizes);
+  const rep=n<2?'':(resto===0?(_cfgPl(g,'grupo','grupos')+' de '+base):(_cfgPl(resto,'grupo','grupos')+' de '+(base+1)+' y '+(g-resto)+' de '+base));
+  const eEq=n<2?'Mínimo 2 equipos':'', eGr=(n>=2&&g>maxG)?('Con '+n+' equipos, máximo '+_cfgPl(maxG,'grupo','grupos')):'', eCl=(n>=2&&g<=maxG&&k>minS)?('Máximo '+minS+' con grupos de '+minS):'';
+  _cfgFieldErr('fEquipos',eEq); _cfgFieldErr('fGrupos',eGr); _cfgFieldErr('fClasif',eCl);
+  W.cfgOk=!(eEq||eGr||eCl);
+  const fechas=Math.max.apply(null,sizes.map(_cfgFechas))*(W.idaVuelta?2:1), impares=sizes.filter(function(x){return x%2===1;}).length;
+  _cfgSummary([rep||'Fase de grupos', _cfgPl(fechas,'jornada','jornadas')+(W.idaVuelta?' (ida y vuelta)':''), 'clasifican '+k+' por grupo'], (W.cfgOk&&impares)?'en los grupos impares un equipo descansa por jornada':'');
   _cfgSyncNext();
 }
 /* Ajuste al SOLTAR el campo, no en cada tecla: mientras escribes puedes quedar

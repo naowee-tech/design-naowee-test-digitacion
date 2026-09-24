@@ -373,7 +373,7 @@
   /** Tamaño de llave (potencia de 2) para N participantes y número de cruces de 1.ª ronda. */
   function bracketSize(n) { let size = 2; while (size < n) size *= 2; return size; }
   function bracketUnits(n) { return bracketSize(n) / 2; }
-  function rondaInicial(n) { const r = _roundNames(Math.round(Math.log2(bracketSize(n)))); return r[0] + (r[0] === 'Final' ? '' : ' de final'); }
+  function rondaInicial(n) { const r = _roundNames(Math.round(Math.log2(bracketSize(n))))[0]; return r + (/^(Cuartos|Octavos|Dieciseisavos|Treintaidosavos)$/.test(r) ? ' de final' : ''); }
 
   /** Cuadro de eliminación directa a partir de las PAREJAS de 1.ª ronda ya
    *  sorteadas (pairs = [[t1, t2|null], …], una por cruce). El sorteo solo
