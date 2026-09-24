@@ -828,7 +828,7 @@ body.sorteo-has-footer .page{padding-bottom:96px}
       <div class="wz-body">
         <!-- PASO 1 -->
         <div class="wz-panel active" id="panel1">
-          <div class="wz-panel-title">Selecciona la prueba</div>
+          <div class="wz-panel-title">Selecciona la prueba <span class="naowee-badge naowee-badge--neutral naowee-badge--quiet naowee-badge--small" style="vertical-align:middle;margin-left:6px">Deportes de conjunto</span></div>
           <div class="wz-panel-hint">Deporte de conjunto, categoría y rama. Solo los deportes de conjunto del evento.</div>
           <div class="wz-field" id="fDeporte">
             <label>Deporte</label>
@@ -875,7 +875,7 @@ body.sorteo-has-footer .page{padding-bottom:96px}
           </div>
           <!-- RN-SORTEO-UNICO: aviso de prueba ya sorteada (accionable 1.1) -->
           <div id="dupWarn"></div>
-          <div id="cfgConjunto" style="margin-top:18px">
+          <div id="cfgConjunto" class="wz-field hidden" style="margin-top:18px">
             <div class="wz-row wz-row--narrow">
               <div class="wz-field">
                 <label>N.º de equipos clasificados</label>
@@ -1058,13 +1058,13 @@ function selTipo(tipo){
   document.getElementById('ddDeporte-menu').innerHTML = `<div class="dd-search-wrap"><input type="text" class="dd-search-input" placeholder="Buscar deporte…" oninput="filterDeporteDD(this.value)" onclick="event.stopPropagation()"></div><div id="ddDeporte-opts">${_dopts}</div>`;
   resetDD('ddDeporte','Selecciona un deporte…'); resetDD('ddCategoria','Categoría…'); resetDD('ddSexo','Sexo…');
   document.getElementById('fDeporte').classList.remove('hidden');
-  document.getElementById('fCategoria').classList.add('hidden'); document.getElementById('fSexo').classList.add('hidden');
+  document.getElementById('fCategoria').classList.add('hidden'); document.getElementById('fSexo').classList.add('hidden'); document.getElementById('cfgConjunto').classList.add('hidden');
   refreshStep1();
 }
 function resetDD(id,ph){ const s=document.querySelector('#'+id+' .naowee-dropdown__placeholder, #'+id+' .naowee-dropdown__value'); if(s){s.textContent=ph;s.classList.add('naowee-dropdown__placeholder');s.classList.remove('naowee-dropdown__value');} document.querySelectorAll('#'+id+' .naowee-dropdown__option--selected').forEach(o=>o.classList.remove('naowee-dropdown__option--selected')); }
 function selDeporte(key){ const sp=key&&typeof SPORTS_DB!=='undefined'?SPORTS_DB[key]:null;
   W.deporteKey=key; W.deporteLabel=sp?sp.label:''; W.emoji=sp?(sp.emoji||'🏅'):'';
-  document.getElementById('fCategoria').classList.toggle('hidden',!key); document.getElementById('fSexo').classList.toggle('hidden',!key); refreshStep1(); }
+  document.getElementById('fCategoria').classList.toggle('hidden',!key); document.getElementById('fSexo').classList.toggle('hidden',!key); document.getElementById('cfgConjunto').classList.toggle('hidden',!key); refreshStep1(); }
 /* ═══ RN-SORTEO-UNICO (accionable 1.1) ═════════════════════════════
    Una prueba —deporte + categoría + sexo— admite UN solo sorteo.
    Reusa SorteoStore.pruebaId, que ya deriva ese id estable, y busca
@@ -1689,7 +1689,7 @@ function _renderSteppers(n){ var a=document.getElementById('wzStepper'); if(a)a.
 function openCrearSorteo(){
   _editingId=null; showStage('wizardStage'); document.body.dataset.screen='crear'; document.body.dataset.route='/home/events/'+EVENT.code+'/draws/'+PROMOTION.code+'/new';
   setCrumbs([{label:_promoLabel(),go:openProgEdit},'Crear sorteo']);
-  var sub=_promoLabel()+'. Cada prueba (deporte, categoría y rama) es un sorteo independiente dentro de esta promoción.';
+  var sub='Sorteo para deportes de conjunto';
   ['wzPromoSub','clasifPromoSub'].forEach(function(id){ var e=document.getElementById(id); if(e)e.textContent=sub; });
   selTipo('conjunto');   /* el catálogo depende de la promoción */
   goStep(1);
