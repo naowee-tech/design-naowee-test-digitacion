@@ -263,7 +263,7 @@ const SUITE_ITEMS = {
   analitica:      { id: 'analitica',        label: 'Analítica',                icon: 'chart' },
   gestUsuarios:   { id: 'gest-usuarios',    label: 'Gestión de usuarios',      icon: 'users' },
   documentacion:  { id: 'documentacion',    label: 'Documentación',            icon: 'doc',   children: [ { id: 'doc-aprobacion', label: 'Aprobación' } ] },
-  eventos:        { id: 'events',           label: 'Listado de eventos',       icon: 'calendar',
+  eventos:        { id: 'events',           label: 'Listado de eventos',       icon: 'calendar', route: '/home/events',
                     children: [
                       { id: 'event-users',          label: 'Gestión de usuarios' },
                       { id: 'event-draws',          label: 'Sorteos', route: `/home/events/${EVENT_CODE}/draws` }
@@ -286,11 +286,17 @@ const SUITE_ITEMS = {
 /* Solo lo que importa para el sorteo: la sección del evento con "Listado de
    eventos" y sus dos hijos gateados por permiso (Gestión de usuarios como
    referencia del patrón, Sorteos como la página de esta demo). */
-const SUITE_MENU = [
-  { section: 'EVENTO DEPORTIVO', items: [SUITE_ITEMS.eventos] },
-];
+/* Los hijos de "Listado de eventos" solo existen cuando hay un evento en
+   contexto (igual que main-layout.buildEventChildren en la suite). Antes de
+   entrar a un evento, el ítem se pinta sin submenú. */
+let _eventOpen = false;
+export function setEventOpen(open) { _eventOpen = !!open; }
+export function isEventOpen() { return _eventOpen; }
 export function getMenuForRole(roleCode) {
-  return SUITE_MENU;
+  const eventos = _eventOpen
+    ? SUITE_ITEMS.eventos
+    : Object.assign({}, SUITE_ITEMS.eventos, { children: undefined });
+  return [ { section: 'EVENTO DEPORTIVO', items: [eventos] } ];
 }
 
 /* Para un childId dado, retorna el id del item padre (parent) que lo contiene.

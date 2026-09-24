@@ -8,7 +8,7 @@
  * - Header con profile-switcher (user-chip "Phil" estilo: avatar+dot+nombre+rol+chevron)
  * - Dropdown del profile-switcher con la lista de los roles disponibles
  */
-import { ROLES, getMenuForRole, getIcon, findParentOfChild } from './menu-data.js?v=3.1';
+import { ROLES, getMenuForRole, getIcon, findParentOfChild, setEventOpen } from './menu-data.js?v=3.2';
 
 const COLLAPSED_KEY = 'naowee-sidebar-collapsed';
 
@@ -139,7 +139,7 @@ function renderItem(item, activeId, options) {
      (barra naranja + label/icon en accent). El sub-item activo muestra un
      dot adicional como indicador secundario. */
   const isParentSelected = isActive || childActive;
-  const expanded = childActive;
+  const expanded = childActive || (isActive && hasChildren);
 
   return `
     <div class="nav-row ${isParentSelected ? 'active' : ''} ${expanded ? 'expanded' : ''}"
@@ -198,8 +198,9 @@ function bindSidebarEvents(rootEl) {
       e.preventDefault();
 
       const hasChildren = row.getAttribute('data-has-children') === 'true';
+      const hasRoute = !!row.getAttribute('data-route');
 
-      if (hasChildren) {
+      if (hasChildren && !hasRoute) {
         row.classList.toggle('expanded');
         return;
       }
@@ -239,8 +240,11 @@ function bindSidebarEvents(rootEl) {
    perdía el rol al navegar → el coordinador terminaba como ROOT/Digitador
    o saltaba al shell host. Centralizado aquí: una sola fuente de verdad. */
 const DIGI_ROUTES = {
+  'events':      'sorteo.html',
   'event-draws': 'sorteo.html',
 };
+/* Estando ya en la demo, cada id abre su pantalla in-page. */
+const INPAGE = { 'events': 'openEvents', 'event-draws': 'openPromos' };
 export function resolveDigiRoute(activeId, roleCode) {
   const page = DIGI_ROUTES[activeId];
   if (!page) return null;                       // ítem inerte en esta demo
@@ -259,8 +263,8 @@ function navigateToActive(activeId) {
 
   if (url) {
     if (baseName(url.split('?')[0]) === currentFile) {
-      /* Ya estamos en la demo: volver a la raíz del módulo (promociones). */
-      if (typeof window.openPromos === 'function') window.openPromos();
+      const fn = window[INPAGE[activeId]];
+      if (typeof fn === 'function') fn();
       return;
     }
     window.location.href = url;                       // navegación full, rol preservado
@@ -268,6 +272,21 @@ function navigateToActive(activeId) {
   }
   /* Demo de Sorteo: los demás ítems del menú de la suite son inertes.
      No se navega ni se cambia el activo, para no perder el contexto. */
+}
+
+/* Sincroniza el sidebar con la pantalla actual: qué ítem está activo y si el
+   evento está abierto (hijos visibles). No dispara onActiveChange. */
+export function setSidebarState({ activeId, eventOpen }) {
+  setEventOpen(eventOpen);
+  const { rootEl, role } = _state;
+  if (!rootEl || !role) return;
+  const sections = getMenuForRole(role.code);
+  const isCollapsed = rootEl.querySelector('.sidebar')?.classList.contains('collapsed') || false;
+  rootEl.innerHTML = renderSidebar({ sections, activeId, isCollapsed });
+  bindSidebarEvents(rootEl);
+  setupTooltips(rootEl);
+  setupScrollHint(rootEl);
+  _state.activeId = activeId;
 }
 
 function updateActive(activeId, options) {

@@ -681,6 +681,35 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-primary);font
 .promo-card.is-off .promo-card__step{background:#e9ebf3;color:var(--text-muted)}
 .promo-card.is-off .promo-card__title{color:var(--text-secondary)}
 .promo-card.is-off .promo-card__arrow{display:none}
+/* ═══ S0 / S0b · listado e índice del evento ═══ */
+.ev-card{border:1px solid var(--border);border-radius:var(--radius-xl);background:var(--surface);padding:22px 24px;margin:0 0 20px;box-shadow:var(--shadow-sm)}
+.ev-card__title{font-size:17px;font-weight:700;color:var(--text-primary);margin:0 0 16px}
+.ev-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 20px}
+.ev-field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.ev-field--full{margin-bottom:14px}
+.ev-field__lbl{font-size:12.5px;color:var(--text-secondary)}
+.ev-field__val{font-size:14px;font-weight:600;color:var(--text-primary)}
+.ev-field__chips{display:flex;flex-wrap:wrap;gap:6px}
+.promo-card__icon{width:48px;height:48px;flex:0 0 48px;border-radius:12px;background:var(--accent-bg,#fff3e6);color:var(--accent);display:flex;align-items:center;justify-content:center}
+.promo-card__icon svg{width:22px;height:22px}
+.promo-card.is-off .promo-card__icon{background:#e9ebf3;color:var(--text-muted)}
+.promo-card.is-quiet{cursor:default}
+.promo-card.is-quiet:hover{box-shadow:none;border-color:var(--border)}
+.promo-card.is-quiet .promo-card__icon{background:var(--bg-soft);color:var(--text-secondary)}
+.ev-tc .naowee-table-card__toolbar{flex-wrap:wrap}
+.ev-tc .naowee-table-card__toolbar-left{flex:1 1 auto;flex-wrap:wrap;min-width:0;gap:12px}
+.ev-tc .prog-search{flex:0 1 284px;min-width:244px;max-width:none;width:auto}
+.ev-tc .naowee-dropdown{width:auto;min-width:112px}
+.ev-tc .ev-pager{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);margin-left:auto}
+.ev-tc .ev-pager__box{width:46px;height:34px;border:1px solid var(--border);border-radius:var(--radius-md);display:grid;place-items:center;color:var(--text-primary);font-weight:600}
+.ev-tc .ev-pager__nav{width:30px;height:30px;border:none;border-radius:8px;background:var(--bg-soft);color:var(--text-muted);display:grid;place-items:center}
+.ev-tc .ev-pager__nav svg{width:14px;height:14px}
+.ev-check{width:18px;height:18px;border:1.5px solid var(--border-dark);border-radius:4px;display:inline-block;background:var(--surface);vertical-align:middle}
+.ev-row{cursor:pointer}
+.ev-row:hover td{background:var(--bg-soft)}
+.ev-row.is-off{cursor:default}
+.ev-row.is-off:hover td{background:transparent}
+@media(max-width:900px){.ev-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* ═══ v3 · Participantes con checkbox ═══ */
 .part-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap}
 .part-toolbar__count{font-size:13px;color:var(--text-secondary)}
@@ -720,7 +749,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-primary);font
 body.sorteo-has-footer .page{padding-bottom:96px}
 </style>
 </head>
-<body data-screen="promociones" data-route="/home/events/jin-2026/draws">
+<body data-screen="eventos" data-route="/home/events">
 <div class="shell">
 
 <div id="sidebarRoot" style="display:contents"></div>
@@ -734,6 +763,35 @@ body.sorteo-has-footer .page{padding-bottom:96px}
       <button class="event-strip__back" type="button" onclick="crumbBack()" aria-label="Volver"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <span class="event-strip__name" id="eventName">Juegos Intercolegiados Nacionales 2026</span>
       <span class="naowee-badge naowee-badge--negative naowee-badge--quiet">En curso</span>
+    </div>
+
+    <!-- ═══ S0 · LISTADO DE EVENTOS (sin evento en contexto) ═══ -->
+    <div id="eventsStage" class="stage" style="display:none">
+      <div class="sorteo-head">
+        <div>
+          <h1 class="sorteo-title">Listado de eventos</h1>
+          <p class="sorteo-sub">Monitoreo y control de cupos</p>
+        </div>
+        <div class="ph-actions">
+          <button class="naowee-btn naowee-btn--loud" type="button" aria-disabled="true" title="Solo demo"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.6" stroke="currentColor" stroke-width="1.5"/><path d="M3 13.5c.6-2.6 2.5-4 5-4s4.4 1.4 5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Crear nuevo evento</button>
+        </div>
+      </div>
+      <div id="eventsBody"></div>
+    </div>
+
+    <!-- ═══ S0b · ÍNDICE DEL EVENTO ═══ -->
+    <div id="eventHomeStage" class="stage" style="display:none">
+      <div class="ev-card">
+        <h2 class="ev-card__title">Datos del evento</h2>
+        <div class="ev-field ev-field--full"><span class="ev-field__lbl">Descripción</span><span class="ev-field__val">Juegos Intercolegiados Nacionales 2026</span></div>
+        <div class="ev-grid">
+          <div class="ev-field"><span class="ev-field__lbl">Fecha de inicio</span><span class="ev-field__val">04 de May, 2026</span></div>
+          <div class="ev-field"><span class="ev-field__lbl">Fecha final</span><span class="ev-field__val">31 de Dic, 2026</span></div>
+          <div class="ev-field"><span class="ev-field__lbl">Categorías</span><span class="ev-field__val ev-field__chips"><span class="naowee-badge naowee-badge--neutral naowee-badge--quiet naowee-badge--small">Juvenil</span><span class="naowee-badge naowee-badge--neutral naowee-badge--quiet naowee-badge--small">Pre Juvenil</span><span class="naowee-badge naowee-badge--neutral naowee-badge--quiet naowee-badge--small">Infantil</span></span></div>
+          <div class="ev-field"><span class="ev-field__lbl">Cierre inscripciones</span><span class="ev-field__val">01 de Jun, 2026</span></div>
+        </div>
+      </div>
+      <div id="eventHomeBody"></div>
     </div>
 
     <!-- ═══ S1 · PROMOCIONES DEL EVENTO ═══ -->
@@ -1150,7 +1208,11 @@ var _WHEEL_COLORS=['#2c4a6b','#e8a05a','#96b9d5'];
 function teamColorLocal(n){ if(window.CompRender&&CompRender.teamColor)return CompRender.teamColor(n); let h=0; for(let i=0;i<n.length;i++)h=n.charCodeAt(i)+((h<<5)-h); return _TC[Math.abs(h)%_TC.length]; }
 function teamInitLocal(n){ if(window.CompRender&&CompRender.teamInit)return CompRender.teamInit(n); return n.split(' ').filter(w=>w.length>1).map(w=>w[0]).join('').substring(0,2).toUpperCase()||n[0]; }
 var _stageHistReady=false;
-function showStage(id,opts){ opts=opts||{}; const D={promoStage:'block',wizardStage:'block',clasifStage:'flex',ruletaStage:'flex',previewStage:'flex',progEditStage:'flex'}; ['promoStage','wizardStage','clasifStage','ruletaStage','previewStage','progEditStage'].forEach(s=>{const el=document.getElementById(s); if(el)el.style.display=(s===id?(D[s]||'block'):'none');}); try{document.querySelector('.page').scrollTo(0,0);}catch(e){} try{document.body.classList.toggle('sorteo-has-footer',['clasifStage','ruletaStage','previewStage'].indexOf(id)>=0);}catch(e){}
+function showStage(id,opts){ opts=opts||{}; const D={eventsStage:'block',eventHomeStage:'block',promoStage:'block',wizardStage:'block',clasifStage:'flex',ruletaStage:'flex',previewStage:'flex',progEditStage:'flex'}; ['eventsStage','eventHomeStage','promoStage','wizardStage','clasifStage','ruletaStage','previewStage','progEditStage'].forEach(s=>{const el=document.getElementById(s); if(el)el.style.display=(s===id?(D[s]||'block'):'none');});
+  /* Franja del evento solo cuando hay evento en contexto; sidebar según la pantalla. */
+  var eh=document.getElementById('eventHeader'); if(eh)eh.style.display=(id==='eventsStage'?'none':'');
+  window.__sidebarWanted = id==='eventsStage' ? {activeId:'events',eventOpen:false} : (id==='eventHomeStage' ? {activeId:'events',eventOpen:true} : {activeId:'event-draws',eventOpen:true});
+  if(typeof window.__sidebarSync==='function') window.__sidebarSync(window.__sidebarWanted); try{document.querySelector('.page').scrollTo(0,0);}catch(e){} try{document.body.classList.toggle('sorteo-has-footer',['clasifStage','ruletaStage','previewStage'].indexOf(id)>=0);}catch(e){}
   /* Historial: cada cambio de stage = una entrada de historial, para que el BACK del navegador
      recorra los stages in-page (p.ej. progEditStage → wizardStage) en vez de salir de la página
      (antes saltaba directo a lista.html). Se seedea el stage base en el arranque (ver abajo). */
@@ -1463,9 +1525,10 @@ function _drawsOf(code){
 /* ── Breadcrumb del header (como el de la suite: Inicio › Eventos › evento › …) ── */
 var _crumbs=[];
 function setCrumbs(tail){
-  _crumbs=[{label:'Inicio'},{label:'Eventos'},{label:EVENT.name},{label:'Sorteos',go:openPromos}].concat(tail||[]);
+  _crumbs=[{label:'Inicio'},{label:'Eventos',go:openEvents},{label:EVENT.name,go:openEventHome},{label:'Sorteos',go:openPromos}].concat(tail||[]);
   renderCrumbs();
 }
+function setCrumbsRaw(list){ _crumbs=list; renderCrumbs(); }
 function renderCrumbs(){
   var nav=document.getElementById('breadcrumb'); if(!nav) return;
   nav.innerHTML=_crumbs.map(function(c,i){
@@ -1476,6 +1539,66 @@ function renderCrumbs(){
   nav.querySelectorAll('a[data-crumb]').forEach(function(a){ a.addEventListener('click',function(){ var c=_crumbs[+a.dataset.crumb]; if(c&&c.go)c.go(); }); });
 }
 function crumbBack(){ for(var i=_crumbs.length-2;i>=0;i--){ var c=_crumbs[i]; if(c&&c.go){ c.go(); return; } } }
+
+/* ── S0 · Listado de eventos ── */
+var DEMO_EVENTS=[
+  { code:'jdn-2026', name:'XXIII Juegos Deportivos Nacionales',       start:'14 de Ago, 2026', end:'30 de Dic, 2027', total:0, status:'En curso', open:false },
+  { code:'jin-2026', name:'Juegos Intercolegiados Nacionales 2026',   start:'4 de May, 2026',  end:'31 de Dic, 2026', total:0, status:'En curso', open:true  }
+];
+var _ICO_CAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>';
+var _ICO_PHASES='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-dasharray="3 3"><circle cx="12" cy="12" r="8.5"/></svg>';
+var _ICO_CUP='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3M12 14v4M8 20h8"/></svg>';
+var _ICO_SHUFFLE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>';
+var _ICO_USERS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.5-3 2.7-5 5.5-5s5 2 5.5 5M17 8v6M20 11h-6"/></svg>';
+function openEvents(){
+  showStage('eventsStage'); document.body.dataset.screen='eventos'; document.body.dataset.route='/home/events';
+  setCrumbsRaw([{label:'Inicio'},'Eventos']);
+  var el=document.getElementById('eventsBody'); if(!el)return;
+  el.innerHTML='<div class="naowee-table-card ev-tc">'
+    +'<div class="naowee-table-card__toolbar">'
+      +'<div class="naowee-table-card__toolbar-left">'
+        +'<div class="naowee-searchbox naowee-searchbox--medium prog-search"><div class="naowee-searchbox__input-wrap"><span class="naowee-searchbox__icon">'+_ICO_PSEARCH+'</span><input class="naowee-searchbox__input" type="text" placeholder="Buscar nombre del evento" oninput="evFilter(this.value)"></div></div>'
+        +'<div class="naowee-dropdown naowee-dropdown--medium"><button type="button" class="naowee-dropdown__trigger" aria-disabled="true"><span class="naowee-dropdown__placeholder">Estados</span><span class="naowee-dropdown__controls"><span class="naowee-dropdown__chevron">'+_ICO_PCHEV+'</span></span></button></div>'
+        +'<div class="naowee-dropdown naowee-dropdown--medium"><button type="button" class="naowee-dropdown__trigger" aria-disabled="true"><span class="naowee-dropdown__placeholder">Fechas</span><span class="naowee-dropdown__controls"><span class="naowee-dropdown__chevron">'+_ICO_PCHEV+'</span></span></button></div>'
+      +'</div>'
+      +'<div class="ev-pager"><span>Página</span><span class="ev-pager__box">1</span><span>de 1</span><span class="ev-pager__nav" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ev-pager__nav" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>'
+    +'</div>'
+    +'<div id="eventsRows"></div>'
+  +'</div>';
+  evFilter('');
+}
+function evFilter(q){
+  var mount=document.getElementById('eventsRows'); if(!mount)return;
+  var n=_progNorm(q), rows=DEMO_EVENTS.filter(function(e){ return !n||_progNorm(e.name).indexOf(n)>=0; });
+  if(!rows.length){ mount.innerHTML='<div class="naowee-empty-state"><span class="naowee-empty-state__icon">'+_ICO_PEMPTY+'</span><h3 class="naowee-empty-state__title">Sin resultados</h3><p class="naowee-empty-state__description">Ningún evento coincide con la búsqueda.</p></div>'; return; }
+  mount.innerHTML='<div class="naowee-table-card__table-wrap"><table class="naowee-table--in-card"><thead><tr><th style="width:40px"><span class="ev-check" aria-hidden="true"></span></th><th>Nombre del evento</th><th>Fecha inicio</th><th>Fecha fin</th><th>Total</th><th>Estado</th><th></th></tr></thead><tbody>'
+    +rows.map(function(e){
+      return '<tr class="ev-row'+(e.open?'':' is-off')+'" '+(e.open?'onclick="openEventHome()" tabindex="0" onkeydown="if(event.key===\'Enter\')openEventHome()"':'title="Solo demo: este evento no tiene sorteos"')+'>'
+        +'<td><span class="ev-check" aria-hidden="true"></span></td>'
+        +'<td data-label="Nombre del evento" class="naowee-table__cell-name"><span class="naowee-table__cell-primary">'+tEsc(e.name)+'</span></td>'
+        +'<td data-label="Fecha inicio" class="naowee-table__cell-muted">'+tEsc(e.start)+'</td>'
+        +'<td data-label="Fecha fin" class="naowee-table__cell-muted">'+tEsc(e.end)+'</td>'
+        +'<td data-label="Total" class="naowee-table__cell-muted">'+e.total+'</td>'
+        +'<td data-label="Estado"><span class="naowee-badge naowee-badge--negative naowee-badge--quiet naowee-badge--small">'+tEsc(e.status)+'</span></td>'
+        +'<td style="text-align:right;color:var(--text-muted)">⋮</td>'
+      +'</tr>';
+    }).join('')+'</tbody></table></div>';
+}
+/* ── S0b · Índice del evento ── */
+function openEventHome(){
+  showStage('eventHomeStage'); document.body.dataset.screen='evento'; document.body.dataset.route='/home/events/'+EVENT.code;
+  setCrumbsRaw([{label:'Inicio'},{label:'Eventos',go:openEvents},EVENT.name]);
+  var el=document.getElementById('eventHomeBody'); if(!el)return;
+  var nDraws=0, nOpen=0; PROMOTIONS.forEach(function(pr){ nDraws+=_drawsOf(pr.code).length; if(!pr.ended)nOpen++; });
+  var nSports=EVENT.teamSports.length, nTests=EVENT.teamSports.reduce(function(a,sp){ return a+((sp.tests&&sp.tests.length)||0); },0);
+  function card(icon,title,sub,onclick){ return '<button type="button" class="promo-card'+(onclick?'':' is-quiet')+'" '+(onclick?'onclick="'+onclick+'"':'aria-disabled="true" title="Solo demo"')+'><span class="promo-card__icon" aria-hidden="true">'+icon+'</span><span class="promo-card__text"><span class="promo-card__title">'+title+'</span><span class="promo-card__meta"><span>'+sub+'</span></span></span><span class="promo-card__arrow">'+_ICO_CHEV_L+'</span></button>'; }
+  el.innerHTML='<div class="promo-grid">'
+    +card(_ICO_PHASES,'Fases',EVENT.phases.length+' fases configuradas')
+    +card(_ICO_CUP,'Catálogo deportivo',nSports+' deportes de conjunto'+(nTests?' · '+nTests+' pruebas':''))
+    +card(_ICO_SHUFFLE,'Sorteos',_cfgPl(nDraws,'sorteo','sorteos')+' · '+_cfgPl(nOpen,'promoción abierta','promociones abiertas'),'openPromos()')
+    +card(_ICO_USERS,'Accesos','Gestiona los usuarios del evento')
+  +'</div>';
+}
 
 /* ── S1 · Promociones ── */
 var _ICO_ARROW='<svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -1651,7 +1774,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeConfi
     if(draw){ var rec=_getProgRec(draw); if(rec) editProg(draw); }
     return;
   }
-  openPromos();
+  openEvents();
 })();
 </script>
 
@@ -1672,7 +1795,8 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeConfi
 
 <!-- Shell compartido: mismo sidebar/header/demo-switcher que lista.html (activeId 'sorteo') -->
 <script type="module">
-  import { mountSidebar, mountHeader, mountDemoRoleSwitcher, resolveRoleCode } from './shared/sidebar.js?v=3.1';
+  import { mountSidebar, mountHeader, mountDemoRoleSwitcher, resolveRoleCode, setSidebarState } from './shared/sidebar.js?v=3.2';
+  import { setEventOpen } from './shared/menu-data.js?v=3.2';
   const roleCode = resolveRoleCode('ACCESS_MANAGER');
   /* Basename SIN extension: si el servidor usa URLs limpias (/sorteo en vez de
      /sorteo.html) la comparacion contra LEGACY_MAP fallaba y onActiveChange
@@ -1680,17 +1804,21 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeConfi
   const baseName = (ruta) => (ruta.split('/').pop() || '').replace(/\.html$/, '');
   const currentFile = baseName(window.location.pathname) || 'sorteo';
   /* Demo de sorteo independiente: la única página propia es esta. */
-  const LEGACY_MAP = { 'event-draws': 'sorteo.html' };
+  const LEGACY_MAP = { 'events': 'sorteo.html', 'event-draws': 'sorteo.html' };
+  const wanted = window.__sidebarWanted || { activeId: 'events', eventOpen: false };
+  setEventOpen(wanted.eventOpen);
   const { role } = mountSidebar({
     rootEl: document.getElementById('sidebarRoot'),
     roleCode,
-    activeId: 'event-draws',
+    activeId: wanted.activeId,
     onActiveChange: (activeId) => {
       const target = LEGACY_MAP[activeId];
       if (target) { if (baseName(target) === currentFile) return; window.location.href = target + '?role=' + encodeURIComponent(roleCode); return; }
       /* Los demás ítems del menú de la suite son inertes en esta demo. */
     }
   });
+  /* Cada cambio de pantalla remonta el sidebar (activo + hijos del evento). */
+  window.__sidebarSync = (st) => setSidebarState(st);
   mountHeader({ headerEl: document.getElementById('topHeader'), role });
   /* Breadcrumb a la izquierda del header, como en la suite. */
   document.getElementById('topHeader').insertAdjacentHTML('afterbegin', '<nav class="crumbs" id="breadcrumb" aria-label="Ruta"></nav>');
