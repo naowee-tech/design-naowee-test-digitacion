@@ -1096,6 +1096,7 @@ body.sorteo-has-footer .page{padding-bottom:96px}
           <p class="sorteo-sub">Revisa los grupos y los enfrentamientos. Puedes resortear hasta que cierres el sorteo.</p>
         </div>
         <div class="sorteo-head-actions">
+          <span data-devnote-jornadas></span>
           <button class="naowee-btn naowee-btn--mute" id="btnResortear" onclick="reSortear()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.6 8a5.6 5.6 0 11-1.64-3.96M13.6 2.2v3h-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Resortear</button>
         </div>
       </div>
@@ -1124,6 +1125,7 @@ body.sorteo-has-footer .page{padding-bottom:96px}
           </div>
         </div>
         <div class="ph-actions">
+          <span data-devnote-jornadas></span>
           <div id="detailActions"></div>
           <button type="button" class="demo-reset" data-demo-reset onclick="demoResetClick(this)" hidden><span class="naowee-badge naowee-badge--caution naowee-badge--small">Solo demo</span><span class="demo-reset__label">Reiniciar demo</span></button>
           <button class="naowee-btn naowee-btn--loud" id="btnCrearSorteo" onclick="openCrearSorteo()" style="display:none"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Crear sorteo</button>
@@ -1140,7 +1142,7 @@ body.sorteo-has-footer .page{padding-bottom:96px}
 </div>
 
 <script src="shared.js"></script>
-<script src="sorteo-engine.js"></script>
+<script src="sorteo-engine.js?v=3.1"></script>
 <script src="ruleta-wheel.js"></script>
 <script src="sorteo-store.js"></script>
 <script src="competition-render.js?v=2.1.1"></script>
@@ -1391,7 +1393,19 @@ var DEVNOTE_SORTEO='<span class="wz-devnote" tabindex="0" role="button" aria-lab
  +'<li><b>No sortea.</b> Pide el sorteo al back y recibe los grupos ya conformados.</li>'
  +'<li><b>Automático</b>: la barra recorre el resultado en orden de cupos. <b>Manual</b>: la ruleta gira y aterriza en el equipo que el back asignó al siguiente cupo; los fijos ya aparecen sentados. «Saltar» muestra el resultado de inmediato.</li>'
  +'<li>El modo es solo presentación: no se guarda ni cambia el resultado.</li></ul></div></span></span>';
-function _mountDevnotes(){ document.querySelectorAll('[data-devnote-sorteo]').forEach(function(el){ if(!el.firstChild) el.innerHTML=DEVNOTE_SORTEO; }); }
+var DEVNOTE_JORNADAS='<span class="wz-devnote" tabindex="0" role="button" aria-label="Nota para devs"><span class="naowee-badge naowee-badge--caution naowee-badge--small">Solo demo</span>Validaciones para devs'
+ +'<span class="wz-devnote__pop" role="tooltip"><span class="wz-devnote__head">Enfrentamientos y jornadas <em>· nota para devs, no es parte del producto</em></span>'
+ +'<div class="wz-devnote__sec"><div class="wz-devnote__sec-title">Qué genera el sorteo</div><ul>'
+ +'<li>Solo la <b>fase de grupos</b>: los grupos y sus enfrentamientos, todos contra todos dentro de cada grupo. Sin fecha, hora, escenario ni marcador.</li>'
+ +'<li><b>No genera fase final</b> ni llaves. Cómo avanza la competencia después lo definen los resultados que se digitan, fuera del sorteo.</li></ul></div>'
+ +'<div class="wz-devnote__sec"><div class="wz-devnote__sec-title">Cómo se arman las jornadas (back)</div><ul>'
+ +'<li>Round robin por el <b>método del círculo</b>: con K equipos en el grupo hay K−1 jornadas y cada par se enfrenta exactamente una vez. Si K es impar se añade un «descansa» ficticio: K jornadas y en cada una un equipo libra.</li>'
+ +'<li>Se fija el equipo 1 y los demás rotan una posición por jornada; en cada jornada se emparejan el i-ésimo con el (K−i)-ésimo. El orden de los equipos dentro del grupo es el del sorteo, así que las jornadas también quedan sorteadas.</li>'
+ +'<li>Es determinista a partir del orden del grupo: con el mismo resultado guardado se reconstruyen las mismas jornadas. Se persisten como partidos de la fase destino con estado pendiente.</li></ul></div>'
+ +'<div class="wz-devnote__sec"><div class="wz-devnote__sec-title">Qué hace el front</div><ul>'
+ +'<li>Muestra los grupos y los partidos por jornada que devuelve el back. No calcula nada.</li>'
+ +'<li>Programación (fecha, hora, escenario) y resultados se hacen en Digitación; aquí los partidos siempre se ven pendientes.</li></ul></div></span></span>';
+function _mountDevnotes(){ document.querySelectorAll('[data-devnote-sorteo]').forEach(function(el){ if(!el.firstChild) el.innerHTML=DEVNOTE_SORTEO; }); document.querySelectorAll('[data-devnote-jornadas]').forEach(function(el){ if(!el.firstChild) el.innerHTML=DEVNOTE_JORNADAS; }); }
 function startSorteoStep(){ _mountDevnotes(); _renderSteppers(3); showStage('modoStage'); document.body.dataset.screen='crear'; }
 function setModo(m){ W.modo=m; if(m==='manual') startManual(); else startRuleta(); }
 var _manualGroups=[],_manualSizes=[],_manualSeq=[],_manualFree=[],_manualIdx=0,_manualSpin=false,_manualAssign=null;
@@ -1431,15 +1445,6 @@ function skipRuleta(){ _ruletaTimers.forEach(t=>{clearTimeout(t);clearInterval(t
 function finishRuleta(){ if(_ruletaDone)return; _ruletaDone=true; document.getElementById('ruletaSub').textContent='Grupos conformados. Continúa para ver los enfrentamientos.'; document.getElementById('btnSkip').style.display='none'; document.getElementById('ruletaNav').style.display=''; }
 const _PV_TABS=[
   {id:'grupos',label:'Grupos y enfrentamientos',icon:'<svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 6.5h12M5 1.5v3M11 1.5v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',render:function(c){return (window.CompRender&&CompRender.renderGrupos)?CompRender.renderGrupos(c):'';}},
-  {id:'final',label:'Fase final',icon:'<svg viewBox="0 0 16 16" fill="none"><path d="M4.5 2.5h7v3a3.5 3.5 0 01-7 0v-3z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M4.5 3.5h-2v1a2 2 0 002 2M11.5 3.5h2v1a2 2 0 01-2 2M6.5 13h3M8 9v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',render:function(c){
-    if(c.bracket) return CompRender.renderBracket(c)+CompRender.renderMedalleria(c);
-    /* Decia "Un solo grupo" tambien con varios grupos, que es falso: lo que pasa
-       es que ese sorteo no tiene fase final generada. */
-    var _ng=(c.grupos||[]).length;
-    return '<div class="cr-empty" style="text-align:center;padding:36px 0">'+(_ng<2
-      ? 'Con un solo grupo no hay fase final cruzada: el campeón sale de la tabla de posiciones.'
-      : 'Este sorteo todavía no tiene fase final generada.')+'</div>';
-  }}
 ];
 let _pvComp=null,_pvTab='grupos',_activeTabs=_PV_TABS;
 function _tabsFor(comp){ return _PV_TABS; }
@@ -1602,7 +1607,7 @@ function _progRenderPager(total,pages){
     +'<div class="naowee-pagination__controls"><button class="naowee-pagination__btn" type="button" onclick="progGoPage('+(_progPage-1)+')"'+(_progPage<=1?' disabled':'')+' aria-label="Página anterior"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="naowee-pagination__btn" type="button" onclick="progGoPage('+(_progPage+1)+')"'+(_progPage>=pages?' disabled':'')+' aria-label="Página siguiente"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>';
   var inp=document.getElementById('progPageInput'); if(inp){ inp.addEventListener('change',function(){progGoPage(parseInt(this.value,10)||1);}); inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){this.blur();progGoPage(parseInt(this.value,10)||1);} }); }
 }
-function editProg(id){ var rec=_getProgRec(id); if(!rec||!rec.comp)return; showStage('progEditStage'); _progEditId=id; _pvComp=rec.comp; _progPanelId='progEditBody';
+function editProg(id){ var rec=_getProgRec(id); if(!rec||!rec.comp)return; _mountDevnotes(); showStage('progEditStage'); _progEditId=id; _pvComp=rec.comp; _progPanelId='progEditBody';
   document.body.dataset.screen='detalle'; document.body.dataset.route='/home/events/'+EVENT.code+'/draws/'+PROMOTION.code+'/'+id; setCrumbs([{label:_promoLabel(),go:openProgEdit},rec.comp.nombre||'Sorteo']);
   var t=document.getElementById('progEditTitle'),sub=document.getElementById('progEditSub'); if(t)t.textContent=(rec.comp.nombre||'Sorteo');
   if(sub){ var ng=(rec.comp.grupos||[]).length; sub.textContent=_promoLabel()+' · '+ng+' grupos · '+(rec.estado==='CERRADO'?('Cerrado el '+new Date(rec.cerradoTs||rec.ts).toLocaleDateString('es-CO',{day:'numeric',month:'short',year:'numeric'})+(rec.cerradoPor?(' por '+rec.cerradoPor):'')):'Abierto: todavía se puede resortear.'); }
@@ -1618,7 +1623,7 @@ function editProg(id){ var rec=_getProgRec(id); if(!rec||!rec.comp)return; showS
   try{document.querySelector('.page').scrollTo(0,0);}catch(e){} }
 function progEditBack(){ openProgEdit(); }
 function _attachTeamMeta(comp,sorteo){ if(!comp||comp.teamMeta)return; try{ var parts=(sorteo&&sorteo.participantes)||[], reg=(sorteo&&sorteo.region)||comp.region||'', map={}, any=false; parts.forEach(function(p){ if(p&&typeof p==='object'&&p.nombre){ var meta=_teamMetaStr(p.nombre,p.delegacion,reg); if(meta){ map[p.nombre]=meta; any=true; } } }); if(any)comp.teamMeta=map; }catch(e){} }
-function showPreview(comp){ _pvComp=comp||SorteoEngine.toComp(_sorteo); _sorteo.resultado=_pvComp; _attachTeamMeta(_pvComp,_sorteo); _progPanelId='previewPanel'; _pvMount={tabs:'previewTabs',panel:'previewPanel'}; showStage('previewStage'); document.body.dataset.screen='crear'; setCrumbs([{label:_promoLabel(),go:openProgEdit},'Crear sorteo']);
+function showPreview(comp){ _mountDevnotes(); _pvComp=comp||SorteoEngine.toComp(_sorteo); _sorteo.resultado=_pvComp; _attachTeamMeta(_pvComp,_sorteo); _progPanelId='previewPanel'; _pvMount={tabs:'previewTabs',panel:'previewPanel'}; showStage('previewStage'); document.body.dataset.screen='crear'; setCrumbs([{label:_promoLabel(),go:openProgEdit},'Crear sorteo']);
   const b=document.getElementById('btnConfirmSorteo'); if(b){b.disabled=false;b.textContent='Cerrar sorteo';} var _pc=document.getElementById('previewCenefa'); if(_pc)_pc.innerHTML='';
   var _rs=document.getElementById('btnResortear'); if(_rs)_rs.style.display='';
   _activeTabs=_tabsFor(_pvComp); _pvTab='grupos';
@@ -1627,7 +1632,7 @@ function showPreview(comp){ _pvComp=comp||SorteoEngine.toComp(_sorteo); _sorteo.
 /* Punto de montaje de las tabs: el mismo juego sirve para el resultado recién
    sorteado (previewStage) y para un sorteo abierto desde la lista. */
 let _pvMount={tabs:'previewTabs',panel:'previewPanel'};
-function renderPvTabs(){ const tb=document.getElementById(_pvMount.tabs); if(tb) tb.innerHTML=_activeTabs.map(function(t){return '<button class="naowee-tab'+(t.id===_pvTab?' naowee-tab--selected':'')+'" onclick="switchPvTab(\''+t.id+'\')">'+(t.icon||'')+'<span>'+t.label+'</span></button>';}).join(''); const tab=_activeTabs.find(function(t){return t.id===_pvTab;}); const p=document.getElementById(_pvMount.panel); if(p&&tab) p.innerHTML=tab.render(_pvComp); }
+function renderPvTabs(){ try{ (_pvComp&&_pvComp.grupos||[]).forEach(function(g){ if(g.partidos) g.partidos.sort(function(a,b){return (a.jornada||0)-(b.jornada||0);}); }); }catch(e){} const tb=document.getElementById(_pvMount.tabs); if(tb){ tb.style.display=(_activeTabs.length<2)?'none':''; } if(tb) tb.innerHTML=_activeTabs.map(function(t){return '<button class="naowee-tab'+(t.id===_pvTab?' naowee-tab--selected':'')+'" onclick="switchPvTab(\''+t.id+'\')">'+(t.icon||'')+'<span>'+t.label+'</span></button>';}).join(''); const tab=_activeTabs.find(function(t){return t.id===_pvTab;}); const p=document.getElementById(_pvMount.panel); if(p&&tab) p.innerHTML=tab.render(_pvComp); }
 function switchPvTab(id){ if(id===_pvTab) return; const oi=_activeTabs.findIndex(function(t){return t.id===_pvTab;}), ni=_activeTabs.findIndex(function(t){return t.id===id;}); _pvTab=id; renderPvTabs(); const p=document.getElementById(_pvMount.panel); if(p){ p.style.animation='none'; void p.offsetWidth; p.style.animation=(ni>oi?'tabSlideR':'tabSlideL')+' .28s cubic-bezier(.32,.72,0,1)'; } }
 /* Ir a crear: limpia el activo de "Lista de sorteos" en el sub-nav, que
    openProgEdit() enciende al abrir el listado (ahora es el aterrizaje). */

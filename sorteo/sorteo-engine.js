@@ -185,12 +185,15 @@
       return grupo;
     });
 
-    const bracket = nGrupos >= 2 ? faseFinal(grupos) : null;
+    /* El sorteo define SOLO la fase de grupos y sus jornadas. La fase final no
+       se genera aquí: el sistema evoluciona según los resultados que se
+       digitan (fuera del alcance del sorteo). */
+    const bracket = null;
     const pr = sorteo.prueba || {};
 
     return {
       sisCls: 'grupos',
-      sistema: nGrupos >= 2 ? 'Fase de Grupos + Final' : 'Round Robin',
+      sistema: 'Fase de grupos · todos contra todos',
       nombre: [pr.deporteLabel, pr.categoria, pr.sexo].filter(Boolean).join(' '),
       deporte: pr.deporteLabel || '',
       emoji: pr.emoji || '🏆',
