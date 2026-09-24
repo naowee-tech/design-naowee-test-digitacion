@@ -649,7 +649,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-primary);font
 
 /* ═══ v3 · Chrome de suite-web-v2: breadcrumb en el header + franja del evento ═══ */
 .top-header{justify-content:space-between}
-.crumbs{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--text-secondary);min-width:0;flex-wrap:wrap}
+.crumbs{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--text-secondary);min-width:0;flex-wrap:wrap;margin-right:auto}
+.demo-note{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);margin:-6px 0 16px}
 .crumbs a{color:var(--text-secondary);cursor:pointer}
 .crumbs a:hover{color:var(--accent);text-decoration:none}
 .crumbs__sep{color:var(--text-muted)}
@@ -681,6 +682,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-primary);font
 .promo-card.is-off .promo-card__step{background:#e9ebf3;color:var(--text-muted)}
 .promo-card.is-off .promo-card__title{color:var(--text-secondary)}
 .promo-card.is-off .promo-card__arrow{display:none}
+/* SOLO DEMO · botón Reiniciar demo (mismo patrón que la demo de Incentivos) */
+.demo-reset{display:inline-flex;align-items:center;gap:6px;cursor:pointer;border:1px dashed #d9a441;background:#fff8e6;color:#8a5a00;border-radius:999px;padding:4px 12px 4px 4px;font:inherit;font-size:12.5px;font-weight:600}
+.demo-reset.is-armed{border-style:solid;border-color:#b42318;background:#fff0ee;color:#b42318}
+.demo-reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.demo-reset[hidden]{display:none !important}
 /* ═══ S0 / S0b · listado e índice del evento ═══ */
 .ev-card{border:1px solid var(--border);border-radius:var(--radius-xl);background:var(--surface);padding:22px 24px;margin:0 0 20px;box-shadow:var(--shadow-sm)}
 .ev-card__title{font-size:17px;font-weight:700;color:var(--text-primary);margin:0 0 16px}
@@ -776,6 +782,7 @@ body.sorteo-has-footer .page{padding-bottom:96px}
           <button class="naowee-btn naowee-btn--loud" type="button" aria-disabled="true" title="Solo demo"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.6" stroke="currentColor" stroke-width="1.5"/><path d="M3 13.5c.6-2.6 2.5-4 5-4s4.4 1.4 5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Crear nuevo evento</button>
         </div>
       </div>
+      <div class="demo-note"><span class="naowee-badge naowee-badge--caution naowee-badge--small">Solo demo</span><span>En esta demo solo <b>Juegos Intercolegiados Nacionales 2026</b> está operativo. El otro evento es de referencia y no abre.</span></div>
       <div id="eventsBody"></div>
     </div>
 
@@ -801,6 +808,7 @@ body.sorteo-has-footer .page{padding-bottom:96px}
           <h1 class="sorteo-title">Sorteos</h1>
           <p class="sorteo-sub">Elige la promoción que vas a sortear. Cada promoción es el paso de una fase a la siguiente.</p>
         </div>
+        <div class="ph-actions"><button type="button" class="demo-reset" data-demo-reset onclick="demoResetClick(this)" hidden><span class="naowee-badge naowee-badge--caution naowee-badge--small">Solo demo</span><span class="demo-reset__label">Reiniciar demo</span></button></div>
       </div>
       <div id="promoBody"></div>
     </div>
@@ -994,6 +1002,7 @@ body.sorteo-has-footer .page{padding-bottom:96px}
         </div>
         <div class="ph-actions">
           <div id="detailActions"></div>
+          <button type="button" class="demo-reset" data-demo-reset onclick="demoResetClick(this)" hidden><span class="naowee-badge naowee-badge--caution naowee-badge--small">Solo demo</span><span class="demo-reset__label">Reiniciar demo</span></button>
           <button class="naowee-btn naowee-btn--loud" id="btnCrearSorteo" onclick="openCrearSorteo()" style="display:none"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Crear sorteo</button>
         </div>
       </div>
@@ -1264,7 +1273,7 @@ let _pvComp=null,_pvTab='grupos',_activeTabs=_PV_TABS;
 function _tabsFor(comp){ return _PV_TABS; }
 var _progPanelId='previewPanel',_progEditId=null;
 /* ── F5: editar programación de un sorteo publicado (desde el menú) ── */
-function openProgEdit(){ _progEditId=null; _progPanelId='previewPanel'; showStage('progEditStage'); document.body.dataset.screen='sorteos'; document.body.dataset.route='/home/events/'+EVENT.code+'/draws/'+PROMOTION.code; setCrumbs([_promoLabel()]);
+function openProgEdit(){ setTimeout(refreshDemoReset,0); _progEditId=null; _progPanelId='previewPanel'; showStage('progEditStage'); document.body.dataset.screen='sorteos'; document.body.dataset.route='/home/events/'+EVENT.code+'/draws/'+PROMOTION.code; setCrumbs([_promoLabel()]);
   var _tb=document.getElementById('progEditTabs'); if(_tb)_tb.style.display='none';
   var _wr=document.getElementById('progEditWrap'); if(_wr)_wr.classList.remove('is-detalle');
   var t=document.getElementById('progEditTitle'),sub=document.getElementById('progEditSub'); if(t)t.textContent=_promoLabel(); if(sub)sub.textContent='Sorteos de esta promoción. Fase '+PROMOTION.to+': '+_phaseDates(_phase(PROMOTION.toCode))+'.';
@@ -1543,6 +1552,28 @@ function renderCrumbs(){
 }
 function crumbBack(){ for(var i=_crumbs.length-2;i>=0;i--){ var c=_crumbs[i]; if(c&&c.go){ c.go(); return; } } }
 
+/* SOLO DEMO · Reiniciar: dos clics (el segundo confirma) para no borrar por error.
+   Borra los sorteos creados, resorteados o cerrados en este navegador y deja la semilla. */
+function demoRecordsCount(){ try{ return SorteoStore.list().length; }catch(e){ return 0; } }
+function refreshDemoReset(){
+  var n=demoRecordsCount();
+  document.querySelectorAll('[data-demo-reset]').forEach(function(btn){
+    btn.hidden=!n;
+    btn.title='Borra los '+n+' sorteo(s) creados, resorteados o cerrados en este navegador y vuelve a la semilla.';
+  });
+}
+function demoResetClick(btn){
+  var label=btn.querySelector('.demo-reset__label');
+  if(!btn.dataset.armed){
+    btn.dataset.armed='1'; btn.classList.add('is-armed');
+    label.textContent='¿Borrar '+demoRecordsCount()+' sorteo(s) de este navegador? Clic para confirmar';
+    clearTimeout(btn._t);
+    btn._t=setTimeout(function(){ delete btn.dataset.armed; btn.classList.remove('is-armed'); label.textContent='Reiniciar demo'; },4000);
+    return;
+  }
+  SorteoStore.resetAll();
+  location.href=location.pathname+'?role='+encodeURIComponent(new URLSearchParams(location.search).get('role')||'ACCESS_MANAGER');
+}
 /* ── S0 · Listado de eventos ── */
 var DEMO_EVENTS=[
   { code:'jdn-2026', name:'XXIII Juegos Deportivos Nacionales',       start:'14 de Ago, 2026', end:'30 de Dic, 2027', total:0, status:'En curso', open:false },
@@ -1604,7 +1635,7 @@ function openEventHome(){
 /* ── S1 · Promociones ── */
 var _ICO_ARROW='<svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var _ICO_CHEV_L='<svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-function openPromos(){
+function openPromos(){ setTimeout(refreshDemoReset,0);
   showStage('promoStage'); document.body.dataset.screen='promociones'; document.body.dataset.route='/home/events/'+EVENT.code+'/draws';
   setCrumbs([]); renderPromos();
 }
